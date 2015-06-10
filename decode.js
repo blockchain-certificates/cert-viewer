@@ -19,7 +19,6 @@ $( document ).ready(function() {
 	        }
 	        img.src = event.target.result;
 	        qrcode.decode(event.target.result);
-	        $('#js-scan-btn').button('reset')
 	    }
 	    reader.readAsDataURL(e.target.files[0]); 
 	}
@@ -27,6 +26,7 @@ $( document ).ready(function() {
 
 	function revealUrl(data) {
 	    window.location.replace(data);
+	    $('#js-scan-btn').button('reset');
 	  }
 
     $('#js-scan-btn').click(function(){
