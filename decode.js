@@ -4,20 +4,16 @@ $( document ).ready(function() {
 
 	var imageLoader = document.getElementById('js-qr-input');
     imageLoader.addEventListener('change', handleImage, false);
-	var canvas = document.getElementById('qr-canvas');
-	var ctx = canvas.getContext('2d');
+
+	function isUrl(s) {
+	    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+	    return regexp.test(s);
+	}
 
 	function handleImage(e){
 	    var reader = new FileReader();
 	    $('#js-scan-btn').button('loading');
 	    reader.onload = function(event){
-	        var img = new Image();
-	        img.onload = function(){
-	            canvas.width = img.width;
-	            canvas.height = img.height;
-	            ctx.drawImage(img,0,0);
-	        }
-	        img.src = event.target.result;
 	        qrcode.decode(event.target.result);
 	    }
 	    reader.readAsDataURL(e.target.files[0]); 
@@ -25,8 +21,13 @@ $( document ).ready(function() {
 
 
 	function revealUrl(data) {
-	    window.location.replace(data);
-	    $('#js-scan-btn').button('reset');
+		$('#js-scan-btn').button('reset');
+		if (isUrl(data)==true) {
+			window.location.replace(data);
+		}
+		else{
+			alert('Oops! Please try again.');
+		}
 	  }
 
     $('#js-scan-btn').click(function(){
