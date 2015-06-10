@@ -9,6 +9,7 @@ $( document ).ready(function() {
 
 	function handleImage(e){
 	    var reader = new FileReader();
+	    $('#js-scan-btn').button('loading');
 	    reader.onload = function(event){
 	        var img = new Image();
 	        img.onload = function(){
@@ -30,11 +31,6 @@ $( document ).ready(function() {
 
     $('#js-scan-btn').click(function(){
     	$("#js-qr-input").click();
-    });
-
-    $("#js-qr-input").change(function() {
-        $('#js-scan-btn').button('loading');
-
     });
 
 });
