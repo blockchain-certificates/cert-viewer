@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>certs.media.mit.edu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">ML Certs</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="#">Home</a></li>
+                  <li><a href="#">About</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Welcome.</h1>
+            <p class="lead">This page is designed to allow you to scan in Media Lab QR code certificates and verify their identity.</p>
+            <p class="lead">
+              <button id="js-scan-btn" class="btn btn-lg btn-default" data-loading-text="Loading...">Scan</button>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Project by the <a href="http://media.mit.edu">MIT Media Lab</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <canvas id="qr-canvas" class="qr-canvas"></canvas>
+    <input type="file" id="js-qr-input" class="qr-input">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/grid.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/version.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/detector.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/formatinf.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/errorlevel.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/bitmat.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/datablock.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/bmparser.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/datamask.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/rsdecoder.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/gf256poly.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/gf256.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/decoder.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/qrcode.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/findpat.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/alignpat.js"></script>
+    <script type="text/javascript" src="/static/js/qrdecoder/databr.js"></script>
+    <script type="text/javascript" src="/static/js/decode.js"></script>
+  </body>
+</html>
