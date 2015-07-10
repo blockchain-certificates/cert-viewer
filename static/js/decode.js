@@ -14,7 +14,16 @@ $( document ).ready(function() {
 	    var reader = new FileReader();
 	    $('#js-scan-btn').button('loading');
 	    reader.onload = function(event){
-	        qrcode.decode(event.target.result);
+	    	var canvas = document.getElementById("qr-canvas");
+    		var ctx = canvas.getContext("2d");
+	    	var img = new Image();
+	    	img.onload = function(){
+	            canvas.width = img.width;
+	            canvas.height = img.height;
+	            ctx.drawImage(img,0,0);
+	            qrcode.decode(event.target.result);
+	        }
+	        img.src = event.target.result;
 	    }
 	    reader.readAsDataURL(e.target.files[0]); 
 	}
@@ -23,7 +32,8 @@ $( document ).ready(function() {
 	function revealUrl(data) {
 		$('#js-scan-btn').button('reset');
 		if (isUrl(data)==true) {
-			window.location.replace(data);
+			// window.location.replace(data);
+			alert(data);
 		}
 		else{
 			alert('Oops! Please try again.');

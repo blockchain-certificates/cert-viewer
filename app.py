@@ -16,21 +16,29 @@ staticImgs = {
 def home_page():
 	return render_template('index.html')
 
-@app.route('/awards/<id>')
+@app.route('/hierarchy')
+def test():
+	return "trial"
+
+@app.route('/<id>')
 def award(id=None):
 	if id:
 		recipient = mongo.db.awards.find_one({"_id": ObjectId(id)})
-		award = {
-			"qrcodeImg": staticImgs["qrcodeImg"],
-			"logoImg": staticImgs["logoImg"],
-			"signatureImg": staticImgs["signatureImg"],
-			"name": recipient["name"],
-			"title": recipient["title"],
-			"organization": recipient["organization"],
-			"year": recipient["year"],
-			"text": recipient["text"]
-		}
-		return render_template('award.html', award=award)
+		print recipient
+		if recipient:
+			award = {
+				"qrcodeImg": staticImgs["qrcodeImg"],
+				"logoImg": staticImgs["logoImg"],
+				"signatureImg": staticImgs["signatureImg"],
+				"name": recipient["name"],
+				"title": recipient["title"],
+				"organization": recipient["organization"],
+				"year": recipient["year"],
+				"text": recipient["schema:text"]
+			}
+			return render_template('award.html', award=award)
+		else:
+			return id
 	else:
 		return "Error, please try again."
 
