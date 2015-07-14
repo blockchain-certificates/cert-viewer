@@ -17,17 +17,57 @@
 }
 
 body{
-	padding: 40px;
-}
-
-h3{
-	font-family: Neue Haas Grotesk Bold, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-h4{
+	padding: 30px;
 	font-family: Neue Haas Grotesk, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-p{
+a{
+	color: #333;
+}
+
+a:hover{
+	text-decoration: none;
+	color: #000
+}
+
+.font-light{
 	font-family: Neue Haas Grotesk Light, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
+
+.font-bold{
+	font-family: Neue Haas Grotesk Bold, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.no-wrap{
+	white-space: nowrap;
+}
+
+.long-word{
+	word-wrap: break-word;
+}
+
+.name{
+	margin-top: 35px;
+	margin-bottom: 15px;
+}
+
+.subtitle{
+	margin: 3px 0px 3px 0px;
+}
+
+.description{
+	margin-top: 20px;
+	margin-bottom: 5px;
+	line-height: 1.4;
+}
+
+#signature-img{
+	max-height: 40px;
+	margin-bottom: 70px;
+}
+
+.signature-info{
+	line-height: 1.2;
+}
+
+

@@ -19,33 +19,43 @@
     <![endif]-->
 
   </head>
+
+
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-xs-12">
-          <img src="data:image/png;base64,{{award.logoImg}}" width="40%"/>
+        <div class="col-md-2 col-sm-2 col-xs-4">
+          <img src="{{award.logoImg}}" class="img-responsive" alt="MIT Media Lab"/>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12">
-          <h3> {{award.name}} </h3>
-          <h4> {{award.title}}<br>{{award.organization}}<br>{{award.year}}</h4>
-          <p> {{award.text}} </p>
+        <div class="col-md-6 col-sm-8 col-xs-12">
+          <h3 class="name font-bold"> {{award.name}} </h3>
+          <h4 class="subtitle"> {{award.title}} </h4>
+          <h4 class="subtitle"> {{award.organization}}</h4>
+          <h4 class="subtitle">{{award.subtitle}}</h4>
+          <p class="description font-light"> {{award.text}} </p>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-4 col-xs-offset-6">
-          <img src="data:image/png;base64,{{award.signatureImg}}" width="100%"/>
+        <div class="col-md-2 col-md-offset-4 col-sm-3 col-sm-offset-5 col-xs-4 col-xs-offset-7">
+          <img src="{{award.signatureImg}}" class="img-responsive" id="signature-img" alt="Signature"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+          <h6 class="signature-info">This certificate was digitally signed by the <span class="no-wrap">MIT Media Lab</span> and registered on the blockchain.</h6>
+          <h6 class="signature-info">Public Key: <a href=""><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
+          <h6 class="signature-info">Blockchain Address: <a href=""><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
         </div>
       </div>
     </div>
-
-
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
   </body>
 </html>
