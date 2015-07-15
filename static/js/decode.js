@@ -1,7 +1,5 @@
 $( document ).ready(function() {
 
-    qrcode.callback = revealUrl;
-
 	var imageLoader = document.getElementById('js-qr-input');
     imageLoader.addEventListener('change', handleImage, false);
 
@@ -41,7 +39,23 @@ $( document ).ready(function() {
 				ctx.putImageData(imgData, 0, 0);
 				convertedImg.src = canvas.toDataURL();
 
-				qrcode.decode(convertedImg.src); 
+				var qr = new QCodeDecoder();
+
+				qr.decodeFromImage(convertedImg, function (err, result) {
+				 
+				  	if (err) {	
+				  		alert(err);
+				  	} else {
+				  		if(isUrl(result) == true) {
+				  			alert(result);
+				  		}
+				  	}
+
+				});
+
+				$('#js-scan-btn').text('Scan');
+				$( "#js-scan-btn" ).button( "refresh" );
+
 	        }
 	        
 	        img.src = event.target.result; 
@@ -49,17 +63,6 @@ $( document ).ready(function() {
 
 	    reader.readAsDataURL(e.target.files[0]); 
 	}
-
-	function revealUrl(data) {
-		$('#js-scan-btn').button('reset');
-		if (isUrl(data) == true) {
-			// window.location.replace(data);
-			alert(data);
-		}
-		else{
-			alert('Oops! Please try again.');
-		}
-	  }
 
     $('#js-scan-btn').click(function(){
     	$("#js-qr-input").click();
