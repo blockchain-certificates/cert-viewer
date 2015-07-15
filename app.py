@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-MLPUBKEY_PATH = 'keys/ml-certs-public-key.asc'
+MLPUBKEY_PATH = 'keys/ml-certs-public-key.txt'
 TXIDMAP_PATH = 'data/transaction_id_mappings.json'
 
 def read_json(path):
@@ -30,7 +30,7 @@ def check_display(award):
 def home_page():
 	return render_template('index.html')
 
-@app.route('/keys/ml-certs-public-key.asc')
+@app.route('/keys/ml-certs-public-key.txt')
 def mlpubkey_page():
 	content = read_file(MLPUBKEY_PATH)
 	return content
