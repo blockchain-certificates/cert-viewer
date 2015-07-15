@@ -5,7 +5,8 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 KEYS_PATH = 'keys/'
-MLPUBKEY_PATH = 'keys/ml-certs-public-key.txt'
+JSONS_PATH = 'data/jsons/'
+MLPUBKEY_PATH = 'keys/ml-certs-public-key.asc'
 TXIDMAP_PATH = 'data/transaction_id_mappings.json'
 
 def read_json(path):
@@ -32,25 +33,21 @@ def check_display(award):
 def home_page():
 	return render_template('index.html')
 
-#@app.route('/keys/ml-certs-public-key.txt')
 @app.route('/keys/<key_name>')
-def mlpubkey_page(key_name=None):
+def key_page(key_name=None):
 	if key_name in os.listdir(KEYS_PATH):
 		content = read_file(KEYS_PATH+key_name)
 		return content
 	else:
-		return 'Invalid URL'
+		return 'Sorry, this page does not exist.'
 
 @app.route('/<id>')
 def award(id=None):
-	if id:
+	if id+'.json' in os.listdir(JSONS_PATH):
 		pubkey_content = read_file(MLPUBKEY_PATH)
 		txidmap_content = read_json(TXIDMAP_PATH)
 		tx_id = get_txid(txidmap_content,id)
-		try:
-			recipient = read_json('data/jsons/'+id+'.json')
-		except IOError:
-			return 'Invalid URL'	
+		recipient = read_json(JSONS_PATH+id+'.json')	
 		if recipient:
 			award = {
 				"logoImg": recipient["certificate"]["issuer"]["image"],
@@ -69,7 +66,7 @@ def award(id=None):
 			award = check_display(award)
 			return render_template('award.html', award=award)
 	else:
-		return "Error, please try again."
+		return "Sorry, this page does not exist."
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
