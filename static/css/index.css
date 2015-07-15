@@ -13,10 +13,10 @@ a:hover {
 .btn-default,
 .btn-default:hover,
 .btn-default:focus {
-  color: #333;
+  color: #fff;
   text-shadow: none; /* Prevent inheritence from `body` */
-  background-color: #fff;
-  border: 1px solid #fff;
+  background-color: #222;
+  border: 1px solid #222;
 }
 
 /* Base structure */
@@ -24,12 +24,11 @@ a:hover {
 html,
 body {
   height: 100%;
-  background-color: #333;
+  background-color: #fff;
+  padding: 20px;
 }
 body {
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  color: #333;
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
@@ -38,8 +37,6 @@ body {
   width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
-          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -49,57 +46,11 @@ body {
   margin-right: auto;
   margin-left: auto;
 }
-
 /* Padding for spacing */
 .inner {
   padding: 30px;
 }
-
-/* Header */
-.masthead-brand {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.masthead-nav > li {
-  display: inline-block;
-}
-.masthead-nav > li + li {
-  margin-left: 20px;
-}
-.masthead-nav > li > a {
-  padding-right: 0;
-  padding-left: 0;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff; /* IE8 proofing */
-  color: rgba(255,255,255,.75);
-  border-bottom: 2px solid transparent;
-}
-.masthead-nav > li > a:hover,
-.masthead-nav > li > a:focus {
-  background-color: transparent;
-  border-bottom-color: #a9a9a9;
-  border-bottom-color: rgba(255,255,255,.25);
-}
-.masthead-nav > .active > a,
-.masthead-nav > .active > a:hover,
-.masthead-nav > .active > a:focus {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-@media (min-width: 768px) {
-  .masthead-brand {
-    float: left;
-  }
-  .masthead-nav {
-    float: right;
-  }
-}
-
 /* Cover */
-
 .cover {
   padding: 0 20px;
 }
@@ -107,13 +58,11 @@ body {
   padding: 10px 20px;
   font-weight: bold;
 }
-
-
 /* Footer */
-
 .mastfoot {
   color: #999; /* IE8 proofing */
   color: rgba(255,255,255,.5);
+  text-align: center;
 }
 
 
