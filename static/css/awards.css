@@ -1,33 +1,31 @@
-@font-face {
-	font-family: Neue Haas Grotesk Light;
-	font-weight: 350;
-	src: url("/static/fonts/NHaasGroteskDSPro-35XLt.otf") format("opentype");
-}
-
-@font-face {
-	font-family: Neue Haas Grotesk;
-	font-weight: 550;
-	src: url("/static/fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
-}
-
-@font-face {
-	font-family: Neue Haas Grotesk Bold;
-	font-weight: 750;
-	src: url("/static/fonts/NHaasGroteskDSPro-75Bd.otf") format("opentype");
-}
+/* styles for award.html pages */
 
 body{
-	padding: 40px;
+	padding: 35px;
 }
 
-h3{
-	font-family: Neue Haas Grotesk Bold, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+.name{
+	margin-top: 35px;
+	margin-bottom: 15px;
 }
 
-h4{
-	font-family: Neue Haas Grotesk, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+.subtitle{
+	margin: 3px 0px 3px 0px;
 }
 
-p{
-	font-family: Neue Haas Grotesk Light, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+.description{
+	margin-top: 20px;
+	margin-bottom: 5px;
+	line-height: 1.4;
 }
+
+#signature-img{
+	max-height: 40px;
+	margin-bottom: 70px;
+}
+
+.signature-info{
+	line-height: 1.2;
+}
+
+
