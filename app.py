@@ -1,8 +1,10 @@
 import json
+import os
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+KEYS_PATH = 'keys/'
 MLPUBKEY_PATH = 'keys/ml-certs-public-key.txt'
 TXIDMAP_PATH = 'data/transaction_id_mappings.json'
 
@@ -30,10 +32,14 @@ def check_display(award):
 def home_page():
 	return render_template('index.html')
 
-@app.route('/keys/ml-certs-public-key.txt')
-def mlpubkey_page():
-	content = read_file(MLPUBKEY_PATH)
-	return content
+#@app.route('/keys/ml-certs-public-key.txt')
+@app.route('/keys/<key_name>')
+def mlpubkey_page(key_name=None):
+	if key_name in os.listdir(KEYS_PATH):
+		content = read_file(KEYS_PATH+key_name)
+		return content
+	else:
+		return 'Invalid URL'
 
 @app.route('/<id>')
 def award(id=None):
