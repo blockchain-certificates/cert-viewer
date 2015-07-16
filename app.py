@@ -5,9 +5,11 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 KEYS_PATH = 'keys/'
-JSONS_PATH = 'data/jsons/'
-MLPUBKEY_PATH = 'keys/ml-certs-public-key.asc'
-TXIDMAP_PATH = 'data/transaction_id_mappings.json'
+DATA_PATH = 'data/'
+JSONS_PATH = DATA_PATH + 'jsons/'
+MLPUBKEY_PATH = KEYS_PATH + '/ml-certs-public-key.asc'
+TXIDMAP_PATH = DATA_PATH + 'transaction_id_mappings.json'
+HASHMAP_PATH = DATA_PATH + 'hash_id_mappings.json'
 
 def read_json(path):
 	with open(path) as json_file:
@@ -41,32 +43,34 @@ def key_page(key_name=None):
 	else:
 		return 'Sorry, this page does not exist.'
 
-@app.route('/<id>')
-def award(id=None):
-	if id+'.json' in os.listdir(JSONS_PATH):
-		pubkey_content = read_file(MLPUBKEY_PATH)
-		txidmap_content = read_json(TXIDMAP_PATH)
-		tx_id = get_txid(txidmap_content,id)
-		recipient = read_json(JSONS_PATH+id+'.json')	
-		if recipient:
-			award = {
-				"logoImg": recipient["certificate"]["issuer"]["image"],
-				"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
-				"title": recipient["certificate"]["title"],
-				"subtitle": recipient["certificate"]["subtitle"]["content"],
-				"display": recipient["certificate"]["subtitle"]["display"],
-				"organization":recipient["certificate"]["issuer"]["name"],
-				"text": recipient["certificate"]["description"],
-				"signatureImg": recipient["assertion"]["image:signature"],
-				"mlPublicKey": pubkey_content,
-				"mlPublicKeyURL": recipient["verify"]["signer"],
-				"transactionID": tx_id,
-				"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
-			}
-			award = check_display(award)
-			return render_template('award.html', award=award)
-	else:
-		return "Sorry, this page does not exist."
+@app.route('/<hashval>')
+def award(hashval=None):
+	hashmap_content = read_json(HASHMAP_PATH)
+	id = hashmap_content.get(hashval, None)
+	if id:
+		if id+'.json' in os.listdir(JSONS_PATH):
+			pubkey_content = read_file(MLPUBKEY_PATH)
+			txidmap_content = read_json(TXIDMAP_PATH)
+			tx_id = get_txid(txidmap_content,id)
+			recipient = read_json(JSONS_PATH+id+'.json')	
+			if recipient:
+				award = {
+					"logoImg": recipient["certificate"]["issuer"]["image"],
+					"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
+					"title": recipient["certificate"]["title"],
+					"subtitle": recipient["certificate"]["subtitle"]["content"],
+					"display": recipient["certificate"]["subtitle"]["display"],
+					"organization":recipient["certificate"]["issuer"]["name"],
+					"text": recipient["certificate"]["description"],
+					"signatureImg": recipient["assertion"]["image:signature"],
+					"mlPublicKey": pubkey_content,
+					"mlPublicKeyURL": recipient["verify"]["signer"],
+					"transactionID": tx_id,
+					"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
+				}
+				award = check_display(award)
+				return render_template('award.html', award=award)
+	return "Sorry, this page does not exist."
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
