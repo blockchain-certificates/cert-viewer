@@ -31,7 +31,7 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-sm-8 col-xs-12">
-          <h3 class="name font-bold"> {{award.name}} </h3>
+          <h3 class="name font-bold"> {{award.name}}</h3>
           <h4 class="subtitle"> {{award.title}} </h4>
           <h4 class="subtitle"> {{award.organization}}</h4>
           <h4 class="subtitle">{{award.subtitle}}</h4>
@@ -46,6 +46,12 @@
       <div class="row">
         <div class="col-md-6 col-sm-8 col-xs-12">
           <h6 class="signature-info">This certificate was digitally signed by the <span class="no-wrap">MIT Media Lab</span> and registered on the blockchain.</h6>
+           <button class="btn btn-sm btn-default" id="verify-button" value="{{verification_info}}">Verify certificate</button>
+          <img id="verified-icon" src="static/img/verified.png"/>
+          <img id="not-verified-icon" src="static/img/not-verified.png"/>
+
+           <p id="progress-msg" class="no-wrap"></p>
+
           <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
           <h6 class="signature-info">Blockchain Address: <a href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
         </div>
@@ -57,6 +63,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.loadingdotdotdot.js"></script>
+    <script src="/static/js/awards-verify.js"></script>
 
   </body>
 </html>
