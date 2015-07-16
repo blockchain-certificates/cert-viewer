@@ -96,6 +96,10 @@ $( document ).ready(function() {
 				    $(".result").html('<a href="' + res + '">' + res + '</a>');
 				 });
 
+
+				$('#js-scan-btn').text('Scan');
+				$( "#js-scan-btn" ).button( "refresh" );
+
 	        }
 	        
 	        img.src = event.target.result; 
