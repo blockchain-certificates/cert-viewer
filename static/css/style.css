@@ -35,6 +35,16 @@ a:focus{
   color: #333;
 }
 
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #fff;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #222;
+  border: 1px solid #222;
+  border-radius: 0px;
+}
+
 a:hover,a:focus{
   text-decoration: underline;
 }
