@@ -2,6 +2,12 @@ $(document).ready(function() {
 
 	$( "#verify-button" ).click(function() {
 
+		data = decodeURIComponent($(this).attr("value"));
+
+		$.post( "/verify", data, function( res ) {
+			console.log(res);
+		});
+
 		$("#progress-msg").Loadingdotdotdot({
 			    "speed": 400,
 			    "maxDots": 4,
