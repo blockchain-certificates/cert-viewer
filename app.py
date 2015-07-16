@@ -2,6 +2,7 @@ import json
 import os
 import urllib
 from flask import Flask, render_template, request
+from verify import verify_signature, verify_doc
 
 app = Flask(__name__)
 
@@ -11,6 +12,8 @@ JSONS_PATH = DATA_PATH + 'jsons/'
 MLPUBKEY_PATH = KEYS_PATH + '/ml-certs-public-key.asc'
 TXIDMAP_PATH = DATA_PATH + 'transaction_id_mappings.json'
 HASHMAP_PATH = DATA_PATH + 'hash_id_mappings.json'
+BLOCKCHAIN_ADDRESS = '1HYPitzbwR83M3Smw6GWs5XeQzBWoJAEeS'
+CERT_MARKER = 'MEDIALAB'
 
 def read_json(path):
 	with open(path) as json_file:
@@ -40,8 +43,8 @@ def get_id_info(id):
 		recipient = read_json(JSONS_PATH+id+'.json')	
 		if recipient:
 			verification_info = {
-				"uid": recipient["assertion"]["uid"],
-				"rawJson": recipient
+				"signed_cert_path": JSONS_PATH+id+".json",
+				"transactionID": tx_id
 			}
 			award = {
 				"logoImg": recipient["certificate"]["issuer"]["image"],
@@ -58,7 +61,7 @@ def get_id_info(id):
 				"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
 			}
 			award = check_display(award)
-			return award
+			return award, verification_info
 	return None
 
 @app.route('/')
@@ -82,10 +85,20 @@ def award_by_hash(identifier=None):
 		hashmap_content = read_json(HASHMAP_PATH)
 		id = hashmap_content.get(identifier, None) # try to get id by hash
 	if id:
-		award = get_id_info(id)
+		award, verification_info = get_id_info(id)
 	if award:
-		return render_template('award.html', award=award)
+		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
 	return "Sorry, this page does not exist."
+
+@app.route('/verify', methods=['POST'])
+def verify():
+	verify_json = request.form
+	tx_id = verify_json["transactionID"]
+	signed_cert_path = verify_json["signed_cert_path"]
+	print BLOCKCHAIN_ADDRESS, signed_cert_path, tx_id
+	verify_signature(BLOCKCHAIN_ADDRESS, signed_cert_path)
+	verify_doc(tx_id, signed_cert_path)
+	return 'done'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
