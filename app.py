@@ -31,6 +31,31 @@ def check_display(award):
 		award['subtitle'] = '';
 	return award
 
+def get_id_info(id):
+	if id+'.json' in os.listdir(JSONS_PATH):
+		pubkey_content = read_file(MLPUBKEY_PATH)
+		txidmap_content = read_json(TXIDMAP_PATH)
+		tx_id = get_txid(txidmap_content,id)
+		recipient = read_json(JSONS_PATH+id+'.json')	
+		if recipient:
+			award = {
+				"logoImg": recipient["certificate"]["issuer"]["image"],
+				"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
+				"title": recipient["certificate"]["title"],
+				"subtitle": recipient["certificate"]["subtitle"]["content"],
+				"display": recipient["certificate"]["subtitle"]["display"],
+				"organization":recipient["certificate"]["issuer"]["name"],
+				"text": recipient["certificate"]["description"],
+				"signatureImg": recipient["assertion"]["image:signature"],
+				"mlPublicKey": pubkey_content,
+				"mlPublicKeyURL": recipient["verify"]["signer"],
+				"transactionID": tx_id,
+				"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
+			}
+			award = check_display(award)
+			return award
+	return None
+
 @app.route('/')
 def home_page():
 	return render_template('index.html')
@@ -43,33 +68,18 @@ def key_page(key_name=None):
 	else:
 		return 'Sorry, this page does not exist.'
 
-@app.route('/<hashval>')
-def award(hashval=None):
-	hashmap_content = read_json(HASHMAP_PATH)
-	id = hashmap_content.get(hashval, None)
+@app.route('/<identifier>')
+def award_by_hash(identifier=None):
+	award = None
+	if identifier+'.json' in os.listdir(JSONS_PATH):
+		id = identifier
+	else:
+		hashmap_content = read_json(HASHMAP_PATH)
+		id = hashmap_content.get(identifier, None) # try to get id by hash
 	if id:
-		if id+'.json' in os.listdir(JSONS_PATH):
-			pubkey_content = read_file(MLPUBKEY_PATH)
-			txidmap_content = read_json(TXIDMAP_PATH)
-			tx_id = get_txid(txidmap_content,id)
-			recipient = read_json(JSONS_PATH+id+'.json')	
-			if recipient:
-				award = {
-					"logoImg": recipient["certificate"]["issuer"]["image"],
-					"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
-					"title": recipient["certificate"]["title"],
-					"subtitle": recipient["certificate"]["subtitle"]["content"],
-					"display": recipient["certificate"]["subtitle"]["display"],
-					"organization":recipient["certificate"]["issuer"]["name"],
-					"text": recipient["certificate"]["description"],
-					"signatureImg": recipient["assertion"]["image:signature"],
-					"mlPublicKey": pubkey_content,
-					"mlPublicKeyURL": recipient["verify"]["signer"],
-					"transactionID": tx_id,
-					"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
-				}
-				award = check_display(award)
-				return render_template('award.html', award=award)
+		award = get_id_info(id)
+	if award:
+		return render_template('award.html', award=award)
 	return "Sorry, this page does not exist."
 
 if __name__ == '__main__':
