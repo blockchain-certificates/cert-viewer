@@ -31,6 +31,11 @@ body {
   color: #333;
 }
 
+.result a {
+  color: #333;
+}
+
+
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
   display: table;
@@ -108,3 +113,4 @@ body {
 .qr-canvas{
   display: none !important;
 }
+
