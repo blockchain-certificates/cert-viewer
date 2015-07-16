@@ -4,22 +4,32 @@ $(document).ready(function() {
 
 		data = decodeURIComponent($(this).attr("value"));
 
-		$.post( "/verify", data, function( res ) {
-			console.log(res);
-		});
+		$.ajax({                                                                                                           
+            type:'POST', 
+            url: "/verify",
+            data: data,                                                                                                                                                                                                       
+            beforeSend:function(){                                                                                         
+                $("#progress-msg").Loadingdotdotdot({
+			    	"speed": 400,
+			    	"maxDots": 4,
+			    	"word": "Verifying OP_RETURN"
+				});                                                                               
+            },
+            success:function(res){
+            	setTimeout(function(){
+            		$("#progress-msg").Loadingdotdotdot("Stop");
+            		if(res=="True"){
+	            		$("#verified-icon").show()
+	            		$("#progress-msg").html('Verified.')  
+	            	}
+	            	else{
+	            		$("#not-verified-icon").show()
+	            		$("#progress-msg").html('Unable to verify.')  
+	            	}
 
-		$("#progress-msg").Loadingdotdotdot({
-			    "speed": 400,
-			    "maxDots": 4,
-			    "word": "Verifying signature"
-			});
-
-		 setTimeout(
-		  function(){
-		  	$("#progress-msg").Loadingdotdotdot("Stop");
-			$("#verified-icon").show()
-			$("#progress-msg").html('Verified.')
-		    }, 3000);
+            	}, 3000)     
+            },                                                                                                                                                                                                                                                                    
+        });
 
 	});
 });

@@ -37,7 +37,7 @@ body{
 	font-size: 12px;
 }
 
-#verified-icon{
+#verified-icon, #not-verified-icon{
 	max-height: 25px;
 	display: none;
 }

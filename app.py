@@ -2,7 +2,7 @@ import json
 import os
 import urllib
 from flask import Flask, render_template, request
-from verify import verify_signature, verify_doc
+from verify import verify_doc
 
 app = Flask(__name__)
 
@@ -95,10 +95,9 @@ def verify():
 	verify_json = request.form
 	tx_id = verify_json["transactionID"]
 	signed_cert_path = verify_json["signed_cert_path"]
-	print BLOCKCHAIN_ADDRESS, signed_cert_path, tx_id
-	verify_signature(BLOCKCHAIN_ADDRESS, signed_cert_path)
-	verify_doc(tx_id, signed_cert_path)
-	return 'done'
+	# verify_signature(BLOCKCHAIN_ADDRESS, signed_cert_path)
+	verified = verify_doc(tx_id, signed_cert_path, CERT_MARKER)
+	return str(verified)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
