@@ -36,7 +36,8 @@ a:focus{
 }
 
 a:hover,a:focus{
-  text-decoration: none;
+  /*text-decoration: none;*/
+  text-decoration: underline;
 }
 
 .font-light{

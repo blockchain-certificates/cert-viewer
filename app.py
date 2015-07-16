@@ -1,5 +1,6 @@
 import json
 import os
+import urllib
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -49,6 +50,10 @@ def award(id=None):
 		tx_id = get_txid(txidmap_content,id)
 		recipient = read_json(JSONS_PATH+id+'.json')	
 		if recipient:
+			verification_info = {
+				"uid": recipient["assertion"]["uid"],
+				"rawJson": recipient
+			}
 			award = {
 				"logoImg": recipient["certificate"]["issuer"]["image"],
 				"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
@@ -64,7 +69,7 @@ def award(id=None):
 				"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
 			}
 			award = check_display(award)
-			return render_template('award.html', award=award)
+			return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
 	else:
 		return "Sorry, this page does not exist."
 
