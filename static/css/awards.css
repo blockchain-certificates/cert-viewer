@@ -28,12 +28,16 @@ body{
 	line-height: 1.2;
 }
 
-/* Custom default button */
-.btn-default,
-.btn-default:hover,
-.btn-default:focus {
-  color: #fff;
-  text-shadow: none; /* Prevent inheritence from `body` */
-  background-color: #222;
-  border: 1px solid #222;
+#verify-button{
+	margin-right: 5px;
+}
+
+#progress-msg{
+	display: inline;
+	font-size: 12px;
+}
+
+#verified-icon{
+	max-height: 25px;
+	display: none;
 }
