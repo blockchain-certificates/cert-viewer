@@ -1,12 +1,11 @@
 Installation
 ===
 
-* Clone / download the repository
-* Run `python -m SimpleHTTPServer 8000`
-* Open up http://localhost:8000
+* Git clone the repository
+* Set up a virtual environment and install the dependencies from requirements.txt
+* Run the flask server `python app.py`
+* Open http://localhost:5000
 
-
-Dependencies
+Contact
 ===
-
-* https://github.com/LazarSoft/jsqrcode
+Contact [mailto:certs.media.mit.edu](certs@media.mit.edu) with questions
