@@ -43,7 +43,7 @@ def get_id_info(id):
 		recipient = read_json(JSONS_PATH+id+'.json')	
 		if recipient:
 			verification_info = {
-				"signed_cert_path": JSONS_PATH+id+".json",
+				"uid": id,
 				"transactionID": tx_id
 			}
 			award = {
@@ -90,14 +90,14 @@ def award_by_hash(identifier=None):
 		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
 	return "Sorry, this page does not exist."
 
-@app.route('/verify', methods=['POST'])
+@app.route('/verify')
 def verify():
-	verify_json = request.form
-	tx_id = verify_json["transactionID"]
-	signed_cert_path = verify_json["signed_cert_path"]
+	uid = request.args.get('uid')
+	transactionID = request.args.get('transactionID')
+	signed_cert_path = JSONS_PATH+uid+".json"
 	# verify_signature(BLOCKCHAIN_ADDRESS, signed_cert_path)
-	verified = verify_doc(tx_id, signed_cert_path, CERT_MARKER)
+	verified = verify_doc(transactionID, signed_cert_path, CERT_MARKER)
 	return str(verified)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run(host='0.0.0.0', debug=True)
