@@ -8,4 +8,4 @@ Installation
 
 Contact
 ===
-Contact [certs.media.mit.edu](mailto:certs@media.mit.edu) with questions
+Contact [certs@media.mit.edu](mailto:certs@media.mit.edu) with questions
