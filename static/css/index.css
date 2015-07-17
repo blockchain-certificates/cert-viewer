@@ -18,7 +18,7 @@ body {
 .description{
   line-height: 1.3;
 }
-#verify-button{
+#QR-buttons{
   margin-bottom: 40px;
 }
 /* Extra markup and styles for table-esque vertical and horizontal centering */
