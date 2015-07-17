@@ -5,7 +5,7 @@ import binascii
 import os
 import urllib2
 
-# from bitcoin.signmessage import BitcoinMessage, VerifyMessage
+import config
 
 def fetchurl(url, data=None):
         try:
@@ -28,17 +28,25 @@ def get_hash_from_bc_op(tx_json, cert_marker):
         hashed_json = op_field.split(cert_marker)[-1]
         return hashed_json
 
-# def verify_signature(address, signed_cert_path):
-#         signed_json = json.loads(open(signed_cert_path).read())
-#         message = BitcoinMessage(signed_json["assertion"]["uid"])
-#         signature = signed_json["signature"]
-#         return VerifyMessage(address, message, signature)
+def get_address_from_bc_op(tx_json, address):
+        for tx in tx_json["inputs"]:
+                if tx["prev_out"]["addr"]==address:
+                        return True
+        return False
 
 def verify_doc(tx_id, signed_cert_path, cert_marker):
+        doc_integrity = False
+        author_integrity = False
+
         doc = open(signed_cert_path).read()
         hash_from_local = hashlib.sha256(open(signed_cert_path).read()).hexdigest()
         tx_json = get_rawtx(tx_id)
         hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json, cert_marker))
+
         if hash_from_local in hash_from_bc:
+                doc_integrity = True
+        if get_address_from_bc_op(tx_json, config.BLOCKCHAIN_ADDRESS) == True:
+                author_integrity = True
+        if doc_integrity and author_integrity:
                 return True
         return False

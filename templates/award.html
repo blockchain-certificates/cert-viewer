@@ -46,10 +46,18 @@
       <div class="row">
         <div class="col-md-6 col-sm-8 col-xs-12">
           <h6 class="signature-info">This certificate was digitally signed by the <span class="no-wrap">MIT Media Lab</span> and registered on the blockchain.</h6>
-           <button class="btn btn-sm btn-default" id="verify-button" value="{{verification_info}}">Verify certificate</button>
-          <img id="verified-icon" src="static/img/verified.png"/>
-          <img id="not-verified-icon" src="static/img/not-verified.png"/>
-          <p id="progress-msg" class="no-wrap"></p>
+          <button class="btn btn-sm btn-default" id="verify-button" value="{{verification_info}}">Verify certificate</button>
+          <span id="verified"> <img id="verified-icon" src="static/img/verified.png"/> Verified </span>
+          <span id="not-verified"> <img id="not-verified-icon" src="static/img/not-verified.png"/> </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+          <h6 id="progress-msg" class="font-light long-word output-txt"></h6>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
           <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
           <h6 class="signature-info">Blockchain Address: <a href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
         </div>

@@ -33,11 +33,20 @@ body{
 }
 
 #progress-msg{
-	display: inline;
+	/*display: inline;*/
 	font-size: 12px;
+	text-align: left;
+	display: none;
+}
+
+#verified, #not-verified{
+	display: none;
 }
 
 #verified-icon, #not-verified-icon{
 	max-height: 25px;
-	display: none;
+}
+
+.output-txt{
+	line-height: 1.5;
 }

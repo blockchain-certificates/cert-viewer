@@ -40,7 +40,6 @@ def verify():
 	uid = request.args.get('uid')
 	transactionID = request.args.get('transactionID')
 	signed_cert_path = config.JSONS_PATH+uid+".json"
-	# verify_signature(config.BLOCKCHAIN_ADDRESS, signed_cert_path)
 	verified = verify_doc(transactionID, signed_cert_path, config.CERT_MARKER)
 	return str(verified)
 
