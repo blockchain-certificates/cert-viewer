@@ -8,7 +8,7 @@ Installation
 
 Website
 ===
-Checkout the website itself at [http://certs.media.mit.edu](certs.media.mit.edu).
+Checkout the website itself at [https://certs.media.mit.edu](https://certs.media.mit.edu).
 
 Contact
 ===
