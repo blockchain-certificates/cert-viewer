@@ -51,3 +51,13 @@ def get_id_info(id):
 			award = check_display(award)
 			return award, verification_info
 	return None
+
+def get_recently_issued():
+	recent_hashes = config.RECENTLY_ADDED
+	recently_issued = {
+		"hashes": recent_hashes,
+		"urls": ['/'+ h for h in recent_hashes]
+	}
+	return recently_issued
+
+

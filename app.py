@@ -11,7 +11,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-	return render_template('index.html')
+	recents = helpers.get_recently_issued()
+	return render_template('index.html', recents=recents)
 
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
