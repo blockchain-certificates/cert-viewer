@@ -2,15 +2,21 @@ import json
 import os
 import urllib
 from flask import Flask, render_template, request
+from flask.ext.pymongo import PyMongo 
 
 import config
 import helpers
+import secrets
 from verify import verify_doc
 
 app = Flask(__name__)
+app.config["MONGO_URI"]=secrets.MONGO_URI
+app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
+mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
+	print mongo.db
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
