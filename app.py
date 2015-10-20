@@ -2,7 +2,7 @@ import json
 import os
 import urllib
 from flask import Flask, render_template, request
-from flask.ext.pymongo import PyMongo 
+from pymongo import MongoClient
 
 import config
 import helpers
@@ -10,13 +10,24 @@ import secrets
 from verify import verify_doc
 
 app = Flask(__name__)
-app.config["MONGO_URI"]=secrets.MONGO_URI
-app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
-mongo = PyMongo(app)
+client = MongoClient(host=secrets.MONGO_URI)
+# app.config["MONGO_URI"]=secrets.MONGO_URI
+# app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
+# mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
-	print mongo.db
+	client.admin.coins.ensure_index([
+			('user.name.familyName', 'text'),
+			('user.name.givenName', 'text'),
+	  	],
+	  	name="search_index",
+	  	weights={
+	      	'user.name.familyName':100,
+	      	'user.name.givenName':100
+	  	}
+		)
+	print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
