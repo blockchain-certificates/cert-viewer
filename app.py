@@ -11,9 +11,6 @@ from verify import verify_doc
 
 app = Flask(__name__)
 client = MongoClient(host=secrets.MONGO_URI)
-# app.config["MONGO_URI"]=secrets.MONGO_URI
-# app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
-# mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
@@ -27,7 +24,7 @@ def home_page():
 	      	'user.name.givenName':100
 	  	}
 		)
-	print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
+	print list(client.admin.coins.find({'$text': {'$search': 'Giorgos'}}, fields={'user.name.givenName':100}))
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
