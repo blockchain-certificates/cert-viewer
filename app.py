@@ -1,24 +1,52 @@
 import json
 import os
 import urllib
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.pymongo import PyMongo 
 
 import config
 import helpers
 import secrets
 from verify import verify_doc
+from forms import RegistrationForm, AddressForm
+from mail import send_confirm_email
 
 app = Flask(__name__)
+app.secret_key = secrets.SECRET_KEY
 app.config["MONGO_URI"]=secrets.MONGO_URI
 app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
 mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
-	print mongo.db
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm(request.form)
+    #temp = test_mail()
+    if request.method == 'POST' and form.validate():
+        user = form.username.data
+        if mongo.db.data.find_one({'user.username': user}):
+        	flash('We sent you an email. Go check it out.')
+        	return redirect(url_for('home_page'))
+        else:
+        	form.username.errors.append('Hmm... we cannot find that username. Try again?')
+    return render_template('register.html', form=form)
+
+@app.route('/confirm/<token>', methods=['GET', 'POST'])
+def confirm():
+    form = AddressForm(request.form)
+    #temp = test_mail()
+    if request.method == 'POST' and form.validate():
+        user = form.username.data
+        if mongo.db.data.find_one({'user.username': user}):
+        	flash('We sent you an email. Go check it out.')
+        	return redirect(url_for('home_page'))
+        else:
+        	form.username.errors.append('Hmm... we cannot find that username. Try again?')
+    return render_template('register.html', form=form)
 
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
