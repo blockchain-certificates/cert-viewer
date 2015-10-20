@@ -1,22 +1,33 @@
 import json
 import os
 import urllib
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request
 from pymongo import MongoClient
+import sys
 
 import config
 import helpers
 import secrets
 from verify import verify_doc
+from createjsonmodule import create
 from forms import RegistrationForm, AddressForm
 from mail import send_confirm_email
 
 app = Flask(__name__)
 client = MongoClient(host=secrets.MONGO_URI)
 app.secret_key = secrets.SECRET_KEY
-# app.config["MONGO_URI"]=secrets.MONGO_URI
-# app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
-# mongo = PyMongo(app)
+
+def findUser(familyName, givenName):
+	query = givenName + " " + familyName
+	userId = list(client.admin.coins.find({'$text': {'$search': query}}, fields={'user.name.familyName':100, 'user.name.givenName':100}))[0]["_id"]
+	user = client.admin.coins.find_one(userId)
+	print user
+	return user
+	
+def createJson(user):
+	updated_json = create.run(user)
+	# next update the DB with new document
+	return updated_json
 
 @app.route('/')
 def home_page():
@@ -30,7 +41,8 @@ def home_page():
 	      	'user.name.givenName':100
 	  	}
 		)
-	#print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
+	user = findUser('Giorgos', 'Zacharia')
+	created_json = createJson(user)
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
