@@ -23,7 +23,7 @@
     <p>We will send it via snail mail, so we will need your address, please:</p>
 
     {% from "_formhelpers.html" import render_field %}
-    <form method=post action="/confirm">
+    <form method=post>
       <dl>
         {{ render_field(form.address) }}
         {{ render_field(form.city) }}

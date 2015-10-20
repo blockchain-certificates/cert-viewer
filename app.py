@@ -2,7 +2,7 @@ import json
 import os
 import urllib
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask.ext.pymongo import PyMongo 
+from pymongo import MongoClient
 
 import config
 import helpers
@@ -12,10 +12,11 @@ from forms import RegistrationForm, AddressForm
 from mail import send_confirm_email
 
 app = Flask(__name__)
+client = MongoClient(host=secrets.MONGO_URI)
 app.secret_key = secrets.SECRET_KEY
-app.config["MONGO_URI"]=secrets.MONGO_URI
-app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
-mongo = PyMongo(app)
+# app.config["MONGO_URI"]=secrets.MONGO_URI
+# app.config["MONGO_DBNAME"]=secrets.MONGO_DBNAME
+# mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
@@ -29,35 +30,35 @@ def home_page():
 	      	'user.name.givenName':100
 	  	}
 		)
-	print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
+	#print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
-    #temp = test_mail()
     if request.method == 'POST' and form.validate():
-        user = form.username.data
-        if mongo.db.data.find_one({'user.username': user}):
-        	flash('We sent you an email. Go check it out.')
+        first_name = form.first.data
+        last_name = form.last.data
+        #print client.admin.coins.find({'$text': {'$search': first_name}}, fields={'user.name.givenName':100}).count() > 0
+        #print client.admin.coins.find({'$text': {'$search': last_name}}, fields={'user.name.familyName':100}).count() > 0
+        #if client.admin.coins.find({'$text': {'$search': first_name}}, fields={'user.name.givenName':100}).count() > 0 and client.admin.coins.find({'$text': {'$search': last_name}}, fields={'user.name.familyName':100}).count() > 0:
+        if client.admin.coins.find_one({'$text': {'$search': first_name}}, fields={'user.name.givenName':100}) and client.admin.coins.find_one({'$text': {'$search': last_name}}, fields={'user.name.familyName':100}):
+
+        	flash('We send you an email. Go check it out.')
         	return redirect(url_for('home_page'))
         else:
-        	form.username.errors.append('Hmm... we cannot find that username. Try again?')
+        	form.last.errors.append('Hmm... we cannot find you. Try again?')
     return render_template('register.html', form=form)
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
-def confirm():
-    form = AddressForm(request.form)
-    #temp = test_mail()
-    if request.method == 'POST' and form.validate():
-        user = form.username.data
-        if mongo.db.data.find_one({'user.username': user}):
-        	flash('We sent you an email. Go check it out.')
-        	return redirect(url_for('home_page'))
-        else:
-        	form.username.errors.append('Hmm... we cannot find that username. Try again?')
-    return render_template('register.html', form=form)
+def confirm(token=None):
+	confirm = {'name': "Katherine"}
+	form = AddressForm(request.form)
+	if request.method == 'POST' and form.validate():
+		flash('You did it! Your coin is on the way!')
+		return redirect(url_for('home_page'))
+	return render_template('confirm.html', form=form, confirm=confirm)
 
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):

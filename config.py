@@ -1,4 +1,3 @@
-
 KEYS_PATH = 'keys/'
 DATA_PATH = 'data/'
 JSONS_PATH = DATA_PATH + 'jsons/'
