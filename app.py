@@ -19,6 +19,17 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def home_page():
+	client.admin.coins.ensure_index([
+			('user.name.familyName', 'text'),
+			('user.name.givenName', 'text'),
+	  	],
+	  	name="search_index",
+	  	weights={
+	      	'user.name.familyName':100,
+	      	'user.name.givenName':100
+	  	}
+		)
+	print list(client.admin.coins.find({'$text': {'$search': 'juliana'}}, fields={'user.name.givenName':100}))
 	recents = helpers.get_recently_issued()
 	return render_template('index.html', recents=recents)
 
