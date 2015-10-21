@@ -29,11 +29,11 @@ def home_page():
 
 	form = RegistrationForm(request.form)
 	if request.method == 'POST' and form.validate():
-		first = form.first_name.data
-		last = form.last_name.data
-		user = helpers.findUser_by_name(first,last)
+		givenName = form.first_name.data
+		familyName = form.last_name.data
+		user = helpers.findUser_by_name(familyName, givenName)
 		if user:
-			temp = send_confirm_email('katherine.mcconachie@gmail.com',user['user']['name'])
+			temp = send_confirm_email(user['user']['email'],user['user']['name'])
 			flash('We sent you an email. Go check it out.')
 		else:
 			form.last_name.errors.append('Hmm... we cannot find you. Try again?')
@@ -42,13 +42,14 @@ def home_page():
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm(token=None):
 	if check_token(token):
-		#email = check_token(token)
-		email = "zacharia@alum.mit.edu"
+		email = check_token(token)
 		user = helpers.findUser_by_email(email)
 		name = user["user"]["name"]["givenName"]
 		form = AddressForm(request.form)
 		if request.method == 'POST' and form.validate():
 			helpers.createJson(user)
+			helpers.updateRequested(user)
+			helpers.addAddress(user,form)
 			flash('You did it! Your coin is on the way!')
 			return redirect(url_for('home_page'))
 		return render_template('confirm.html', form=form, name=name)

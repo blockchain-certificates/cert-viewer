@@ -28,6 +28,20 @@ def createJson(user):
 	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
 	return updated_json
 
+def updateRequested(user):
+	userId = user["_id"]
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
+	return True
+
+def addAddress(user, form):
+	userId = user["_id"]
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.streetAddress": form.address.data}})
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.city": form.city.data}})
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.state": form.state.data}})
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.zipcode": "\'"+form.zipcode.data}})
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.country": form.country.data}})
+	return True
+
 def read_json(path):
 	with open(path) as json_file:
 		data = json.load(json_file)
