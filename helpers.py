@@ -2,6 +2,29 @@ import os
 import json
 
 import config
+import secrets
+from pymongo import MongoClient
+from createjsonmodule import create
+
+client = MongoClient(host=secrets.MONGO_URI)
+
+def findUser_by_email(email):
+	user = client.admin.coins.find_one({'user.email': email})
+	return user
+
+def findUser_by_name(familyName, givenName):
+	query = givenName + " " + familyName
+	try:
+		userId = list(client.admin.coins.find({'$text': {'$search': query}}, fields={'user.name.familyName':100, 'user.name.givenName':100}))[0]["_id"]
+		user = client.admin.coins.find_one(userId)
+		return user
+	except IndexError:
+		return None
+
+def createJson(user):
+	updated_json = create.run(user)
+	# next update the DB with new document
+	return updated_json
 
 def read_json(path):
 	with open(path) as json_file:
@@ -51,13 +74,3 @@ def get_id_info(id):
 			award = check_display(award)
 			return award, verification_info
 	return None
-
-def get_recently_issued():
-	recent_hashes = config.RECENTLY_ADDED
-	recently_issued = {
-		"hashes": recent_hashes,
-		"urls": ['/'+ h for h in recent_hashes]
-	}
-	return recently_issued
-
-

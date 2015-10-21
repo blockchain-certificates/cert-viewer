@@ -25,20 +25,21 @@ def send_confirm_email(email, name):
 			"from_name": "ML Coins",
 			"to": [{
 				"email": email,
-				"name": name
+				"name": name['givenName'] + " " + name['familyName']
 			}],
 			"headers": {"Reply-To": "coins@media.mit.edu"},
 			"important": False,
 			"track_opens": True,
 			"track_clicks": True,
 			"auto_text": True,
+			"inline_css":True,
 			"merge_language": "handlebars",
 			"global_merge_vars" : [{'name': 'confirm_link','content': confirm_link},
+								   {'name': 'first_name','content': name['givenName']},
 								   {'name': 'secret_msg','content': 'This is the secret message!'}]
 		}
 	try:
 		result = mandrill_client.messages.send_template(template_name='test-template', template_content=template_content, message=message, async=False)
-		print result
 
 	except mandrill.Error, e:
 	    # Mandrill errors are thrown as exceptions
