@@ -32,23 +32,12 @@
 
     <h1>ML Coins</h1>
 
+    {% from "_formhelpers.html" import render_errors %}
     <form method="POST">
       <div class="input-group input-group-lg">{{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}</div>
-      <ul class="errors">
-        {% if form.first_name.errors %}
-          {% for error in form.first_name.errors %}
-            <li>{{ error }}</li>
-          {% endfor %}
-        {% endif %}
-      </ul>
+      {{ render_errors(form.first_name) }}
       <div class="input-group input-group-lg">{{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}</div>
-      <ul class="errors">
-        {% if form.last_name.errors %}
-          {% for error in form.last_name.errors %}
-            <li>{{ error }}</li>
-          {% endfor %}
-        {% endif %}
-      </ul>      
+      {{ render_errors(form.last_name) }}     
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
 
