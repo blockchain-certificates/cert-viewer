@@ -18,29 +18,25 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
   <body>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-
     <h1>ML Coins</h1>
+    <p>Looks like you are who you say you are, {{name}}! Let's get you that coin!</p>
+    <p>We will send it via snail mail, so we will need your address, please:</p>
 
     {% from "_formhelpers.html" import render_errors %}
     <form method="POST">
-      <div class="input-group input-group-lg">{{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}</div>
-      {{ render_errors(form.first_name) }}
-      <div class="input-group input-group-lg">{{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}</div>
-      {{ render_errors(form.last_name) }}     
+      <div class="input-group input-group-lg">{{ form.address(type='text',placeholder='Address',**{'class':'form-control'})}}</div>
+      {{ render_errors(form.address) }}
+      <div class="input-group input-group-lg">{{ form.city(type='text',placeholder='City',**{'class':'form-control'})}}</div>
+      {{ render_errors(form.city) }}
+      <div class="input-group input-group-lg">{{ form.state(type='text',placeholder='State/Province/Region',**{'class':'form-control'})}}</div>
+      {{ render_errors(form.state) }}
+      <div class="input-group input-group-lg">{{ form.zipcode(type='text',placeholder='ZIP/Postal Code',**{'class':'form-control'})}}</div>
+      {{ render_errors(form.zipcode) }}
+      <div class="input-group input-group-lg">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
+      {{ render_errors(form.country) }}
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
-
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -48,7 +44,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   </body>
 </html>
-
-
-
- 
