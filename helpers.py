@@ -23,7 +23,9 @@ def findUser_by_name(familyName, givenName):
 
 def createJson(user):
 	updated_json = create.run(user)
-	# next update the DB with new document
+	userId = user["_id"]
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"json": updated_json}})
+	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
 	return updated_json
 
 def read_json(path):

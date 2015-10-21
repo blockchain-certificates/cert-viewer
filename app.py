@@ -45,11 +45,10 @@ def confirm(token=None):
 		#email = check_token(token)
 		email = "zacharia@alum.mit.edu"
 		user = helpers.findUser_by_email(email)
-		userId = user["_id"]
-		client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
 		name = user["user"]["name"]["givenName"]
 		form = AddressForm(request.form)
 		if request.method == 'POST' and form.validate():
+			helpers.createJson(user)
 			flash('You did it! Your coin is on the way!')
 			return redirect(url_for('home_page'))
 		return render_template('confirm.html', form=form, name=name)

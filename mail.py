@@ -35,8 +35,7 @@ def send_confirm_email(email, name):
 			"inline_css":True,
 			"merge_language": "handlebars",
 			"global_merge_vars" : [{'name': 'confirm_link','content': confirm_link},
-								   {'name': 'first_name','content': name['givenName']},
-								   {'name': 'secret_msg','content': 'This is the secret message!'}]
+								   {'name': 'first_name','content': name['givenName']}]
 		}
 	try:
 		result = mandrill_client.messages.send_template(template_name='test-template', template_content=template_content, message=message, async=False)
