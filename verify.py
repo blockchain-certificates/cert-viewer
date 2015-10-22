@@ -34,19 +34,35 @@ def get_address_from_bc_op(tx_json, address):
                         return True
         return False
 
-def verify_doc(tx_id, signed_cert_path, cert_marker):
-        doc_integrity = False
-        author_integrity = False
+def computeHash(doc):
+        return hashlib.sha256(doc).hexdigest()
 
-        doc = open(signed_cert_path).read()
-        hash_from_local = hashlib.sha256(open(signed_cert_path).read()).hexdigest()
+def fetchHashFromChain(tx_id, cert_marker):
         tx_json = get_rawtx(tx_id)
         hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json, cert_marker))
+        return hash_from_bc
 
-        if hash_from_local in hash_from_bc:
-                doc_integrity = True
-        if get_address_from_bc_op(tx_json, config.BLOCKCHAIN_ADDRESS) == True:
-                author_integrity = True
-        if doc_integrity and author_integrity:
+def compareHashes(hash1, hash2):
+        if hash1 in hash2:
                 return True
         return False
+
+def checkAuthor(tx_id):
+        tx_json = get_rawtx(tx_id)
+        if tx_json["inputs"][0]["prev_out"]["addr"] == config.BLOCKCHAIN_ADDRESS:
+                return True
+        return False
+
+def verify_doc(tx_id, doc, cert_marker):
+        doc_integrity = False
+        author_integrity = checkAuthor(tx_id)
+        hash_from_local = computeHash(doc)
+        hash_from_bc = fetchHashFromChain(tx_id, cert_marker)
+        if hash_from_local in hash_from_bc:
+                doc_integrity = True
+        if doc_integrity and author_integrity:
+                return "Success! Both certificate and transaction verfied"
+        elif doc_integrity == True:
+                return "Oops! Certificate was not able to be verfied"
+        else:
+                return "Oops! Signature was not able to be verfied"

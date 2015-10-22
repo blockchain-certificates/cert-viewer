@@ -12,6 +12,10 @@ def findUser_by_id(id):
 	user = client.admin.coins.find_one({'_id':ObjectId(id)})
 	return user
 
+def findUser_by_txid(txid):
+	user = client.admin.coins.find_one({'txid': txid})
+	return user
+
 def findUser_by_email(email):
 	user = client.admin.coins.find_one({'user.email': email})
 	return user
@@ -58,8 +62,6 @@ def read_file(path):
 	f.close()
 	return data
  
-def get_txid(data,id):
-	return data[id]
 
 def check_display(award):
 	if award['display'] == 'FALSE':
@@ -68,15 +70,14 @@ def check_display(award):
 
 def get_id_info(recipient):
 	pubkey_content = read_file(config.MLPUBKEY_PATH)
-	txidmap_content = recipient["txid"]
-	tx_id = get_txid(txidmap_content, str(recipient["_id"]))
+	tx_id = recipient["txid"]
 	verification_info = {
-		"uid": id,
+		"uid": str(recipient["_id"]),
 		"transactionID": tx_id
 	}
 	award = {
 		"logoImg": recipient["json"]["certificate"]["issuer"]["image"],
-		"name": recipient["json"]["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
+		"name": recipient["json"]["recipient"]["givenName"]+' '+recipient["json"]["recipient"]["familyName"],
 		"title": recipient["json"]["certificate"]["title"],
 		"subtitle": recipient["json"]["certificate"]["subtitle"]["content"],
 		"display": recipient["json"]["certificate"]["subtitle"]["display"],

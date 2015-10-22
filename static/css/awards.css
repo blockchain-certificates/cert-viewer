@@ -37,6 +37,11 @@ body{
 	font-size: 12px;
 	text-align: left;
 	display: none;
+	border-top: 1px black dashed;
+	border-bottom: 1px black dashed;
+	padding-bottom: 10px;
+	margin-bottom: 0px;
+	padding-top: 12px;
 }
 
 #verified, #not-verified{
@@ -49,4 +54,13 @@ body{
 
 .output-txt{
 	line-height: 1.5;
+}
+
+.okay-field{
+	float: right;
+}
+
+.return-fields{
+	font-size: 8px;
+	margin-bottom: 12px;
 }
