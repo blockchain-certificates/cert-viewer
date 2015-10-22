@@ -100,16 +100,16 @@ def compareHashes():
 	localHash = computeHash(uid)
 	globalHash = fetchHashFromChain(transactionID)
 	if v.compareHashes(localHash, globalHash) == True:
-		return "Matched hashes"
-	return "Not able to match hashes"
+		return "True"
+	return "False"
 
 @app.route('/checkAuthor')
 def checkAuthor():
 	transactionID = request.args.get('transactionID')
 	verify_authors = v.checkAuthor(transactionID)
 	if verify_authors:
-		return "Verified signature"
-	return "Not able to verify signature"
+		return "True"
+	return "False"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

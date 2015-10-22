@@ -61,8 +61,8 @@ def verify_doc(tx_id, doc, cert_marker):
         if hash_from_local in hash_from_bc:
                 doc_integrity = True
         if doc_integrity and author_integrity:
-                return "Success! Both certificate and transaction verfied"
+                return 'Success! The certificate has been verified.'
         elif doc_integrity == True:
-                return "Oops! Certificate was not able to be verfied"
+                return 'Oops! The author signature could not be verified'
         else:
-                return "Oops! Signature was not able to be verfied"
+                return 'Oops! The certificate content could not be verified'

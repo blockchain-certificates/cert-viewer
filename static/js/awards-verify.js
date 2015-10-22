@@ -1,52 +1,37 @@
 loading_messages = [
-	'Computing SHA256 digest of local certificate...', 
-	'Fetching hash in OP_RETURN field from the blockchain...', 
-	'Comparing local hash to hash stored on the blockchain...',
-	'Checking cryptographic signature in certificate...',
-	'Determining validility...'
+	{'message': 'Computing SHA256 digest of local certificate...', 'results': 'DONE'}, 
+	{'message': 'Fetching hash in OP_RETURN field from the blockchain...', 'results': 'DONE'}, 
+	{'message': 'Comparing local hash to hash stored on the blockchain...', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Checking cryptographic signature in certificate...', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Determining validility...', 'results': 'DONE'}
 	]
 
 urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/verify']
 
-// $(document).ready(function() {
-// 	$( "#verify-button" ).click(function() {
-// 		var counter = 0
-// 		$("#progress-msg").text(loading_messages[counter])
-// 		$("#progress-msg").show()
-// 		var data = $(this).attr('value');
-// 		url = '/verify?'+data
-// 		$.get(url, function(res){
-//     		if(res=="True"){
-//     			var timerId = 0;
-//     			timerId = setInterval(change, 2000)
-//     			function change() {
-// 					counter++;
-// 					if(counter >= loading_messages.length) { 
-// 					    	$("#verified").show()
-// 				        	$("#progress-msg").hide()  
-// 				        	clearInterval(timerId);
-// 					    }
-// 					$("#progress-msg").html($("#progress-msg").html()+"<br>"+loading_messages[counter]);
-// 				    }
-//         	}
-//         	else{
-//         		$("#not-verified").show()
-//         		$("#progress-msg").hide()
-//         	}
-// 		})
-// 	});
-// });
+timeDelay = 2000;
 
-var timeFactor = 4000
+function sleep(delay) {
+    var start = new Date().getTime();
+    while (new Date().getTime() < start + delay);
+  }
+
+function callUrl(i, data, callback){
+	var url = urls[i]+"?"+data;
+	$.get(url, function(res){
+		callback(res, i);
+	})
+}
 
 function makeCall(i, data, callback){
-	var t = i*Math.random()*timeFactor/7
-	setTimeout(function(){
-		var url = urls[i]+"?"+data;
-		$.get(url, function(res){
-			callback(res, i);
-		})
-	}, t)
+	callUrl(i, data, callback)
+}
+
+function getMark(index, res){
+	var mark = loading_messages[index]['results']
+	if (mark.constructor == Object){
+			return mark[res]
+	}
+	return mark
 }
 
 $(document).ready(function() {
@@ -54,31 +39,33 @@ $(document).ready(function() {
 		$("#not-verified").hide();
 		$("#verified").hide();
 		$("#progress-msg").html("");
-		$("#progress-msg").show();
 		var data = $(this).attr('value');
+		var timeFactors = []
 		for (i=0; i<urls.length; i++){
 			(function(index) {
-		        setTimeout(function() {
-		        	$("#progress-msg").html($("#progress-msg").html()+loading_messages[index]+'</span>');
-						makeCall(i, data, function(res, index){
-						if(index == urls.length-1){
-							if(res.indexOf("Oops!")>-1){
-								$("#not-verified").show()
+	        	var progress = (index+1).toString()+"/"+urls.length.toString();
+				makeCall(index, data, function(res, index){
+					setTimeout(function(){
+					    $("#progress-msg").show();
+						$("#progress-msg").html($("#progress-msg").html()+loading_messages[index]['message']+'</span>');
+						var mark = getMark(index, res)
+						setTimeout(function(){
+							if(index == urls.length-1){
+								if(res.indexOf("Oops!")>-1){
+									$("#not-verified").show()
+								}
+								else{
+									$("#verified").show()
+								}
+								$("#progress-msg").html($("#progress-msg").html()+'<br><span class="return-fields font-light">'+res+'<span class="okay-field">['+mark+' '+progress+']</span></span><br>');
 							}
 							else{
-								$("#verified").show()
+								$("#progress-msg").html($("#progress-msg").html()+'<br><span class="return-fields font-light okay-field ">['+mark+' '+progress+']</span><br>');
 							}
-						}
-						$("#progress-msg").html($("#progress-msg").html()+'<br><span class="return-fields font-light okay-field ">[DONE]</span><br>');
-					});
-		        }, i * timeFactor);
+						}, timeDelay)
+					}, timeDelay*index);
+				});
 		    })(i);
 		}
-		// for (i=0; i<urls.length; i++){
-		// 	var url = urls[i]+"?"+data;
-		// 	$.get(url, function(res){
-		// 		console.log(res);
-	 //        })
-		// }
 	});
 });
