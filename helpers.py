@@ -1,12 +1,20 @@
 import os
 import json
-
+from bson.objectid import ObjectId
 import config
 import secrets
 from pymongo import MongoClient
 from createjsonmodule import create
 
 client = MongoClient(host=secrets.MONGO_URI)
+
+def findUser_by_id(id):
+	user = client.admin.coins.find_one({'_id':ObjectId(id)})
+	return user
+
+def findUser_by_txid(txid):
+	user = client.admin.coins.find_one({'txid': txid})
+	return user
 
 def findUser_by_email(email):
 	user = client.admin.coins.find_one({'user.email': email})
@@ -54,39 +62,32 @@ def read_file(path):
 	f.close()
 	return data
  
-def get_txid(data,id):
-	return data[id]
 
 def check_display(award):
 	if award['display'] == 'FALSE':
 		award['subtitle'] = '';
 	return award
 
-def get_id_info(id):
-	if id+'.json' in os.listdir(config.JSONS_PATH):
-		pubkey_content = read_file(config.MLPUBKEY_PATH)
-		txidmap_content = read_json(config.TXIDMAP_PATH)
-		tx_id = get_txid(txidmap_content,id)
-		recipient = read_json(config.JSONS_PATH+id+'.json')	
-		if recipient:
-			verification_info = {
-				"uid": id,
-				"transactionID": tx_id
-			}
-			award = {
-				"logoImg": recipient["certificate"]["issuer"]["image"],
-				"name": recipient["recipient"]["givenName"]+' '+recipient["recipient"]["familyName"],
-				"title": recipient["certificate"]["title"],
-				"subtitle": recipient["certificate"]["subtitle"]["content"],
-				"display": recipient["certificate"]["subtitle"]["display"],
-				"organization":recipient["certificate"]["issuer"]["name"],
-				"text": recipient["certificate"]["description"],
-				"signatureImg": recipient["assertion"]["image:signature"],
-				"mlPublicKey": pubkey_content,
-				"mlPublicKeyURL": recipient["verify"]["signer"],
-				"transactionID": tx_id,
-				"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
-			}
-			award = check_display(award)
-			return award, verification_info
-	return None
+def get_id_info(recipient):
+	pubkey_content = read_file(config.MLPUBKEY_PATH)
+	tx_id = recipient["txid"]
+	verification_info = {
+		"uid": str(recipient["_id"]),
+		"transactionID": tx_id
+	}
+	award = {
+		"logoImg": recipient["json"]["certificate"]["issuer"]["image"],
+		"name": recipient["json"]["recipient"]["givenName"]+' '+recipient["json"]["recipient"]["familyName"],
+		"title": recipient["json"]["certificate"]["title"],
+		"subtitle": recipient["json"]["certificate"]["subtitle"]["content"],
+		"display": recipient["json"]["certificate"]["subtitle"]["display"],
+		"organization":recipient["json"]["certificate"]["issuer"]["name"],
+		"text": recipient["json"]["certificate"]["description"],
+		"signatureImg": recipient["json"]["assertion"]["image:signature"],
+		"mlPublicKey": pubkey_content,
+		"mlPublicKeyURL": recipient["json"]["verify"]["signer"],
+		"transactionID": tx_id,
+		"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
+	}
+	award = check_display(award)
+	return award, verification_info

@@ -2,11 +2,12 @@ import os
 import urllib
 from flask import Flask, render_template, request, flash, redirect, url_for
 from pymongo import MongoClient
-
+import json
 import config
 import helpers
 import secrets
 from verify import verify_doc
+import verify as v
 from forms import RegistrationForm, AddressForm
 from mail import send_confirm_email, check_token
 
@@ -53,27 +54,62 @@ def key_page(key_name=None):
 	else:
 		return 'Sorry, this page does not exist.'
 
-# @app.route('/<identifier>')
-# def award_by_hash(identifier=None):
-# 	award = None
-# 	if identifier+'.json' in os.listdir(config.JSONS_PATH):
-# 		id = identifier
-# 	else:
-# 		hashmap_content = helpers.read_json(config.HASHMAP_PATH)
-# 		id = hashmap_content.get(identifier, None)
-# 	if id:
-# 		award, verification_info = helpers.get_id_info(id)
-# 	if award:
-# 		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
-# 	return "Sorry, this page does not exist."
+@app.route('/<identifier>')
+def award_by_hash(identifier=None):
+	award = None
+	if len(identifier) == 24:
+		user = helpers.findUser_by_id(identifier)
+	else:
+		user = helpers.findUser_by_txid(identifier)
+	if user and user["issued"] == True:
+		award, verification_info = helpers.get_id_info(user)
+	if award:
+		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
+	return "Sorry, this page does not exist."
 
-# @app.route('/verify')
-# def verify():
-# 	uid = request.args.get('uid')
-# 	transactionID = request.args.get('transactionID')
-# 	signed_cert_path = config.JSONS_PATH+uid+".json"
-# 	verified = verify_doc(transactionID, signed_cert_path, config.CERT_MARKER)
-# 	return str(verified)
+@app.route('/verify')
+def verify():
+	uid = request.args.get('uid')
+	transactionID = request.args.get('transactionID')
+	signed_local_json = helpers.findUser_by_id(uid)
+	signed_local_json["_id"] = str(signed_local_json["_id"]) #important to ensure this happens when certificates are issued
+	verified = verify_doc(transactionID, json.dumps(signed_local_json), config.CERT_MARKER)
+	return str(verified)
+
+@app.route('/computeHash')
+def computeHash(uid=None):
+	if uid == None:
+		uid = request.args.get('uid')
+	signed_local_json = helpers.findUser_by_id(uid)
+	signed_local_json["_id"] = str(signed_local_json["_id"]) 
+	signed_local_json = json.dumps(signed_local_json)
+	hashed = v.computeHash(signed_local_json)
+	return "Hash from local certificate: " + hashed
+
+@app.route('/fetchHashFromChain')
+def fetchHashFromChain(transactionID=None):
+	if transactionID == None:
+		transactionID = request.args.get('transactionID')
+	hashed = v.fetchHashFromChain(transactionID, config.CERT_MARKER)
+	return "Hash from blockchain: "+ hashed
+
+@app.route('/compareHashes')
+def compareHashes():
+	transactionID = request.args.get('transactionID')
+	uid = request.args.get('uid')
+	localHash = computeHash(uid)
+	globalHash = fetchHashFromChain(transactionID)
+	if v.compareHashes(localHash, globalHash) == True:
+		return "True"
+	return "False"
+
+@app.route('/checkAuthor')
+def checkAuthor():
+	transactionID = request.args.get('transactionID')
+	verify_authors = v.checkAuthor(transactionID)
+	if verify_authors:
+		return "True"
+	return "False"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
