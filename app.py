@@ -71,8 +71,8 @@ def award_by_hash(identifier=None):
 def verify():
 	uid = request.args.get('uid')
 	transactionID = request.args.get('transactionID')
-	signed_local_json = helpers.findUser_by_id(uid)
-	signed_local_json["_id"] = str(signed_local_json["_id"]) #important to ensure this happens when certificates are issued
+	signed_local_json = helpers.findUser_by_id(uid)["json"]
+	#signed_local_json["_id"] = str(signed_local_json["_id"]) #important to ensure this happens when certificates are issued
 	verified = verify_doc(transactionID, json.dumps(signed_local_json), config.CERT_MARKER)
 	return str(verified)
 
@@ -105,8 +105,10 @@ def compareHashes():
 
 @app.route('/checkAuthor')
 def checkAuthor():
-	transactionID = request.args.get('transactionID')
-	verify_authors = v.checkAuthor(transactionID)
+	uid = request.args.get('uid')
+	signed_local_json = helpers.findUser_by_id(uid)["json"]
+        #signed_local_json["_id"] = str(signed_local_json["_id"])
+	verify_authors = v.checkAuthor(config.BLOCKCHAIN_ADDRESS, signed_local_json)
 	if verify_authors:
 		return "True"
 	return "False"

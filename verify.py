@@ -6,6 +6,7 @@ import os
 import urllib2
 
 import config
+from bitcoin.signmessage import BitcoinMessage, VerifyMessage, SignMessage
 
 def fetchurl(url, data=None):
         try:
@@ -47,15 +48,21 @@ def compareHashes(hash1, hash2):
                 return True
         return False
 
-def checkAuthor(tx_id):
-        tx_json = get_rawtx(tx_id)
-        if tx_json["inputs"][0]["prev_out"]["addr"] == config.BLOCKCHAIN_ADDRESS:
-                return True
-        return False
+#def checkAuthor(tx_id):
+#        tx_json = get_rawtx(tx_id)
+#        if tx_json["inputs"][0]["prev_out"]["addr"] == config.BLOCKCHAIN_ADDRESS:
+#                return True
+#        return False
+
+def checkAuthor(address, signed_json):
+    #signed_json = json.loads(signed_json)
+    message = BitcoinMessage(signed_json["assertion"]["uid"])
+    signature = signed_json["signature"]
+    return VerifyMessage(address, message, signature)
 
 def verify_doc(tx_id, doc, cert_marker):
         doc_integrity = False
-        author_integrity = checkAuthor(tx_id)
+        author_integrity = checkAuthor(config.BLOCKCHAIN_ADDRESS, json.loads(doc))
         hash_from_local = computeHash(doc)
         hash_from_bc = fetchHashFromChain(tx_id, cert_marker)
         if hash_from_local in hash_from_bc:
