@@ -71,21 +71,22 @@ def check_display(award):
 def get_id_info(recipient):
 	pubkey_content = read_file(config.MLPUBKEY_PATH)
 	tx_id = recipient["txid"]
+	json_info = recipient["json"]
 	verification_info = {
 		"uid": str(recipient["_id"]),
 		"transactionID": tx_id
 	}
 	award = {
-		"logoImg": recipient["json"]["certificate"]["issuer"]["image"],
-		"name": recipient["json"]["recipient"]["givenName"]+' '+recipient["json"]["recipient"]["familyName"],
-		"title": recipient["json"]["certificate"]["title"],
-		"subtitle": recipient["json"]["certificate"]["subtitle"]["content"],
-		"display": recipient["json"]["certificate"]["subtitle"]["display"],
-		"organization":recipient["json"]["certificate"]["issuer"]["name"],
-		"text": recipient["json"]["certificate"]["description"],
-		"signatureImg": recipient["json"]["assertion"]["image:signature"],
+		"logoImg": json_info["certificate"]["issuer"]["image"],
+		"name": json_info["recipient"]["givenName"]+' '+recipient["json"]["recipient"]["familyName"],
+		"title": json_info["certificate"]["title"],
+		"subtitle": json_info["certificate"]["subtitle"]["content"],
+		"display": json_info["certificate"]["subtitle"]["display"],
+		"organization":json_info["certificate"]["issuer"]["name"],
+		"text":json_info["certificate"]["description"],
+		"signatureImg":json_info["assertion"]["image:signature"],
 		"mlPublicKey": pubkey_content,
-		"mlPublicKeyURL": recipient["json"]["verify"]["signer"],
+		"mlPublicKeyURL": json_info["verify"]["signer"],
 		"transactionID": tx_id,
 		"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
 	}
