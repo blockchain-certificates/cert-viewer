@@ -29,6 +29,15 @@ def findUser_by_name(familyName, givenName):
 	except IndexError:
 		return None
 
+def makeListOfAllNames():
+	names = {}
+	users = list(client.admin.coins.find({}))
+	for doc in users:
+		fullname = str(doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"])
+		names[fullname]=str(doc["_id"])
+		# names = names + doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"] + ","
+	return names
+
 def createJson(user):
 	updated_json = create.run(user)
 	userId = user["_id"]

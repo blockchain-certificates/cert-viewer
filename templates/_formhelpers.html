@@ -1,9 +1,10 @@
 {% macro render_errors(field) %}
-  <ul class="errors">
-    {% if field.errors %}
-      {% for error in field.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-    {% endif %}
-  </ul>
+  {% if field.errors %}
+  <span class="popup-msg font-light">
+  	{% for error in field.errors %}
+  		{{ error }}
+  		Please send us an email at <a href="mailto:coins@media.mit.edu">coins@media.mit.edu</a>.
+  	{% endfor %}
+  </span>
+  {% endif %}
 {% endmacro %}

@@ -1,8 +1,9 @@
 from wtforms import Form, TextField, validators
 
 class RegistrationForm(Form):
-	first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
-	last_name = TextField('Last Name', [validators.required(), validators.length(max=200)])
+	# first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
+	# last_name = TextField('Last Name', [validators.required(), validators.length(max=200)])
+	name = TextField('Name', [validators.required(), validators.length(max=200)])
 
 class AddressForm(Form):
 	address = TextField('Mailing Address', [validators.required(), validators.length(max=200)])
