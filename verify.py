@@ -14,7 +14,6 @@ def fetchurl(url, data=None):
                 return result.read()
         except urllib2.URLError, e:
                 print e
-                return "error"
 
 def get_rawtx(tx_index):
         url = "https://blockchain.info/rawtx/%s" % tx_index
@@ -41,8 +40,6 @@ def computeHash(doc):
 
 def fetchHashFromChain(tx_id, cert_marker):
         tx_json = get_rawtx(tx_id)
-        if "error" in tx_json:
-                return "error"
         hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json, cert_marker))
         return hash_from_bc
 

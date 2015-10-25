@@ -93,8 +93,6 @@ def compareHashes(uid=None, transactionID=None):
 		uid = request.args.get('uid')
 	localHash = computeHash(uid)
 	globalHash = fetchHashFromChain(transactionID)
-	if "error" in globalHash:
-		return "error"
 	if v.compareHashes(localHash, globalHash) == True:
 		return "True"
 	return "False"
@@ -115,9 +113,7 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
-	if "error" in verify_doc:
-		return "Oops! Error contacting the blockchain.info API"
-	# signed_cert_path = config.JSONS_PATH+uid+".json"
+	signed_cert_path = config.JSONS_PATH+uid+".json"
 	if verify_author == "True" and verify_doc == "True":
 		return "Success!"
 	elif verify_author == "True":
