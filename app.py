@@ -30,7 +30,7 @@ def home_page():
 				flash('We just sent an email to %s with details on how to collect your coin.' % (hidden_email))
 		else:
 			form.name.errors.append('Oops! We cannot find your name.' )
-	return render_template('index.html', form=form, names=json.dumps(names))
+	return render_template('index.html', form=form, names=json.dumps(names.keys()))
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm(token=None):
