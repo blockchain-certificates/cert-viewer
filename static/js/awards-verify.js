@@ -1,9 +1,9 @@
 loading_messages = [
-	{'message': 'Computing SHA256 digest of local certificate...', 'results': 'DONE'}, 
-	{'message': 'Fetching hash in OP_RETURN field from the blockchain...', 'results': 'DONE'}, 
-	{'message': 'Comparing local hash to hash stored on the blockchain...', 'results': {'True': 'PASS', 'False': 'FAIL'}},
-	{'message': 'Checking cryptographic signature in certificate...', 'results': {'True': 'PASS', 'False': 'FAIL'}},
-	{'message': 'Determining validility...', 'results': {'True': 'PASS', 'False': 'FAIL'}}
+	{'message': 'Computing SHA256 digest of local certificate', 'results': 'DONE'}, 
+	{'message': 'Fetching hash in OP_RETURN field', 'results': 'DONE'}, 
+	{'message': 'Comparing local and blockchain hashes', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Checking Media Lab signature', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': '', 'results': {'True': 'PASS', 'False': 'FAIL'}}
 	]
 
 urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/verify']
@@ -48,13 +48,12 @@ $(document).ready(function() {
 		var data = $(this).attr('value');
 		for (i=0; i<urls.length; i++){
 			(function(index) {
-	        	var progress = (index+1).toString()+"/"+urls.length.toString();
+	        	var progress = (index+1).toString()+"/"+(urls.length-1).toString();
 				makeCall(index, data, function(res, index){
 					setTimeout(function(){
 					    $("#progress-msg").show();
 						$("#progress-msg").html($("#progress-msg").html()+loading_messages[index]['message']+'</span>');
 						var mark = getMark(index, res);
-						console.log(mark);
 						setTimeout(function(){
 							if(index == urls.length-1){
 								if(res.indexOf("Oops!")>-1){
@@ -63,10 +62,10 @@ $(document).ready(function() {
 								else{
 									$("#verified").show()
 								}
-								$("#progress-msg").html($("#progress-msg").html()+'<br><span class="return-fields font-light">'+res+'<span class="okay-field">['+mark+' '+progress+']</span></span><br>');
+								$("#progress-msg").html($("#progress-msg").html()+res);
 							}
 							else{
-								$("#progress-msg").html($("#progress-msg").html()+'<br><span class="return-fields font-light okay-field ">['+mark+' '+progress+']</span><br>');
+								$("#progress-msg").html($("#progress-msg").html()+' ['+mark+' '+progress+']<br>');
 							}
 						}, timeDelay-500)
 					}, timeDelay*index);
