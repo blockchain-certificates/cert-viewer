@@ -93,6 +93,8 @@ def compareHashes(uid=None, transactionID=None):
 		uid = request.args.get('uid')
 	localHash = computeHash(uid)
 	globalHash = fetchHashFromChain(transactionID)
+	if globalHash == 'error':
+		return 'error'
 	if v.compareHashes(localHash, globalHash) == True:
 		return "True"
 	return "False"
@@ -114,6 +116,9 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
+	print verify_doc
+	if verify_doc == 'error':
+		return 'Error! Could not connect to blockchain.info API. Please try again later.'
 	if verify_author == "True" and verify_doc == "True":
 		return "Success! The certificate has been verified."
 	elif verify_author == "True":

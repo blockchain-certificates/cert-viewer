@@ -1,7 +1,7 @@
 loading_messages = [
 	{'message': 'Computing SHA256 digest of local certificate', 'results': 'DONE'}, 
 	{'message': 'Fetching hash in OP_RETURN field', 'results': 'DONE'}, 
-	{'message': 'Comparing local and blockchain hashes', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Comparing local and blockchain hashes', 'results': {'True': 'PASS', 'False': 'FAIL', 'error': 'ERROR'}},
 	{'message': 'Checking Media Lab signature', 'results': {'True': 'PASS', 'False': 'FAIL'}},
 	{'message': '', 'results': {'True': 'PASS', 'False': 'FAIL'}}
 	]
@@ -56,7 +56,7 @@ $(document).ready(function() {
 						var mark = getMark(index, res);
 						setTimeout(function(){
 							if(index == urls.length-1){
-								if(res.indexOf("Oops!")>-1){
+								if(res.indexOf("Oops!")>-1 || res.indexOf("Error")>-1){
 									$("#not-verified").show()
 								}
 								else{
