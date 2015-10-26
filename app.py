@@ -101,7 +101,8 @@ def compareHashes(uid=None, transactionID=None):
 def checkAuthor(uid=None):
 	if uid == None:
 		uid = request.args.get('uid')
-	signed_local_json = helpers.findUser_by_id(uid)["json"]
+	signed_cert_path = config.JSONS_PATH+uid+".json"
+	signed_local_json = json.loads(helpers.read_file(signed_cert_path))
 	verify_authors = v.checkAuthor("1HW53ZHzK6uPBWgQrnZ4WHynVojvJ2Vfqv", signed_local_json) #change this to config.BLOCKCHAIN_ADDRESS
 	if verify_authors:
 		return "True"
@@ -113,9 +114,8 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
-	signed_cert_path = config.JSONS_PATH+uid+".json"
 	if verify_author == "True" and verify_doc == "True":
-		return "Success!"
+		return "Success! The certificate has been verified."
 	elif verify_author == "True":
 		return "Oops! Certificate content could not be verified"
 	else:
