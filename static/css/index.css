@@ -1,0 +1,106 @@
+/* styles for index.html homepage */
+
+body{
+  padding: 35px;
+}
+
+.heading{
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.description{
+  line-height: 1.3;
+}
+
+.hash{
+  line-height: 1.2;
+}
+
+#footer-info{
+  margin-top: 30px;
+}
+
+input#name{
+	min-height: 46px;
+	font-size: 18px;
+}
+
+.empty-message {
+	padding-left: 16px;
+	padding-right: 16px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 18px;
+	text-align: left;
+}
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 396px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 24px;
+  line-height: 30px;
+  border: 1px solid #333;
+  outline: none;
+  box-shadow: none;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+/*.typeahead:focus {
+  border: 2px solid #0097cf;
+}*/
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999;
+}
+
+.tt-menu {
+  width: 100%;
+  margin: 12px 0;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #333;
+  /*border: 1px solid rgba(0, 0, 0, 0.2);*/
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: #000;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #000;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+input.form-control.typeahead.tt-hint {
+    display: none;
+}
+
+.tt-menu.tt-open{
+	margin-top: -1px;
+}

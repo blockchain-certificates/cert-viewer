@@ -66,3 +66,8 @@ a:hover,a:focus{
   word-wrap: break-word;
 }
 
+.popup-msg{
+  float: left;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}

@@ -17,16 +17,20 @@ client = MongoClient(host=secrets.MONGO_URI)
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
 	form = RegistrationForm(request.form)
+	names = helpers.makeListOfAllNames()
 	if request.method == 'POST' and form.validate():
-		givenName = form.first_name.data
-		familyName = form.last_name.data
-		user = helpers.findUser_by_name(familyName, givenName)
-		if user:
-			temp = send_confirm_email(user['user']['email'],user['user']['name'])
-			flash('We sent you an email. Go check it out.')
+		name = form.name.data
+		uid = names.get(name, None)
+		if uid:
+			user = helpers.findUser_by_id(uid)
+			if user:
+				temp = send_confirm_email(user['user']['email'], user['user']['name'])
+				hidden_email_parts = user['user']['email'].split("@")
+				hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
+				flash('We just sent an email to %s with details on how to collect your coin.' % (hidden_email))
 		else:
-			form.last_name.errors.append('Hmm... we cannot find you. Try again?')
-	return render_template('index.html', form=form)
+			form.name.errors.append('Oops! We cannot find your name.' )
+	return render_template('index.html', form=form, names=json.dumps(names.keys()))
 
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm(token=None):
@@ -89,6 +93,8 @@ def compareHashes(uid=None, transactionID=None):
 		uid = request.args.get('uid')
 	localHash = computeHash(uid)
 	globalHash = fetchHashFromChain(transactionID)
+	if globalHash == 'error':
+		return 'error'
 	if v.compareHashes(localHash, globalHash) == True:
 		return "True"
 	return "False"
@@ -110,6 +116,9 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
+	print verify_doc
+	if verify_doc == 'error':
+		return 'Error! Could not connect to blockchain.info API. Please try again later.'
 	if verify_author == "True" and verify_doc == "True":
 		return "Success! The certificate has been verified."
 	elif verify_author == "True":
