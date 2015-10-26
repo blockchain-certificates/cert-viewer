@@ -50,6 +50,23 @@ def updateRequested(user):
 	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
 	return True
 
+def createUser(form):
+	userJson = {}
+	userJson["issued"] = None
+	userJson["txid"] = None
+	userJson["user"] = {}
+	userJson["user"]["email"] = form.email.data
+	userJson["user"]["name"] = {"familyName": form.last_name.data, "givenName": form.first_name.data}
+	userJson["user"]["address"] = {
+		"streetAddress": form.address.data,
+		"city": form.city.data,
+		"state": form.state.data,
+		"zipcode": "\'"+form.zipcode.data,
+		"country": form.country.data
+	}
+	client.admin.coins.insert_one(userJson)
+	return userJson["user"]["name"]
+
 def addAddress(user, form):
 	userId = user["_id"]
 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.streetAddress": form.address.data}})

@@ -40,31 +40,51 @@
           </p>
 
           <h3 class="heading font-bold">Collect Your Coin</h3>
+          <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  <span class="popup-msg font-light">
+                  {% for message in messages %}
+                    {{ message }}
+                  {% endfor %}
+                  </span>
+                {% endif %}
+              {% endwith %}
+          </div>
+          <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
           {% from "_formhelpers.html" import render_errors %}
           <form method="POST">
-            <div class="input-group input-group-lg">
-              {{ form.name(type='text',placeholder='Enter your name',**{'class':'form-control typeahead'})}}
+            <div class="input-group input-group-lg first-group">
+              {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-            {{ render_errors(form.name) }}
-            <div>
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <span class="popup-msg font-light">
-                {% for message in messages %}
-                  {{ message }}
-                {% endfor %}
-                </span>
-              {% endif %}
-            {% endwith %}
+            {{ render_errors(form.first_name) }}
+            <div class="input-group input-group-lg first-group">
+              {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}
             </div>
-          </form>
-          
-          <h3 class="heading font-bold">Recently Issued</h3>
-          <p class="font-light hash long-word"><a href="">Recent Hash</a></p>
-          <p class="font-light hash long-word"><a href="">Recent Hash</a></p>
-          <p class="font-light hash long-word"><a href="">Recent Hash</a></p>
-                             
+            {{ render_errors(form.last_name) }}
+            <div class="input-group input-group-lg first-group">
+              {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
+            </div>
+            {{ render_errors(form.email) }}
+            <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
+            <p class="description font-light form-text">Please use an @media or @mit email if possible.</p>
+            <span id="shipping-info" class="show-later">
+              <h3 class="heading font-bold">Shipping Address</h3>
+              <p class="description font-light"> We will send your physical Media Lab coin here.</p>
+              <div class="input-group input-group-lg">{{ form.address(type='text',placeholder='Address',**{'class':'form-control'})}}</div>
+              {{ render_errors(form.address) }}
+              <div class="input-group input-group-lg">{{ form.city(type='text',placeholder='City',**{'class':'form-control'})}}</div>
+              {{ render_errors(form.city) }}
+              <div class="input-group input-group-lg">{{ form.state(type='text',placeholder='State/Province/Region',**{'class':'form-control'})}}</div>
+              {{ render_errors(form.state) }}
+              <div class="input-group input-group-lg">{{ form.zipcode(type='text',placeholder='ZIP/Postal Code',**{'class':'form-control'})}}</div>
+              {{ render_errors(form.zipcode) }}
+              <div class="input-group input-group-lg">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
+              {{ render_errors(form.country) }}
+              <button type="submit" class="btn btn-default btn-margin">Submit</button>
+            </span>
+          </form> 
+          </div>           
         </div>
       </div>
       <div class="row" id="footer-info">
@@ -76,51 +96,30 @@
       </div>
 
     </div>
-
-    <input id="static-names" type="hidden" value='{{names}}'></input>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="/static/js/typeahead/typeahead.jquery.min.js"></script>
     <script>
-      var id_mappings = JSON.parse($("#static-names").val());
-      var substringMatcher = function(strs) {
-        return function findMatches(q, cb) {
-          var matches, substringRegex;
+    function scrollAndShow(){
+      $("#next-btn").hide()
+      $("#shipping-info").show();
+      $('html, body').animate({
+        scrollTop: $("#shipping-info").offset().top - 100
+      }, 'slow');
+    }
 
-          // an array that will be populated with substring matches
-          matches = [];
-
-          // regex used to determine if a string contains the substring `q`
-          substrRegex = new RegExp(q, 'i');
-
-          // iterate through the pool of strings and for any string that
-          // contains the substring `q`, add it to the `matches` array
-          $.each(strs, function(i, str) {
-            if (substrRegex.test(str)) {
-              matches.push(str);
-            }
-          });
-
-          cb(matches);
-        };
-      };
-      var names = id_mappings;
-
-      $('.typeahead').typeahead({
-        hint: true,
-        highlight: true,
-        minLength: 1,
-      },
-      {
-        name: 'names',
-        source: substringMatcher(names),
-        templates: {
-        empty: [
-            '<div class="empty-message">Oops! No match found.</div>'
-          ]
-      }
+    $(document).ready(function() {
+      var flag = false;
+      if(flag == false){
+        $("#email").focus(function(){
+          scrollAndShow();
+          flag = true;
+        });
+        $("#next-btn").click(function(){
+          scrollAndShow();
+          flag = true;
+        })
+      } 
       });
     </script>
-    
   </body>
 </html>

@@ -71,3 +71,7 @@ a:hover,a:focus{
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
+.btn-margin{
+  margin-top: 5px;
+}

@@ -104,3 +104,19 @@ input.form-control.typeahead.tt-hint {
 .tt-menu.tt-open{
 	margin-top: -1px;
 }
+
+.input-group{
+  margin-top: -2px !important;
+}
+
+.form-text{
+  margin-top: 5px;
+}
+
+.show-later{
+  display: none;
+}
+
+.no-padding-col{
+  padding: 0px;
+}
