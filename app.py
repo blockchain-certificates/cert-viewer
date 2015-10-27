@@ -24,6 +24,7 @@ def home_page():
 			hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
 			sent = send_reciept_email(form.email.data, name)
 			flash('We just sent a confirmation email to %s.' % (hidden_email))
+			return render_template('done.html', form=form)
 		except:
 			flash('There seems to be an erorr with our system. Please try again later.')
 	return render_template('index.html', form=form)

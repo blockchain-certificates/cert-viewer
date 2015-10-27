@@ -34,12 +34,12 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-sm-8 col-xs-12">
-          <h3 class="heading font-bold">Media Lab<br>Coins</h3>
+          <h3 class="heading font-bold">MIT Media Lab Coins</h3>
           <p class="description font-light">
               A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
           </p>
 
-          <h3 class="heading font-bold">Collect Your Coin</h3>
+          <h3 class="heading font-bold" id="prompt-header">Request Your Coin</h3>
           <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
               {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -53,7 +53,7 @@
           </div>
           <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
           {% from "_formhelpers.html" import render_errors, render_radio_field %}
-          <form method="POST">
+          <form method="POST" id="reg-form">
             <div class="input-group input-group-lg first-group">
               {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}
             </div>
@@ -67,7 +67,9 @@
             </div>
             {{ render_errors(form.email) }}
             <p class="description font-light form-text">Please use an @media or @mit email if possible.</p>
-            {{ render_radio_field(form.degree) }}
+            <span class="first-group">
+              {{ render_radio_field(form.degree) }}
+            </span>
             {{ render_errors(form.degree) }}
             <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
             
@@ -84,7 +86,7 @@
               {{ render_errors(form.zipcode) }}
               <div class="input-group input-group-lg last-input">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
               {{ render_errors(form.country) }}
-              <button type="submit" class="btn btn-default btn-margin">Submit</button>
+              <button type="submit" class="btn btn-default btn-margin" id="submit-btn">Submit</button>
             </span>
           </form> 
           </div>           
@@ -94,7 +96,6 @@
         <div class="col-md-6 col-sm-8 col-xs-12">
           <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:coins@media.mit.edu">coins@media.mit.edu</a></span></h6>
             <h6><span class="no-wrap">Media Lab </span><span class="no-wrap">Learning Initiative</span></h6>
-            <h6><span class="font-light"><a href="https://github.com/ml-learning/coins.media.mit.edu">Source code on Github</a></h6>
         </div>
       </div>
 
@@ -110,25 +111,44 @@
       }, 'slow');
     }
 
-    $(document).ready(function() {
-      var flag = false;
-      if($(".errors").length > 0){
-        $("#shipping-info").show();
-        flag=true;
-      }
-      if(flag == false){
-        $('input[type="radio"]').click(function(){
-          if ($(this).is(':checked'))
-          {
-            scrollAndShow();
-            flag = true;
+    function validateFirstForm(){
+      var isValid = true;
+      $('.errors').remove();
+      $('.first-group').each(function(){
+        if($(this).find("input").val()==='' || ($(this).find(".radio-input").length > 0 && $(this).find(".radio-input").is(':checked') == false)){
+          if($(this).is("span")==true && $(this).next().hasClass("errors")==false){
+            $('<p class="font-light errors radio-error">Please select one.</p>').insertAfter(this);
+          } else if ($(this).next().hasClass("errors")==false){
+            $('<p class="font-light errors">This field is required.</p>').insertAfter(this);
           }
-        });
-        $("#next-btn").click(function(){
-          scrollAndShow();
-          flag = true;
-        })
-      } 
+          isValid = false;
+        }
+      });
+      return isValid;
+    }
+
+    $(document).ready(function() {
+        var flag = false;
+        if($(".errors").length > 0){
+          $("#shipping-info").show();
+          flag=true;
+        }
+        if(flag == false){
+          // $('input[type="radio"]').click(function(){
+          //   if ($(this).is(':checked') && validateFirstForm() == true)
+          //   {
+          //     scrollAndShow();
+          //     flag = true;
+          //   }
+          // });
+          $("#next-btn").click(function(){
+            console.log(validateFirstForm())
+            if(validateFirstForm() == true){
+              scrollAndShow();
+              flag = true;
+            }
+          })
+        }
       });
     </script>
   </body>

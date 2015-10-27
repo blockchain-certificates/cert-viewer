@@ -52,3 +52,7 @@ input.form-control{
   font-size: 18px;
   padding-left: 0px !important;
 }
+
+.radio-error{
+  margin-top: -12px;
+}

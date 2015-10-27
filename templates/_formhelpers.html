@@ -1,10 +1,16 @@
 {% macro render_errors(field) %}
   {% if field.errors %}
-  <p class="font-light errors">
   	{% for error in field.errors %}
-  		{{ error }}
+  		{% if error == "Not a valid choice" %}
+  			<p class="font-light errors radio-error">
+  				Please select one.
+  			</p>
+  		{% else %}
+  			<p class="font-light errors">
+  				{{ error }}
+  			</p>
+  		{% endif %}
   	{% endfor %}
-  </p>
   {% endif %}
 {% endmacro %}
 

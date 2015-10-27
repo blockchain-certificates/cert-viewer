@@ -73,7 +73,7 @@ a:hover,a:focus{
 }
 
 .btn-margin{
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
   
@@ -156,4 +156,8 @@ input[type=radio]:checked+.lbl::before {
 
 input[type=radio]+.lbl.padding-8::before {
     margin-right: 8px;
+}
+
+.errors{
+  color: #8B0000;
 }
