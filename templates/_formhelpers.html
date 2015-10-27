@@ -1,10 +1,20 @@
 {% macro render_errors(field) %}
   {% if field.errors %}
-  <span class="popup-msg font-light">
+  <p class="font-light errors">
   	{% for error in field.errors %}
   		{{ error }}
-  		Please send us an email at <a href="mailto:coins@media.mit.edu">coins@media.mit.edu</a>.
   	{% endfor %}
-  </span>
+  </p>
   {% endif %}
 {% endmacro %}
+
+{% macro render_radio_field(field) -%}
+    {% for value, label, _ in field.iter_choices() %}
+        <div class="radio">
+            <label class="radio-label">
+                <input type="radio" class="radio-input" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">
+                <span class="font-light lbl padding-8">{{ label }}</span>
+            </label>
+        </div>
+    {% endfor %}
+{%- endmacro %}
