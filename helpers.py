@@ -52,8 +52,9 @@ def updateRequested(user):
 
 def createUser(form):
 	userJson = {}
-	userJson["issued"] = None
+	userJson["issued"] = False
 	userJson["txid"] = None
+	userJson["requested"] = True
 	userJson["user"] = {}
 	userJson["user"]["email"] = form.email.data
 	userJson["user"]["name"] = {"familyName": form.last_name.data, "givenName": form.first_name.data}
