@@ -1,9 +1,20 @@
 {% macro render_errors(field) %}
   {% if field.errors %}
-  <p class="font-light">
+  <p class="font-light errors">
   	{% for error in field.errors %}
   		{{ error }}
   	{% endfor %}
   </p>
   {% endif %}
 {% endmacro %}
+
+{% macro render_radio_field(field) -%}
+    {% for value, label, _ in field.iter_choices() %}
+        <div class="radio">
+            <label class="radio-label">
+                <input type="radio" class="radio-input" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">
+                <span class="font-light lbl padding-8">{{ label }}</span>
+            </label>
+        </div>
+    {% endfor %}
+{%- endmacro %}

@@ -52,7 +52,7 @@
               {% endwith %}
           </div>
           <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-          {% from "_formhelpers.html" import render_errors %}
+          {% from "_formhelpers.html" import render_errors, render_radio_field %}
           <form method="POST">
             <div class="input-group input-group-lg first-group">
               {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}
@@ -62,12 +62,15 @@
               {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}
             </div>
             {{ render_errors(form.last_name) }}
-            <div class="input-group input-group-lg first-group">
+            <div class="input-group input-group-lg first-group last-input">
               {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
             </div>
             {{ render_errors(form.email) }}
-            <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
             <p class="description font-light form-text">Please use an @media or @mit email if possible.</p>
+            {{ render_radio_field(form.degree) }}
+            {{ render_errors(form.degree) }}
+            <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
+            
             <span id="shipping-info" class="show-later">
               <h3 class="heading font-bold">Shipping Address</h3>
               <p class="description font-light"> We will send your physical Media Lab coin here.</p>
@@ -79,7 +82,7 @@
               {{ render_errors(form.state) }}
               <div class="input-group input-group-lg">{{ form.zipcode(type='text',placeholder='ZIP/Postal Code',**{'class':'form-control'})}}</div>
               {{ render_errors(form.zipcode) }}
-              <div class="input-group input-group-lg">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
+              <div class="input-group input-group-lg last-input">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
               {{ render_errors(form.country) }}
               <button type="submit" class="btn btn-default btn-margin">Submit</button>
             </span>
@@ -109,10 +112,17 @@
 
     $(document).ready(function() {
       var flag = false;
+      if($(".errors").length > 0){
+        $("#shipping-info").show();
+        flag=true;
+      }
       if(flag == false){
-        $("#email").focus(function(){
-          scrollAndShow();
-          flag = true;
+        $('input[type="radio"]').click(function(){
+          if ($(this).is(':checked'))
+          {
+            scrollAndShow();
+            flag = true;
+          }
         });
         $("#next-btn").click(function(){
           scrollAndShow();

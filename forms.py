@@ -1,4 +1,4 @@
-from wtforms import Form, TextField, validators
+from wtforms import Form, TextField, validators, RadioField
 
 class RegistrationForm(Form):
 	first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
@@ -9,6 +9,7 @@ class RegistrationForm(Form):
 	state = TextField('State/Province/Region', [validators.required(), validators.length(max=200)])
 	zipcode = TextField('ZIP/Postal Code', [validators.required(), validators.length(max=200)])
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
+	degree = RadioField('Degree', choices=[('mas-ms','MAS MS'),('mas-phd','MAS PhD'), ('other','It\'s complicated')], coerce=unicode)
 	# name = TextField('Name', [validators.required(), validators.length(max=200)])
 
 class AddressForm(Form):
