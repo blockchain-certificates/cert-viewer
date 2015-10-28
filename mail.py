@@ -3,7 +3,6 @@ import secrets
 from itsdangerous import URLSafeSerializer
 
 def send_reciept_email(email, name):
-	print name['givenName']
 	mandrill_client = mandrill.Mandrill(secrets.MANDRILL_API_KEY)
 	template_content = None
 	message = {
