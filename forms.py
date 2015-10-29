@@ -10,6 +10,7 @@ class RegistrationForm(Form):
 	zipcode = TextField('ZIP/Postal Code', [validators.required(), validators.length(max=200)])
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
 	degree = RadioField('Degree', choices=[('mas-ms','MAS MS'),('mas-phd','MAS PhD'), ('other','It\'s complicated')], coerce=unicode)
+	comments = TextField('Comments', [validators.optional()])
 	# name = TextField('Name', [validators.required(), validators.length(max=200)])
 
 class AddressForm(Form):

@@ -56,3 +56,11 @@ input.form-control{
 .radio-error{
   margin-top: -12px;
 }
+
+#comments-input{
+  display: none;
+}
+
+#comments{
+  margin-bottom: 20px;
+}

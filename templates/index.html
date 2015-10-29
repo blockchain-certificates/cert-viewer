@@ -15,7 +15,6 @@
     <!-- Custom styles for this template -->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="/static/css/index.css" rel="stylesheet">
-    <link href="/static/css/comments.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -40,7 +39,7 @@
               A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
           </p>
           <p class="description font-light">
-            <a href="https://medium.com/@medialab/certificates-reputation-and-the-blockchain-aee03622426f#.tiakqzog5#disqus_thread" target="_blank">
+            <a href="https://medium.com/@medialab/certificates-reputation-and-the-blockchain-aee03622426f#.tiakqzog5" target="_blank">
               Read more about the project on Medium
             </a>
           </p>
@@ -76,6 +75,10 @@
               {{ render_radio_field(form.degree) }}
             </span>
             {{ render_errors(form.degree) }}
+            <div class="input-group input-group-lg first-group last-input" id="comments-input">
+              {{ form.comments(type='text',placeholder='Comments',**{'class':'form-control'})}}
+            </div>
+            {{ render_errors(form.comments) }}
             <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
             
             <span id="shipping-info" class="show-later">
@@ -103,18 +106,13 @@
             <h6><span class="no-wrap">Media Lab </span><span class="no-wrap">Learning Initiative</span></h6>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-8 col-xs-12">
-          <div id="disqus_thread"></div>
-          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-        </div>
-      </div>
+
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
     function scrollAndShow(){
-      $("#next-btn").hide()
+      $("#next-btn").hide();
       $("#shipping-info").show();
       $('html, body').animate({
         scrollTop: $("#shipping-info").offset().top - 100
@@ -125,7 +123,7 @@
       var isValid = true;
       $('.errors').remove();
       $('.first-group').each(function(){
-        if($(this).find("input").val()==='' || ($(this).find(".radio-input").length > 0 && $(this).find(".radio-input").is(':checked') == false)){
+        if( ($(this).find("input").val()==='' && $(this).find("input").attr("id")!="comments") || ($(this).find(".radio-input").length > 0 && $(this).find(".radio-input").is(':checked') == false)){
           if($(this).is("span")==true && $(this).next().hasClass("errors")==false){
             $('<p class="font-light errors radio-error">Please select one.</p>').insertAfter(this);
           } else if ($(this).next().hasClass("errors")==false){
@@ -139,18 +137,18 @@
 
     $(document).ready(function() {
         var flag = false;
+
         if($(".errors").length > 0){
           $("#shipping-info").show();
+          $("#next-btn").hide();
           flag=true;
         }
+
+        if ($(this).is(':checked') && this.value == 'other'){
+          $("#comments-input").show();
+        }
+
         if(flag == false){
-          // $('input[type="radio"]').click(function(){
-          //   if ($(this).is(':checked') && validateFirstForm() == true)
-          //   {
-          //     scrollAndShow();
-          //     flag = true;
-          //   }
-          // });
           $("#next-btn").click(function(){
             console.log(validateFirstForm())
             if(validateFirstForm() == true){
@@ -159,28 +157,18 @@
             }
           })
         }
+
+        $('input[type="radio"]').click(function(){
+          if ($(this).is(':checked') && this.value == 'other')
+          {
+            $("#comments-input").show();
+          }
+          else{
+            $("#comments-input").hide();
+          }
+        });
+
       });
     </script>
-    <script>
-          /**
-           *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-           *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-           */
-          
-          var disqus_config = function () {
-              this.page.url = "{{request.url}}";  // Replace PAGE_URL with your page's canonical URL variable
-              this.page.identifier = "index"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-          };
-          
-          (function() {  // DON'T EDIT BELOW THIS LINE
-              var d = document, s = d.createElement('script');
-              
-              s.src = '//medialabcoins.disqus.com/embed.js';
-              
-              s.setAttribute('data-timestamp', +new Date());
-              (d.head || d.body).appendChild(s);
-          })();
-      </script>
-      <script id="dsq-count-scr" src="//medialabcoins.disqus.com/count.js" async></script>
   </body>
 </html>
