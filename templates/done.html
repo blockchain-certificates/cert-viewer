@@ -63,9 +63,35 @@
             <h6><span class="no-wrap">Media Lab </span><span class="no-wrap">Learning Initiative</span></h6>
         </div>
       </div>
-
+      <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+          <div id="disqus_thread"></div>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        </div>
+      </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script>
+          /**
+           *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+           *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+           */
+          
+          var disqus_config = function () {
+              this.page.url = "{{request.url}}";  // Replace PAGE_URL with your page's canonical URL variable
+              this.page.identifier = "index"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+          };
+          
+          (function() {  // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
+              
+              s.src = '//medialabcoins.disqus.com/embed.js';
+              
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+          })();
+      </script>
+      <script id="dsq-count-scr" src="//medialabcoins.disqus.com/count.js" async></script>
   </body>
 </html>
