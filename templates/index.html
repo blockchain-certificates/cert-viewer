@@ -144,10 +144,6 @@
           flag=true;
         }
 
-        if ($(this).is(':checked') && this.value == 'other'){
-          $("#comments-input").show();
-        }
-
         if(flag == false){
           $("#next-btn").click(function(){
             console.log(validateFirstForm())
@@ -157,16 +153,6 @@
             }
           })
         }
-
-        $('input[type="radio"]').click(function(){
-          if ($(this).is(':checked') && this.value == 'other')
-          {
-            $("#comments-input").show();
-          }
-          else{
-            $("#comments-input").hide();
-          }
-        });
 
       });
     </script>
