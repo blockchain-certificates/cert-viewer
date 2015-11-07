@@ -29,6 +29,10 @@ def home_page():
 			flash('There seems to be an erorr with our system. Please try again later.')
 	return render_template('index.html', form=form)
 
+@app.route('/faq', methods=['GET'])
+def faq_page():
+	return render_template('faq.html')
+
 @app.route('/confirm/<token>', methods=['GET', 'POST'])
 def confirm(token=None):
 	if check_token(token):
