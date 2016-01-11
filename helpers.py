@@ -100,14 +100,14 @@ def check_display(award):
 def get_id_info(recipient):
 	pubkey_content = read_file(config.MLPUBKEY_PATH)
 	tx_id = recipient["txid"]
-	json_info = recipient["json"]
+	json_info = read_json("%s%s.json" % (config.JSONS_PATH, recipient["_id"]))
 	verification_info = {
 		"uid": str(recipient["_id"]),
 		"transactionID": tx_id
 	}
 	award = {
 		"logoImg": json_info["certificate"]["issuer"]["image"],
-		"name": json_info["recipient"]["givenName"]+' '+recipient["json"]["recipient"]["familyName"],
+		"name": json_info["recipient"]["givenName"]+' '+json_info["recipient"]["familyName"],
 		"title": json_info["certificate"]["title"],
 		"subtitle": json_info["certificate"]["subtitle"]["content"],
 		"display": json_info["certificate"]["subtitle"]["display"],
