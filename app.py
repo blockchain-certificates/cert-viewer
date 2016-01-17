@@ -17,6 +17,7 @@ client = MongoClient(host=secrets.MONGO_URI)
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
 	form = RegistrationForm(request.form)
+	done=False
 	if request.method == 'POST' and form.validate():
 		try:
 			name = helpers.createUser(form)
@@ -24,31 +25,37 @@ def home_page():
 			hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
 			sent = send_reciept_email(form.email.data, name)
 			flash('We just sent a confirmation email to %s.' % (hidden_email))
-			return render_template('done.html', form=form)
+			done=True
+			return render_template('index.html', form=form, done=done)
 		except:
 			flash('There seems to be an erorr with our system. Please try again later.')
-	return render_template('index.html', form=form)
+	return render_template('index.html', form=form, done=done)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+	term = request.args.get('term', None)
+	return redirect(url_for('get_award', identifier=term))
+
+@app.route('/request', methods=['GET', 'POST'])
+def request_page():
+	form = RegistrationForm(request.form)
+	done=False
+	if request.method == 'POST' and form.validate():
+		try:
+			name = helpers.createUser(form)
+			hidden_email_parts = form.email.data.split("@")
+			hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
+			sent = send_reciept_email(form.email.data, name)
+			flash('We just sent a confirmation email to %s.' % (hidden_email))
+			done=True
+			return render_template('request.html', form=form, done=done)
+		except:
+			flash('There seems to be an erorr with our system. Please try again later.')
+	return render_template('request.html', form=form, done=done)
 
 @app.route('/faq', methods=['GET'])
 def faq_page():
 	return render_template('faq.html')
-
-@app.route('/confirm/<token>', methods=['GET', 'POST'])
-def confirm(token=None):
-	if check_token(token):
-		email = check_token(token)
-		user = helpers.findUser_by_email(email)
-		name = user["user"]["name"]["givenName"]
-		form = AddressForm(request.form)
-		if request.method == 'POST' and form.validate():
-			helpers.createJson(user)
-			helpers.updateRequested(user)
-			helpers.addAddress(user,form)
-			flash('You did it! Your coin is on the way!')
-			return redirect(url_for('home_page'))
-		return render_template('confirm.html', form=form, name=name)
-	else:
-		return 'Sorry, this page does not exist.'
 
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
@@ -59,15 +66,17 @@ def key_page(key_name=None):
 		return 'Sorry, this page does not exist.'
 
 @app.route('/<identifier>')
-def award_by_hash(identifier=None):
-	award = None
-	if len(identifier) == 24:
-		user = helpers.findUser_by_id(identifier)
-	else:
-		user = helpers.findUser_by_txid(identifier)
-	if user and user["issued"] == True:
-		award, verification_info = helpers.get_id_info(user)
-	if award:
+def get_award(identifier=None):
+	user, certificates = helpers.findUser_by_pubkey(identifier)
+	if user:
+		certificates = helpers.showIssuedOnly(certificates)
+		awards, verfications_info = helpers.get_info_for_certificates(certificates)
+		print user
+		return render_template('user.html', user=user, awards=awards)
+	user, certificate = helpers.findUser_by_txid(identifier)
+	if user:
+		certificate = helpers.showIssuedOnly([certificate])[0]
+		award, verification_info = helpers.get_id_info(certificate)
 		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
 	return "Sorry, this page does not exist."
 

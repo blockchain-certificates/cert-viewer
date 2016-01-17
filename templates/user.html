@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}ML Coins{% endblock %}
+
+{% block css %}
+<link href="/static/css/awards.css" rel="stylesheet">
+<link href="/static/css/user.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-2 col-sm-2 col-xs-4">
+    <a href="http://media.mit.edu">
+      <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+    <h3 class="heading font-bold name">{{user.info.name.givenName}} {{user.info.name.familyName}}</h3>
+    <p class="description font-light">
+        A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
+    </p>
+  </div>
+</div>
+<div class="row" id="awards-row">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+  {% for award in awards*3 %}
+  <a href="/{{award.transactionID}}">
+    <div class="col-md-5 col-sm-5 col-xs-12 award-tile">
+      <h4 class="heading font-bold">{{award.title}} - {{award.organization}}</h4>
+      <p class="font-light">
+        {{award.issuedOn}}
+      </p>
+      <p class="font-light">
+        {{award.text[0:150]}}...
+      </p>
+    </div>
+  </a>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -9,15 +9,24 @@ from createjsonmodule import create
 client = MongoClient(host=secrets.MONGO_URI)
 
 def findUser_by_id(id):
-	user = client.admin.coins.find_one({'_id':ObjectId(id)})
+	user = client.admin.recipients.find_one({'_id':ObjectId(id)})
 	return user
 
 def findUser_by_txid(txid):
-	user = client.admin.coins.find_one({'txid': txid})
-	return user
+	certificate = client.admin.certificates.find_one({'txid': txid})
+	user = client.admin.recipients.find_one({'pubkey': certificate['pubkey']})
+	return user, certificate
+
+def findUser_by_pubkey(pubkey):
+	user = client.admin.recipients.find_one({'pubkey': pubkey})
+	certificates = None
+	if user:
+		user["_id"] = str(user['_id'])
+		certificates = list(client.admin.certificates.find({'pubkey': pubkey}))
+	return user, certificates
 
 def findUser_by_email(email):
-	user = client.admin.coins.find_one({'user.email': email})
+	user = client.admin.recipients.find_one({'info.email': email})
 	return user
 
 def findUser_by_name(familyName, givenName):
@@ -28,6 +37,23 @@ def findUser_by_name(familyName, givenName):
 		return user
 	except IndexError:
 		return None
+
+def showIssuedOnly(certs):
+	issued_certs = []
+	for cert in certs:
+		print cert
+		if cert['issued'] == True:
+			issued_certs.append(cert)
+	return issued_certs
+
+def get_info_for_certificates(certificates):
+	awards = []
+	verifications = []
+	for certificate in certificates:
+		award, verification_info = get_id_info(certificate)
+		awards.append(award)
+		verifications.append(verification_info)
+	return awards, verifications
 
 def makeListOfAllNames():
 	names = {}
@@ -97,12 +123,12 @@ def check_display(award):
 		award['subtitle'] = '';
 	return award
 
-def get_id_info(recipient):
+def get_id_info(cert):
 	pubkey_content = read_file(config.MLPUBKEY_PATH)
-	tx_id = recipient["txid"]
-	json_info = read_json("%s%s.json" % (config.JSONS_PATH, recipient["_id"]))
+	tx_id = cert["txid"]
+	json_info = read_json("%s%s.json" % (config.JSONS_PATH, cert["_id"]))
 	verification_info = {
-		"uid": str(recipient["_id"]),
+		"uid": str(cert["_id"]),
 		"transactionID": tx_id
 	}
 	award = {
@@ -117,7 +143,8 @@ def get_id_info(recipient):
 		"mlPublicKey": pubkey_content,
 		"mlPublicKeyURL": json_info["verify"]["signer"],
 		"transactionID": tx_id,
-		"transactionIDURL": 'https://blockchain.info/tx/'+tx_id
+		"transactionIDURL": 'https://blockchain.info/tx/'+tx_id,
+		"issuedOn": json_info["assertion"]["issuedOn"]
 	}
 	award = check_display(award)
 	return award, verification_info

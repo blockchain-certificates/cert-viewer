@@ -1,161 +1,43 @@
+{% extends "layout.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="static/img/favicon.ico">
-    <title>coins.media.mit.edu</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Custom styles for this template -->
-    <link href="/static/css/style.css" rel="stylesheet">
-    <link href="/static/css/index.css" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
+{% block title %}ML Coins{% endblock %}
 
-  <body>
+{% block css %}
+  <link href="/static/css/index.css" rel="stylesheet">
+  <link href="/static/css/search.css" rel="stylesheet">
+{% endblock %}
 
-  <div class="container">
-      <div class="row">
-        <div class="col-md-2 col-sm-2 col-xs-4">
-          <a href="http://media.mit.edu">
-            <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
-          </a>
-        </div>
+{% block content %}
+<div class="row">
+  <div class="col-md-2 col-sm-2 col-xs-4">
+    <a href="http://media.mit.edu">
+      <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
+    </a>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+    <h3 class="heading font-bold">MIT Media Lab Coins</h3>
+    <p class="description font-light">
+        A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
+    </p>
+    <p class="description font-light">
+      <a href="https://medium.com/@medialab/certificates-reputation-and-the-blockchain-aee03622426f#.tiakqzog5" target="_blank">
+        Read more about the project on Medium
+      </a>
+    </p>
+    <h3 class="heading font-bold">Search</h3>  
+    <p class="description font-light">Enter your Media Lab public key to search for your coin.</p>
+    <form action='/search'>
+      <div class="input-group input-group-lg" id="search-box">
+        <input class="form-control" id="term" name="term" placeholder="" type="text" value="">
       </div>
-      <div class="row">
-        <div class="col-md-6 col-sm-8 col-xs-12">
-          <h3 class="heading font-bold">MIT Media Lab Coins</h3>
-          <p class="description font-light">
-              A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
-          </p>
-          <p class="description font-light">
-            <a href="https://medium.com/@medialab/certificates-reputation-and-the-blockchain-aee03622426f#.tiakqzog5" target="_blank">
-              Read more about the project on Medium
-            </a>
-          </p>
-          <h3 class="heading font-bold" id="prompt-header">ML Alums,<br>Request Your Coin</h3>
-          <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-              {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                  <span class="popup-msg font-light">
-                  {% for message in messages %}
-                    {{ message }}
-                  {% endfor %}
-                  </span>
-                {% endif %}
-              {% endwith %}
-          </div>
-          <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-          {% from "_formhelpers.html" import render_errors, render_radio_field %}
-          <form method="POST" id="reg-form">
-            <div class="input-group input-group-lg first-group">
-              {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}
-            </div>
-            {{ render_errors(form.first_name) }}
-            <div class="input-group input-group-lg first-group">
-              {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}
-            </div>
-            {{ render_errors(form.last_name) }}
-            <div class="input-group input-group-lg first-group last-input">
-              {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
-            </div>
-            {{ render_errors(form.email) }}
-            <p class="font-light form-text">Please use an @media or @mit email if possible.</p>
-            <span class="first-group">
-              {{ render_radio_field(form.degree) }}
-            </span>
-            {{ render_errors(form.degree) }}
-            <div class="input-group input-group-lg first-group last-input" id="comments-input">
-              {{ form.comments(type='text',placeholder='Comments',**{'class':'form-control'})}}
-            </div>
-            {{ render_errors(form.comments) }}
-            <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
-            
-            <span id="shipping-info" class="show-later">
-              <h3 class="heading font-bold">Shipping Address</h3>
-              <p class="description font-light"> We will send your physical Media Lab coin here.</p>
-              <div class="input-group input-group-lg">{{ form.address(type='text',placeholder='Address',**{'class':'form-control'})}}</div>
-              {{ render_errors(form.address) }}
-              <div class="input-group input-group-lg">{{ form.city(type='text',placeholder='City',**{'class':'form-control'})}}</div>
-              {{ render_errors(form.city) }}
-              <div class="input-group input-group-lg">{{ form.state(type='text',placeholder='State/Province/Region',**{'class':'form-control'})}}</div>
-              {{ render_errors(form.state) }}
-              <div class="input-group input-group-lg">{{ form.zipcode(type='text',placeholder='ZIP/Postal Code',**{'class':'form-control'})}}</div>
-              {{ render_errors(form.zipcode) }}
-              <div class="input-group input-group-lg last-input">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
-              {{ render_errors(form.country) }}
-              <button type="submit" class="btn btn-default btn-margin" id="submit-btn">Submit</button>
-            </span>
-          </form> 
-          </div>           
-        </div>
-      </div>
-      <div class="row" id="footer-info">
-        <div class="col-md-6 col-sm-8 col-xs-12">
-          <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:coins@media.mit.edu">coins@media.mit.edu</a></span></h6>
-          <h6 id="footer-start">Questions? <span class="font-light"><a href="/faq">Check out our FAQ page</a></span></h6>
-          <h6><span class="no-wrap">Media Lab </span><span class="no-wrap">Learning Initiative</span></h6>
-        </div>
-      </div>
+      <button type="submit" class="btn btn-default btn-margin">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
 
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script>
-    function scrollAndShow(){
-      $("#next-btn").hide();
-      $("#shipping-info").show();
-      $('html, body').animate({
-        scrollTop: $("#shipping-info").offset().top - 100
-      }, 'slow');
-    }
-
-    function validateFirstForm(){
-      var isValid = true;
-      $('.errors').remove();
-      $('.first-group').each(function(){
-        if( ($(this).find("input").val()==='' && $(this).find("input").attr("id")!="comments") || ($(this).find(".radio-input").length > 0 && $(this).find(".radio-input").is(':checked') == false)){
-          if($(this).is("span")==true && $(this).next().hasClass("errors")==false){
-            $('<p class="font-light errors radio-error">Please select one.</p>').insertAfter(this);
-          } else if ($(this).next().hasClass("errors")==false){
-            $('<p class="font-light errors">This field is required.</p>').insertAfter(this);
-          }
-          isValid = false;
-        }
-      });
-      return isValid;
-    }
-
-    $(document).ready(function() {
-        var flag = false;
-
-        if($(".errors").length > 0){
-          $("#shipping-info").show();
-          $("#next-btn").hide();
-          flag=true;
-        }
-
-        if(flag == false){
-          $("#next-btn").click(function(){
-            console.log(validateFirstForm())
-            if(validateFirstForm() == true){
-              scrollAndShow();
-              flag = true;
-            }
-          })
-        }
-
-      });
-    </script>
-  </body>
-</html>
+{% block scripts %}
+<script type="text/javascript" src="/static/js/register.js"></script>
+{% endblock %}
