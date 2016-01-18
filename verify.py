@@ -39,19 +39,19 @@ def get_address_from_bc_op(tx_json, address):
                         return True
         return False
 
-def check_revocation(tx_id, revoke_address):
-    tx_json = get_rawtx(tx_id)
+def check_revocation(tx_json, revoke_address):
+    # tx_json = get_rawtx(tx_id)
     tx_outs = tx_json["out"]
     for o in tx_outs:
-        if o.get("addr") == revoke_address:
+        if o.get("addr") == revoke_address and o.get("spent") == False:
             return True
     return False
 
 def computeHash(doc):
         return hashlib.sha256(doc).hexdigest()
 
-def fetchHashFromChain(tx_id, cert_marker):
-        tx_json = get_rawtx(tx_id)
+def fetchHashFromChain(tx_json, cert_marker):
+        # tx_json = get_rawtx(tx_id)
         if tx_json == 'error':
                 return 'error'
         hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json, cert_marker))

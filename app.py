@@ -15,6 +15,8 @@ app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
 client = MongoClient(host=secrets.MONGO_URI)
 
+TX_JSON = None
+
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
 	form = RegistrationForm(request.form)
@@ -81,20 +83,28 @@ def get_award(identifier=None):
 		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info), linkedin_url=linkedin_url)
 	return "Sorry, this page does not exist."
 
+@app.route('/prepareVerification')
+def prepareVerification(transactionID=None):
+	if transactionID == None:
+		transactionID = request.args.get('transactionID')
+	global TX_JSON
+	TX_JSON = v.get_rawtx(transactionID)
+	return "True"
+
 @app.route('/computeHash')
 def computeHash(uid=None):
 	if uid == None:
 		uid = request.args.get('uid')
 	signed_cert_path = config.JSONS_PATH+uid+".json"
-        signed_json = open(signed_cert_path).read()
+	signed_json = open(signed_cert_path).read()
 	hashed = v.computeHash(signed_json)
 	return hashed
 
 @app.route('/fetchHashFromChain')
-def fetchHashFromChain(transactionID=None):
-	if transactionID == None:
-		transactionID = request.args.get('transactionID')
-	hashed = v.fetchHashFromChain(transactionID, config.CERT_MARKER)
+def fetchHashFromChain(): #transactionID=None):
+	# if transactionID == None:
+	# 	transactionID = request.args.get('transactionID')
+	hashed = v.fetchHashFromChain(TX_JSON, config.CERT_MARKER)
 	return hashed
 
 @app.route('/compareHashes')
@@ -103,7 +113,7 @@ def compareHashes(uid=None, transactionID=None):
 		transactionID = request.args.get('transactionID')
 		uid = request.args.get('uid')
 	localHash = computeHash(uid)
-	globalHash = fetchHashFromChain(transactionID)
+	globalHash = fetchHashFromChain() #transactionID)
 	if globalHash == 'error':
 		return 'error'
 	if v.compareHashes(localHash, globalHash) == True:
@@ -127,7 +137,7 @@ def checkRevocation(revokeKey=None, transactionID=None):
 	if transactionID == None or revokeKey == None:
 		transactionID = request.args.get('transactionID')
 		revokeKey = helpers.read_file(config.MLREVOKEKEY_PATH)
-	not_revoked = v.check_revocation(transactionID, revokeKey)
+	not_revoked = v.check_revocation(TX_JSON, revokeKey)
 	if not_revoked:
 		return "True"
 	return "False"
@@ -139,7 +149,7 @@ def verify():
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
 	verify_not_revoked = checkRevocation(helpers.read_file(config.MLREVOKEKEY_PATH), transactionID)
-	print "verify_author: %s, verify_doc: %s, verify_not_revoked: %s" % (verify_author, verify_doc, verify_not_revoked) 
+	# print "verify_author: %s, verify_doc: %s, verify_not_revoked: %s" % (verify_author, verify_doc, verify_not_revoked) 
 	if verify_doc == 'error':
 		return 'Error! Could not connect to blockchain.info API. Please try again later.'
 	if verify_author == "True" and verify_doc == "True" and verify_not_revoked == "True":

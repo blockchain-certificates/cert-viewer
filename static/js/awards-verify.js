@@ -42,6 +42,9 @@ function getMark(index, res){
 }
 
 $(document).ready(function() {
+	var prepare_url = '/prepareVerification?'+$( "#verify-button" ).attr('value');
+	$.get(prepare_url, function(res){});
+	
 	$( "#verify-button" ).click(function() {
 		$("#not-verified").hide();
 		$("#verified").hide();
