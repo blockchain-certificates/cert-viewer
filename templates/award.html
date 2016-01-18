@@ -7,45 +7,55 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-2 col-sm-2 col-xs-4">
-    <img src="{{award.logoImg}}" class="img-responsive" alt="MIT Media Lab"/>
+<div class="divToPrint">
+  <div class="row">
+    <div class="col-md-2 col-sm-2 col-xs-4">
+      <img src="{{award.logoImg}}" id="logo" class="img-responsive" alt="MIT Media Lab"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-8 col-xs-12">
+      <h3 class="name font-bold"> {{award.name}}</h3>
+      <h4 class="subtitle"> {{award.title}} </h4>
+      <h4 class="subtitle"> {{award.organization}}</h4>
+      <h4 class="subtitle">{{award.subtitle}}</h4>
+      <p class="description font-light"> {{award.text}} </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-4 col-sm-3 col-sm-offset-5 col-xs-4 col-xs-offset-7">
+      <img src="{{award.signatureImg}}" class="img-responsive" id="signature-img" alt="Signature"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-8 col-xs-12">
+      <h6 class="signature-info">This certificate was digitally signed by the <span class="no-wrap">{{award.organization}}</span> and registered on the blockchain.</h6>
+    </div>
+  </div>
+  <div class="row hide-on-print">
+    <div class="col-md-6 col-sm-8 col-xs-12">
+      <button class="btn btn-sm btn-default hide-on-print" id="verify-button" value="{{verification_info}}">Verify certificate</button>
+      <span id="verified"> <img id="verified-icon" src="static/img/verified.png"/> Verified </span>
+      <span id="not-verified"> <img id="not-verified-icon" src="static/img/not-verified.png"/> Not Verified</span>
+    </div>
+  </div>
+  <div class="row hide-on-print">
+    <div class="col-md-6 col-sm-8 col-xs-12">
+      <h6 id="progress-msg" class="long-word output-txt"></h6>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-8 col-xs-12">
+      <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
+      <h6 class="signature-info">Blockchain Address: <a href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
+    </div>
   </div>
 </div>
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12">
-    <h3 class="name font-bold"> {{award.name}}</h3>
-    <h4 class="subtitle"> {{award.title}} </h4>
-    <h4 class="subtitle"> {{award.organization}}</h4>
-    <h4 class="subtitle">{{award.subtitle}}</h4>
-    <p class="description font-light"> {{award.text}} </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-2 col-md-offset-4 col-sm-3 col-sm-offset-5 col-xs-4 col-xs-offset-7">
-    <img src="{{award.signatureImg}}" class="img-responsive" id="signature-img" alt="Signature"/>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <h6 class="signature-info">This certificate was digitally signed by the <span class="no-wrap">{{award.organization}}</span> and registered on the blockchain.</h6>
-    <button class="btn btn-sm btn-default" id="verify-button" value="{{verification_info}}">Verify certificate</button>
-    <span id="verified"> <img id="verified-icon" src="static/img/verified.png"/> Verified </span>
-    <span id="not-verified"> <img id="not-verified-icon" src="static/img/not-verified.png"/> Not Verified</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <h6 id="progress-msg" class="long-word output-txt"></h6>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
-    <h6 class="signature-info">Blockchain Address: <a href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
-    <button class="btn btn-sm btn-default">Print</button>
-    <a href="{{linkedin_url}}">
-      <button class="btn btn-sm btn-default">Add to LinkedIn</button>
+    <button class="btn btn-sm btn-default hide-on-print" id="print-btn">Print</button>
+    <a href="{{linkedin_url}}" id="linkedin-url" class="hide-on-print">
+      <button class="btn btn-sm btn-default" id="linkedin-btn">Add to LinkedIn</button>
     </a>
   </div>
 </div>
@@ -55,5 +65,6 @@
 
 {% block scripts %}
 <script src="/static/js/awards-verify.js"></script>
+<script src="/static/js/print.js"></script>
 {% endblock %}
  

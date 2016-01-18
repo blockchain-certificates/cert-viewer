@@ -64,3 +64,32 @@ body{
 	font-size: 8px;
 	margin-bottom: 12px;
 }
+
+@media print {
+    div.divToPrint {
+        background-color: white;
+        height: 100%;
+        width: 85%;
+        position: fixed;
+        top: 18%;
+        left: 20%;
+        margin: 0;
+    }
+
+    #logo{
+    	width: 100px;
+    }
+
+    a[href]:after {
+    	content: none !important;
+  	}
+
+  	.hide-on-print{
+  		display: none;
+  	}
+}
+
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;  /* this affects the margin in the printer settings */
+}
