@@ -1,12 +1,13 @@
 import os
 import urllib
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory
 from pymongo import MongoClient
 import json
 import config
 import helpers
 import secrets
 import verify as v
+import snippets
 from urllib import quote
 from forms import RegistrationForm, AddressForm
 from mail import send_confirm_email, check_token, send_reciept_email
@@ -82,6 +83,26 @@ def get_award(identifier=None):
 		linkedin_url = config.LINKEDIN_PATH % (quote(config.DOMAIN_NAME+identifier, safe=''))
 		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info), linkedin_url=linkedin_url)
 	return "Sorry, this page does not exist."
+
+@app.route('/data/jsons/<path:filename>')
+def get_file(filename):
+	return helpers.read_file(config.JSONS_PATH+filename)
+
+@app.route('/manual-verification-instructions')
+def get_manual_verification_page(transactionID=None, uid=None):
+	if transactionID == None:
+		transactionID = request.args.get('transactionID')
+	if uid == None:
+		uid = request.args.get('uid')
+	local_download_url = "/"+config.JSONS_PATH+uid+".json"
+	blockchain_download = json.dumps(v.get_rawtx(transactionID))
+	blockchain_download = "text/json;charset=utf-8," + urllib.quote(blockchain_download.encode("utf-8"))
+	issuer_pubkey = helpers.read_file(config.MLPUBKEY_PATH)
+	return render_template('manual-verification.html', local_download_url=local_download_url, blockchain_download=blockchain_download, issuer_pubkey=issuer_pubkey, highlighted_snippets=snippets.HIGHLIGHTED_SNIPPETS)
+
+@app.route('/manual-verification-script')
+def get_manual_script():
+	return snippets.COMPLETE_CODE
 
 @app.route('/prepareVerification')
 def prepareVerification(transactionID=None):

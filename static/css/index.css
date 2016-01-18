@@ -24,7 +24,6 @@ body{
 
 input#name{
 	min-height: 46px;
-	font-size: 18px;
 }
 
 input.form-control.typeahead.tt-hint {

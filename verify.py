@@ -63,8 +63,8 @@ def compareHashes(hash1, hash2):
         return False
 
 def checkAuthor(address, signed_json):
-	message = BitcoinMessage(signed_json["assertion"]["uid"])
-        if signed_json.get("signature", None):
-	       signature = signed_json["signature"]
-               return VerifyMessage(address, message, signature)
-        return False
+    message = BitcoinMessage(signed_json["assertion"]["uid"])
+    if signed_json.get("signature", None):
+        signature = signed_json["signature"]
+        return VerifyMessage(address, message, signature)
+    return False

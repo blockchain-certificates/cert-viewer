@@ -53,9 +53,14 @@
 </div>
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12">
-    <button class="btn btn-sm btn-default hide-on-print" id="print-btn">Print</button>
-    <a href="{{linkedin_url}}" id="linkedin-url" class="hide-on-print">
-      <button class="btn btn-sm btn-default" id="linkedin-btn">Add to LinkedIn</button>
+    <a href="" class="no-decoration">
+      <button class="btn btn-sm btn-default hide-on-print bottom-buttons" id="print-btn">Print</button>
+    </a>
+    <a href="/manual-verification-instructions?{{verification_info}}" class="hide-on-print no-decoration" id="download-btn">
+      <button class="btn btn-sm btn-default bottom-buttons">Verify Manually</button>
+    </a>
+    <a href="{{linkedin_url}}" id="linkedin-url" class="hide-on-print no-decoration">
+      <button class="btn btn-sm btn-default bottom-buttons" id="linkedin-btn">Add to LinkedIn</button>
     </a>
   </div>
 </div>

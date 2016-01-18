@@ -65,6 +65,10 @@ body{
 	margin-bottom: 12px;
 }
 
+.bottom-buttons {
+    margin-bottom: 2px;
+}
+
 @media print {
     div.divToPrint {
         background-color: white;
