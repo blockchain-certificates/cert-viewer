@@ -25,7 +25,7 @@
 </div>
 <div class="row" id="awards-row">
   <div class="col-md-6 col-sm-8 col-xs-12">
-  {% for award in awards*3 %}
+  {% for award in awards %}
   <a href="/{{award.transactionID}}">
     <div class="col-md-5 col-sm-5 col-xs-12 award-tile">
       <h4 class="heading font-bold">{{award.title}} - {{award.organization}}</h4>

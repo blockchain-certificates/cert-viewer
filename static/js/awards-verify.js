@@ -3,10 +3,11 @@ loading_messages = [
 	{'message': 'Fetching hash in OP_RETURN field', 'results': 'DONE'}, 
 	{'message': 'Comparing local and blockchain hashes', 'results': {'True': 'PASS', 'False': 'FAIL', 'error': 'ERROR'}},
 	{'message': 'Checking Media Lab signature', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Checking not revoked by issuer', 'results': {'True': 'PASS', 'False': 'FAIL'}},
 	{'message': '', 'results': {'True': 'PASS', 'False': 'FAIL'}}
 	]
 
-urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/verify']
+urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/checkRevocation', '/verify']
 
 timeDelay = 2000;
 

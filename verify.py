@@ -27,8 +27,8 @@ def get_rawtx(tx_index):
 def get_hash_from_bc_op(tx_json, cert_marker):
         tx_outs = tx_json["out"]
         for o in tx_outs:
-                if o.get("addr") == None:
-                        op_tx = o
+            if o.get("addr") == None:
+                op_tx = o
         op_field = op_tx["script"].decode("hex")
         hashed_json = op_field.split(cert_marker)[-1]
         return hashed_json
@@ -38,6 +38,14 @@ def get_address_from_bc_op(tx_json, address):
                 if tx["prev_out"]["addr"]==address:
                         return True
         return False
+
+def check_revocation(tx_id, revoke_address):
+    tx_json = get_rawtx(tx_id)
+    tx_outs = tx_json["out"]
+    for o in tx_outs:
+        if o.get("addr") == revoke_address:
+            return True
+    return False
 
 def computeHash(doc):
         return hashlib.sha256(doc).hexdigest()

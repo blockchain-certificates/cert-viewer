@@ -41,7 +41,6 @@ def findUser_by_name(familyName, givenName):
 def showIssuedOnly(certs):
 	issued_certs = []
 	for cert in certs:
-		print cert
 		if cert['issued'] == True:
 			issued_certs.append(cert)
 	return issued_certs

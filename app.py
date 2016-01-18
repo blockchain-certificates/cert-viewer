@@ -7,6 +7,7 @@ import config
 import helpers
 import secrets
 import verify as v
+from urllib import quote
 from forms import RegistrationForm, AddressForm
 from mail import send_confirm_email, check_token, send_reciept_email
 
@@ -71,13 +72,13 @@ def get_award(identifier=None):
 	if user:
 		certificates = helpers.showIssuedOnly(certificates)
 		awards, verfications_info = helpers.get_info_for_certificates(certificates)
-		print user
 		return render_template('user.html', user=user, awards=awards)
 	user, certificate = helpers.findUser_by_txid(identifier)
 	if user:
 		certificate = helpers.showIssuedOnly([certificate])[0]
 		award, verification_info = helpers.get_id_info(certificate)
-		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
+		linkedin_url = config.LINKEDIN_PATH % (quote(config.DOMAIN_NAME+identifier, safe=''))
+		return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info), linkedin_url=linkedin_url)
 	return "Sorry, this page does not exist."
 
 @app.route('/computeHash')
@@ -93,7 +94,7 @@ def computeHash(uid=None):
 def fetchHashFromChain(transactionID=None):
 	if transactionID == None:
 		transactionID = request.args.get('transactionID')
-	hashed = v.fetchHashFromChain(transactionID, "TESTING")#config.CERT_MARKER)
+	hashed = v.fetchHashFromChain(transactionID, config.CERT_MARKER)
 	return hashed
 
 @app.route('/compareHashes')
@@ -115,8 +116,19 @@ def checkAuthor(uid=None):
 		uid = request.args.get('uid')
 	signed_cert_path = config.JSONS_PATH+uid+".json"
 	signed_local_json = json.loads(helpers.read_file(signed_cert_path))
-	verify_authors = v.checkAuthor("1HW53ZHzK6uPBWgQrnZ4WHynVojvJ2Vfqv", signed_local_json) #change this to config.BLOCKCHAIN_ADDRESS
+	issuing_address = helpers.read_file(config.MLPUBKEY_PATH)
+	verify_authors = v.checkAuthor(issuing_address, signed_local_json) #change this to config.BLOCKCHAIN_ADDRESS
 	if verify_authors:
+		return "True"
+	return "False"
+
+@app.route('/checkRevocation')
+def checkRevocation(revokeKey=None, transactionID=None):
+	if transactionID == None or revokeKey == None:
+		transactionID = request.args.get('transactionID')
+		revokeKey = helpers.read_file(config.MLREVOKEKEY_PATH)
+	not_revoked = v.check_revocation(transactionID, revokeKey)
+	if not_revoked:
 		return "True"
 	return "False"
 
@@ -126,15 +138,18 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
-	print verify_doc
+	verify_not_revoked = checkRevocation(helpers.read_file(config.MLREVOKEKEY_PATH), transactionID)
+	print "verify_author: %s, verify_doc: %s, verify_not_revoked: %s" % (verify_author, verify_doc, verify_not_revoked) 
 	if verify_doc == 'error':
 		return 'Error! Could not connect to blockchain.info API. Please try again later.'
-	if verify_author == "True" and verify_doc == "True":
+	if verify_author == "True" and verify_doc == "True" and verify_not_revoked == "True":
 		return "Success! The certificate has been verified."
-	elif verify_author == "True":
+	elif verify_doc == "False":
 		return "Oops! Certificate content could not be verified"
-	else:
+	elif verify_author == "False":
 		return "Oops! Author could not be verfied"
+	else:
+		return "Oops! The certificate has been revoked by the issuer"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
