@@ -2,7 +2,7 @@ KEYS_PATH = 'keys/'
 MLPUBKEY_PATH = KEYS_PATH + '/ml-certs-public-key.asc'
 MLREVOKEKEY_PATH = KEYS_PATH + '/ml-certs-revoke-key.asc'
 # BLOCKCHAIN_ADDRESS = '1HYPitzbwR83M3Smw6GWs5XeQzBWoJAEeS'
-CERT_MARKER = 'CMARKER'
+CERT_MARKER = '        '
 DATA_PATH = 'data/'
 JSONS_PATH = DATA_PATH + 'jsons/'
 

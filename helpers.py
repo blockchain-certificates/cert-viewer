@@ -80,6 +80,7 @@ def createUser(form):
 	userJson["issued"] = False
 	userJson["txid"] = None
 	userJson["requested"] = True
+	userJson["pubkey"] = form.pubkey.data
 	userJson["user"] = {}
 	userJson["user"]["email"] = form.email.data
 	userJson["user"]["degree"] = form.degree.data

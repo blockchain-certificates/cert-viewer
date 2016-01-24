@@ -25,6 +25,11 @@ function validateFirstForm(){
 $(document).ready(function() {
   var flag = false;
 
+  var pubkey = location.href.split("address=")[1];
+  if(pubkey){
+    $("#pubkey").attr('value', pubkey);
+  }
+
   if($(".errors").length > 0){
     $("#shipping-info").show();
     $("#next-btn").hide();

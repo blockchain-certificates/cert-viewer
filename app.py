@@ -57,6 +57,10 @@ def request_page():
 			flash('There seems to be an erorr with our system. Please try again later.')
 	return render_template('request.html', form=form, done=done)
 
+@app.route('/generatekeys', methods=['GET'])
+def generate_keys():
+	return render_template('generatekeys.html')
+
 @app.route('/faq', methods=['GET'])
 def faq_page():
 	return render_template('faq.html')

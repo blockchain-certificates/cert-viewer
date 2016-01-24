@@ -72,8 +72,6 @@ body{
 @media print {
     div.divToPrint {
         background-color: white;
-        height: 100%;
-        width: 85%;
         position: fixed;
         top: 18%;
         left: 20%;

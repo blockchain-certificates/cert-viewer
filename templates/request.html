@@ -43,6 +43,17 @@
         {% endwith %}
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+      <p class="description font-light"> 
+        The Media Lab coins are created using the Bitcoin blockchain. In order to issue you a coin, you need to have a Bitcoin identity. Never used Bitcoin before? Please create a bitcoin identity below. Please note: If you have a pre-existing Bitcoin identity, it is reccomended that you make a new Bitcoin address to hold your Media Lab coin.
+      </p>
+      <p class="description font-light"> 
+        <a href="/generatekeys">
+          <button class="btn btn-default btn-margin">Generate Bitcoin identity</button>
+        </a>
+        <br><br>
+      </p>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
     {% from "_formhelpers.html" import render_errors, render_radio_field %}
     <form method="POST" id="reg-form">
       <div class="input-group input-group-lg first-group">
@@ -53,6 +64,10 @@
         {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}
       </div>
       {{ render_errors(form.last_name) }}
+      <div class="input-group input-group-lg first-group">
+        {{ form.pubkey(type='text',placeholder='Bitcoin Public Address',**{'class':'form-control'})}}
+      </div>
+      {{ render_errors(form.pubkey) }}
       <div class="input-group input-group-lg first-group last-input">
         {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
       </div>
@@ -66,7 +81,7 @@
         {{ form.comments(type='text',placeholder='Comments',**{'class':'form-control'})}}
       </div>
       {{ render_errors(form.comments) }}
-      <button type="button" class="btn btn-default btn-margin" id="next-btn">Next</button>
+      <button type="button" class="btn btn-default btn-margin font-light" id="next-btn">Next</button>
       
       <span id="shipping-info" class="show-later">
         <h3 class="heading font-bold">Shipping Address</h3>
@@ -81,7 +96,7 @@
         {{ render_errors(form.zipcode) }}
         <div class="input-group input-group-lg last-input">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'})}}</div>
         {{ render_errors(form.country) }}
-        <button type="submit" class="btn btn-default btn-margin" id="submit-btn">Submit</button>
+        <button type="submit" class="btn btn-default btn-margin font-light" id="submit-btn">Submit</button>
       </span>
     </form> 
     </div> 

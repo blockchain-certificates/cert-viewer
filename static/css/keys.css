@@ -1,0 +1,45 @@
+#keys{
+	/*font-size: 10px;*/
+	padding-top: 10px;
+	border: 1px solid #333;
+	word-wrap:break-word;
+	display: none;
+	max-width: 200px;
+	margin-left: 15px;
+	padding: 20px;
+}
+
+#print-btn{
+	display: none;
+}
+
+#return-link{
+	display: none;
+}
+
+#logo{
+	float: right;
+}
+
+@media print {
+    div.divToPrint {
+        background-color: white;
+        position: fixed;
+        top: 35%;
+        left: 45%;
+        margin: 0;
+    }
+
+    a[href]:after {
+    	content: none !important;
+  	}
+
+  	.hide-on-print{
+  		display: none;
+  	}
+}
+
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;  /* this affects the margin in the printer settings */
+}

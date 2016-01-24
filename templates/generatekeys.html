@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block title %}ML Coins{% endblock %}
+
+{% block css %}
+  <link href="/static/css/index.css" rel="stylesheet">
+  <link href="/static/css/keys.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="row hide-on-print">
+  <div class="col-md-2 col-sm-2 col-xs-4">
+    <a href="http://media.mit.edu">
+      <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
+    </a>
+  </div>
+</div>
+<div class="row hide-on-print">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+    <h3 class="heading font-bold">Create your Bitcoin identity</h3>
+    <p class="description font-light">
+        Please turn off your wifi and continue. Once your Bitcoin keys have been generated, please print them out and save them. Then return to coins.media.mit.edu.
+        <br>
+        <button id="generatekeys" class="btn btn-default btn-margin">Generate Keys</button>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div id="keys" class="col-md-6 col-sm-8 col-xs-12 divToPrint">
+    <img id="logo" src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab" width="20px"/>
+    <h4 class="heading font-bold"> Bitcoin identity </h4>
+    Public Address: <br>
+    <p class="description font-light" id="pubKey">
+    </p>
+    Private Key: <br>
+    <p class="description font-light" id="privKey">
+    </p>
+  </div>
+</div>
+<div class="row hide-on-print">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+    <button id="print-btn" class="btn btn-default btn-margin font-light">Print</button>
+  </div>
+</div>
+<div class="row hide-on-print">
+  <div class="col-md-6 col-sm-8 col-xs-12">
+    <p class="description font-light">
+      <br>
+      <a id="return-link" href=""> Return to the coin's request page >> </a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="/static/js/register.js"></script>
+<script type="text/javascript" src="/static/js/bitcoinjs.min.js"></script>
+<script src="/static/js/print.js"></script>
+<script>
+  $("#generatekeys").click(function(){
+    var keyPair = bitcoin.ECPair.makeRandom();
+    $('#privKey').text(keyPair.toWIF());
+    $('#pubKey').text(keyPair.getAddress());
+    $("#keys").show();
+    $("#print-btn").show();
+    $("#return-link").attr('href', '/request?address='+keyPair.getAddress());
+    $("#return-link").show();
+  });
+</script>
+{% endblock %}
