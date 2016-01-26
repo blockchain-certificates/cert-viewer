@@ -45,7 +45,8 @@ for tx_out in transaction_outs:
     if tx_out.get("addr") == None:
         opreturn_tx = tx_out
 op_field = opreturn_tx["script"].decode("hex")
-hash_from_chain = binascii.hexlify(op_field.split("%s")[-1])
+# hash_from_chain = binascii.hexlify(op_field.split("%s")[-1])
+hash_from_chain = binascii.hexlify(op_field)
 
 if local_hash in hash_from_chain or local_hash == hash_from_chain:
     valid_hash = True
@@ -62,7 +63,7 @@ revocation_address = "%s"
 
 transaction_outs = blockchain_data["out"]
 for tx_out in transaction_outs:
-    if tx_out.get("addr") == revocation_address and tx_out.get("spent") == False:
+    if tx_out.get("addr", None) == revocation_address and tx_out.get("spent", None) == False:
         not_revoked = True
 
 print "Not revoked:"
