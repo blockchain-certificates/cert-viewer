@@ -46,7 +46,15 @@ def request_page():
 	done=False
 	if request.method == 'POST' and form.validate():
 		try:
-			name = helpers.createUser(form)
+			name = {"givenName": form.first_name.data, "familyName": form.last_name.data}
+			
+			ct = 0
+			for r in client.admin.recipients.find({"pubkey": form.pubkey.data}):
+				ct += 1
+			if ct == 0:
+				name = helpers.createUser(form)
+
+			pubkey = helpers.createCert(form)
 			hidden_email_parts = form.email.data.split("@")
 			hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
 			sent = send_reciept_email(form.email.data, name)

@@ -77,24 +77,32 @@ def updateRequested(user):
 
 def createUser(form):
 	userJson = {}
-	userJson["issued"] = False
-	userJson["txid"] = None
-	userJson["requested"] = True
+	# userJson["issued"] = False
+	# userJson["txid"] = None
+	# userJson["requested"] = True
 	userJson["pubkey"] = form.pubkey.data
-	userJson["user"] = {}
-	userJson["user"]["email"] = form.email.data
-	userJson["user"]["degree"] = form.degree.data
-	userJson["user"]["comments"] = form.comments.data
-	userJson["user"]["name"] = {"familyName": form.last_name.data, "givenName": form.first_name.data}
-	userJson["user"]["address"] = {
+	userJson["info"] = {}
+	userJson["info"]["email"] = form.email.data
+	userJson["info"]["degree"] = form.degree.data
+	userJson["info"]["comments"] = form.comments.data
+	userJson["info"]["name"] = {"familyName": form.last_name.data, "givenName": form.first_name.data}
+	userJson["info"]["address"] = {
 		"streetAddress": form.address.data,
 		"city": form.city.data,
 		"state": form.state.data,
 		"zipcode": "\'"+form.zipcode.data,
 		"country": form.country.data
 	}
-	client.admin.coins.insert_one(userJson)
-	return userJson["user"]["name"]
+	client.admin.recipients.insert_one(userJson)
+	return userJson["info"]["name"]
+
+def createCert(form):
+	certJson = {}
+	certJson["pubkey"] = form.pubkey.data
+	certJson["issued"] = False
+	certJson["txid"] = None
+	client.admin.certificates.insert_one(certJson)
+	return certJson["pubkey"]
 
 def addAddress(user, form):
 	userId = user["_id"]
