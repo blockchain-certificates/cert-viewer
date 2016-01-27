@@ -46,16 +46,32 @@
       <p class="description font-light"> 
         The Media Lab coins are created using the Bitcoin blockchain. In order to issue you a coin, you need to have a Bitcoin identity. Never used Bitcoin before? Please create a bitcoin identity below. Please note: If you have a pre-existing Bitcoin identity, it is recommended that you make a new Bitcoin address to hold your Media Lab coin.
       </p>
-      <p class="description font-light"> 
-        <a href="/generatekeys">
-          <button class="btn btn-default btn-margin">Generate Bitcoin identity</button>
-        </a>
-        <br><br>
-      </p>
+      <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+        {% from "_formhelpers.html" import render_errors, render_radio_field %}
+        <form method="POST" id="bitcoin-form">
+          <span class="first-group">
+            {{ render_radio_field(bitcoin.identity) }}
+          </span>
+          {{ render_errors(bitcoin.identity) }}
+          <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+            <button type="button" class="btn btn-default btn-margin font-light" id="next-btn-1">Next</button>
+          </div>
+        </form>
+        <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+          <a href="/generatekeys" target="_blank">
+            <button type="button" class="btn btn-default btn-margin font-light show-later" id="generate-keys-btn">Create Bitcoin Identity</button>
+          </a>
+        </div>
+      </div>
     </div>
+    <span id="reg-info" class="show-later">
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
     {% from "_formhelpers.html" import render_errors, render_radio_field %}
     <form method="POST" id="reg-form">
+      <div class="input-group input-group-lg first-group">
+        {{ form.pubkey(type='text',placeholder='Bitcoin Public Address',**{'class':'form-control'})}}
+      </div>
+      {{ render_errors(form.pubkey) }}
       <div class="input-group input-group-lg first-group">
         {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'})}}
       </div>
@@ -64,10 +80,6 @@
         {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'})}}
       </div>
       {{ render_errors(form.last_name) }}
-      <div class="input-group input-group-lg first-group">
-        {{ form.pubkey(type='text',placeholder='Bitcoin Public Address',**{'class':'form-control'})}}
-      </div>
-      {{ render_errors(form.pubkey) }}
       <div class="input-group input-group-lg first-group last-input">
         {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
       </div>
@@ -82,7 +94,7 @@
       </div>
       {{ render_errors(form.comments) }}
       <button type="button" class="btn btn-default btn-margin font-light" id="next-btn">Next</button>
-      
+      </span>
       <span id="shipping-info" class="show-later">
         <h3 class="heading font-bold">Shipping Address</h3>
         <p class="description font-light"> We will send your physical Media Lab coin here.</p>

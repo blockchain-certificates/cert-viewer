@@ -4,25 +4,31 @@ from bson.objectid import ObjectId
 import config
 import secrets
 from pymongo import MongoClient
-from createjsonmodule import create
 
 client = MongoClient(host=secrets.MONGO_URI)
 
 def findUser_by_id(id):
+	user = None
 	user = client.admin.recipients.find_one({'_id':ObjectId(id)})
 	return user
 
 def findUser_by_txid(txid):
-	certificate = client.admin.certificates.find_one({'txid': txid})
-	user = client.admin.recipients.find_one({'pubkey': certificate['pubkey']})
+	user = None
+	certificate = None
+	certificate = client.admin.certificates.find_one({'txid': txid}, filter={'issued': True} )
+	if certificate:
+		user = client.admin.recipients.find_one({'pubkey': certificate['pubkey']})
 	return user, certificate
 
 def findUser_by_pubkey(pubkey):
-	user = client.admin.recipients.find_one({'pubkey': pubkey})
+	user = None
 	certificates = None
+	user = client.admin.recipients.find_one({'pubkey': pubkey})
+	certificates = client.admin.certificates.find({'pubkey': pubkey}, filter={'issued': True})
 	if user:
 		user["_id"] = str(user['_id'])
-		certificates = list(client.admin.certificates.find({'pubkey': pubkey}))
+	if certificates:
+		certificates = list(certificates)
 	return user, certificates
 
 def findUser_by_email(email):
@@ -38,12 +44,12 @@ def findUser_by_name(familyName, givenName):
 	except IndexError:
 		return None
 
-def showIssuedOnly(certs):
-	issued_certs = []
-	for cert in certs:
-		if cert['issued'] == True:
-			issued_certs.append(cert)
-	return issued_certs
+# def showIssuedOnly(certs):
+# 	issued_certs = []
+# 	for cert in certs:
+# 		if cert['issued'] == True:
+# 			issued_certs.append(cert)
+# 	return issued_certs
 
 def get_info_for_certificates(certificates):
 	awards = []
@@ -60,15 +66,7 @@ def makeListOfAllNames():
 	for doc in users:
 		fullname = str(doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"])
 		names[fullname]=str(doc["_id"])
-		# names = names + doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"] + ","
 	return names
-
-def createJson(user):
-	updated_json = create.run(user)
-	userId = user["_id"]
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"json": updated_json}})
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
-	return updated_json
 
 def updateRequested(user):
 	userId = user["_id"]
@@ -77,9 +75,6 @@ def updateRequested(user):
 
 def createUser(form):
 	userJson = {}
-	# userJson["issued"] = False
-	# userJson["txid"] = None
-	# userJson["requested"] = True
 	userJson["pubkey"] = form.pubkey.data
 	userJson["info"] = {}
 	userJson["info"]["email"] = form.email.data
@@ -94,7 +89,7 @@ def createUser(form):
 		"country": form.country.data
 	}
 	client.admin.recipients.insert_one(userJson)
-	return userJson["info"]["name"]
+	return userJson
 
 def createCert(form):
 	certJson = {}

@@ -28,12 +28,18 @@
     </p>
     <h3 class="heading font-bold">Search</h3>  
     <p class="description font-light">Enter your Media Lab public key to search for your coin.</p>
-    <form action='/search'>
+    <form action='/' method='post'>
       <div class="input-group input-group-lg" id="search-box">
-        <input class="form-control" id="term" name="term" placeholder="" type="text" value="">
+        <input class="form-control" id="identifier" name="identifier" placeholder="" type="text" value="">
       </div>
       <button type="submit" class="btn btn-default btn-margin">Submit</button>
     </form>
+    <h3 class="heading font-bold">Recently Issued</h3> 
+    {% for txid in recent_txids %}
+    <p class="description font-light">
+      <a href="/{{txid}}">{{txid}}</a>
+    </p>
+    {% endfor %}
     <h3 class="heading font-bold">Request Your Coin</h3> 
     <p class="description font-light">
       <a href="/request"> Alums, would you like a Media Lab coin? Request one here. </a>

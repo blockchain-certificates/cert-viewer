@@ -12,7 +12,6 @@ class RegistrationForm(Form):
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
 	degree = RadioField('Degree', choices=[('mas-ms','MAS MS'),('mas-phd','MAS PhD'), ('other','It\'s complicated')], coerce=unicode)
 	comments = TextField('Comments', [validators.optional()])
-	# name = TextField('Name', [validators.required(), validators.length(max=200)])
 
 class AddressForm(Form):
 	address = TextField('Mailing Address', [validators.required(), validators.length(max=200)])
@@ -20,3 +19,6 @@ class AddressForm(Form):
 	state = TextField('State/Province/Region', [validators.required(), validators.length(max=200)])
 	zipcode = TextField('ZIP/Postal Code', [validators.required(), validators.length(max=200)])
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
+
+class BitcoinForm(Form):
+	identity = RadioField('Identity', choices=[('yes','Yes, I have a Bitcoin identity'),('no','No, I don\'t have a Bitcoin identity')], coerce=unicode)

@@ -1,3 +1,18 @@
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+}
+
 function scrollAndShow(){
   $("#next-btn").hide();
   $("#shipping-info").show();
@@ -25,7 +40,7 @@ function validateFirstForm(){
 $(document).ready(function() {
   var flag = false;
 
-  var pubkey = location.href.split("address=")[1];
+  var pubkey = getUrlParameter('address');
   if(pubkey){
     $("#pubkey").attr('value', pubkey);
   }
@@ -37,8 +52,33 @@ $(document).ready(function() {
   }
 
   if(flag == false){
+    var identity = getUrlParameter('identity');
+    if(identity == "true"){
+      $("#bitcoin-form").hide();
+      $("#reg-info").show();
+      $("#next-btn-1").hide();
+      $("#identity").attr('checked', 'checked');
+    }
+    $("#next-btn-1").click(function(){
+      identity = $("#identity:radio:checked").val();
+
+      if( identity == "yes" ){
+        $("#bitcoin-form").hide();
+        $("#reg-info").show();
+        $('html, body').animate({
+            scrollTop: $("#reg-info").offset().top - 50
+          }, 'slow');
+        $("#next-btn-1").hide();
+      }
+      else{
+        $("#bitcoin-form").hide('slow', function(){});
+        $("#generate-keys-btn").show();
+        $("#reg-info").show();
+        $("#next-btn-1").hide();
+      }
+    })
+
     $("#next-btn").click(function(){
-      console.log(validateFirstForm())
       if(validateFirstForm() == true){
         scrollAndShow();
         flag = true;

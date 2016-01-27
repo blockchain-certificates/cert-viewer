@@ -21,20 +21,26 @@
     <p class="description font-light">
         Please turn off your wifi and continue. Once your Bitcoin keys have been generated, please print them out and save them. Then return to coins.media.mit.edu.
         <br>
-        <button id="generatekeys" class="btn btn-default btn-margin">Generate Keys</button>
+        <button id="generatekeys" class="btn btn-default btn-margin">Generate Keys</button><div id="to-load"></div>
     </p>
   </div>
 </div>
 <div class="row">
   <div id="keys" class="col-md-6 col-sm-8 col-xs-12 divToPrint">
     <img id="logo" src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab" width="20px"/>
-    <h4 class="heading font-bold"> Bitcoin identity </h4>
-    Public Address: <br>
-    <p class="description font-light" id="pubKey">
+    <span class="heading font-bold"> DO NOT DISCARD<span><br><br>
+    <p class="description font-light key-text wallet-warning">The Media Lab does not contain a copy of this information. </p>
+    <p class="description key-text"> Bitcoin Public Address: </p>
+    <p class="description font-light key-text" id="pubKey">
     </p>
-    Private Key: <br>
-    <p class="description font-light" id="privKey">
+    <p><center><div id="pubKeyQr"></div></center></p>
+    <p id="middle-section">
     </p>
+    <p class="description font-light key-text fold-text">Fold along line to hide private key.</p>
+    <p class="description key-text"> Private Key: </p>
+    <p class="description font-light key-text" id="privKey">
+    </p>
+    <p><center><div id="privKeyQr"></div></center></p>
   </div>
 </div>
 <div class="row hide-on-print">
@@ -44,9 +50,22 @@
 </div>
 <div class="row hide-on-print">
   <div class="col-md-6 col-sm-8 col-xs-12">
+    <button 
+    id="copy-btn" 
+    class="btn btn-default btn-margin font-light" 
+    data-clipboard-action="copy" 
+    data-clipboard-target="#pubKey"
+    data-placement="right"
+    title="Copied!">
+      Copy Public Address
+    </button>
+  </div>
+</div>
+<div class="row hide-on-print">
+  <div class="col-md-6 col-sm-8 col-xs-12">
     <p class="description font-light">
       <br>
-      <a id="return-link" href=""> Return to the coin's request page >> </a>
+      <a id="return-link" href="/request"> Return to the coin's request page >> </a>
     </p>
   </div>
 </div>
@@ -54,17 +73,78 @@
 
 {% block scripts %}
 <script type="text/javascript" src="/static/js/register.js"></script>
+<script type="text/javascript" src="/static/js/dotdotdot.js"></script>
 <script type="text/javascript" src="/static/js/bitcoinjs.min.js"></script>
+<script type="text/javascript" src="/static/js/qrcode.min.js"></script>
+<script type="text/javascript" src="/static/js/clipboard.min.js"></script>
 <script src="/static/js/print.js"></script>
 <script>
+  var clipboard = new Clipboard('#copy-btn');
+
+  $('#copy-btn').tooltip({'trigger': 'click', delay: { "show": 500, "hide": 100 }});
+
   $("#generatekeys").click(function(){
+
+    $("#keys").hide();
+    $("#print-btn").hide();
+    $("#copy-btn").hide();
+    $("#return-link").hide();
+
     var keyPair = bitcoin.ECPair.makeRandom();
     $('#privKey').text(keyPair.toWIF());
     $('#pubKey').text(keyPair.getAddress());
-    $("#keys").show();
-    $("#print-btn").show();
-    $("#return-link").attr('href', '/request?address='+keyPair.getAddress());
-    $("#return-link").show();
+    $("#pubKeyQr").html("");
+    $("#privKeyQr").html("");
+
+    var qrcode1 = new QRCode(document.getElementById("pubKeyQr"), {
+      text: keyPair.getAddress(),
+      width: 70,
+      height: 70,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+    var qrcode2 = new QRCode(document.getElementById("privKeyQr"), {
+      text: keyPair.toWIF(),
+      width: 60,
+      height: 60,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+
+    $("#to-load").show();
+    $("#to-load").Loadingdotdotdot({
+        "speed": 400,
+        "maxDots": 4,
+        "word": "Loading"
+    });
+
+    setTimeout(
+      function() 
+      {
+        $("#keys").show();
+        $("#print-btn").show();
+        $("#copy-btn").show();
+        $("#return-link").attr('href', '/request?identity=true&address='+keyPair.getAddress());
+        $("#return-link").show();
+        $("#to-load").Loadingdotdotdot("Stop");
+        $("#to-load").hide();
+      }, 5000);
+
   });
+
+  clipboard.on('success', function(e) {
+      console.info('Action:', e.action);
+      console.info('Text:', e.text);
+      console.info('Trigger:', e.trigger);
+      e.clearSelection();
+  });
+
+  clipboard.on('error', function(e) {
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+  });
+  
 </script>
 {% endblock %}

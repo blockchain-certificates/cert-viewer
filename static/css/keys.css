@@ -4,9 +4,45 @@
 	border: 1px solid #333;
 	word-wrap:break-word;
 	display: none;
-	max-width: 200px;
+	max-width: 225px;
 	margin-left: 15px;
 	padding: 20px;
+}
+
+.key-text{
+  font-size: 10px;
+}
+
+#pubKeyQr{
+  padding-bottom: 30px;
+}
+
+#middle-section{
+  min-height: 130px;
+  border-top: 1px dashed #000;
+  border-bottom: 1px dashed #000;
+}
+
+p.fold-text{
+  margin-top: -25px;
+  float: right;
+  font-size: 8px;
+}
+
+.wallet-warning{
+  /*margin-top: -12px;*/
+  padding-bottom: 15px;
+}
+
+#to-load{
+  padding-left: 10px;
+  margin-top: 5px;
+  text-align: left;
+  float: left;
+}
+
+#copy-btn{
+  display: none;
 }
 
 #print-btn{
@@ -25,7 +61,7 @@
     div.divToPrint {
         background-color: white;
         position: fixed;
-        top: 35%;
+        top: 20%;
         left: 45%;
         margin: 0;
     }
