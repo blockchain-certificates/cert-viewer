@@ -7,11 +7,6 @@ from pymongo import MongoClient
 
 client = MongoClient(host=secrets.MONGO_URI)
 
-def findUser_by_id(id):
-	user = None
-	user = client.admin.recipients.find_one({'_id':ObjectId(id)})
-	return user
-
 def findUser_by_txid(txid):
 	user = None
 	certificate = None
@@ -31,26 +26,6 @@ def findUser_by_pubkey(pubkey):
 		certificates = list(certificates)
 	return user, certificates
 
-def findUser_by_email(email):
-	user = client.admin.recipients.find_one({'info.email': email})
-	return user
-
-def findUser_by_name(familyName, givenName):
-	query = givenName + " " + familyName
-	try:
-		userId = list(client.admin.coins.find({'$text': {'$search': query}}, fields={'user.name.familyName':100, 'user.name.givenName':100}))[0]["_id"]
-		user = client.admin.coins.find_one(userId)
-		return user
-	except IndexError:
-		return None
-
-# def showIssuedOnly(certs):
-# 	issued_certs = []
-# 	for cert in certs:
-# 		if cert['issued'] == True:
-# 			issued_certs.append(cert)
-# 	return issued_certs
-
 def get_info_for_certificates(certificates):
 	awards = []
 	verifications = []
@@ -59,19 +34,6 @@ def get_info_for_certificates(certificates):
 		awards.append(award)
 		verifications.append(verification_info)
 	return awards, verifications
-
-def makeListOfAllNames():
-	names = {}
-	users = list(client.admin.coins.find({}))
-	for doc in users:
-		fullname = str(doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"])
-		names[fullname]=str(doc["_id"])
-	return names
-
-def updateRequested(user):
-	userId = user["_id"]
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
-	return True
 
 def createUser(form):
 	userJson = {}
@@ -98,15 +60,6 @@ def createCert(form):
 	certJson["txid"] = None
 	client.admin.certificates.insert_one(certJson)
 	return certJson["pubkey"]
-
-def addAddress(user, form):
-	userId = user["_id"]
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.streetAddress": form.address.data}})
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.city": form.city.data}})
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.state": form.state.data}})
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.zipcode": "\'"+form.zipcode.data}})
-	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.country": form.country.data}})
-	return True
 
 def read_json(path):
 	with open(path) as json_file:
@@ -151,3 +104,52 @@ def get_id_info(cert):
 	}
 	award = check_display(award)
 	return award, verification_info
+
+# def addAddress(user, form):
+# 	userId = user["_id"]
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.streetAddress": form.address.data}})
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.city": form.city.data}})
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.state": form.state.data}})
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.zipcode": "\'"+form.zipcode.data}})
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.country": form.country.data}})
+# 	return True
+
+# def findUser_by_id(id):
+# 	user = None
+# 	user = client.admin.recipients.find_one({'_id':ObjectId(id)})
+# 	return user
+
+# def findUser_by_email(email):
+# 	user = client.admin.recipients.find_one({'info.email': email})
+# 	return user
+
+# def findUser_by_name(familyName, givenName):
+# 	query = givenName + " " + familyName
+# 	try:
+# 		userId = list(client.admin.coins.find({'$text': {'$search': query}}, fields={'user.name.familyName':100, 'user.name.givenName':100}))[0]["_id"]
+# 		user = client.admin.coins.find_one(userId)
+# 		return user
+# 	except IndexError:
+# 		return None
+
+# def showIssuedOnly(certs):
+# 	issued_certs = []
+# 	for cert in certs:
+# 		if cert['issued'] == True:
+# 			issued_certs.append(cert)
+# 	return issued_certs
+
+# def makeListOfAllNames():
+# 	names = {}
+# 	users = list(client.admin.coins.find({}))
+# 	for doc in users:
+# 		fullname = str(doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"])
+# 		names[fullname]=str(doc["_id"])
+# 	return names
+
+# def updateRequested(user):
+# 	userId = user["_id"]
+# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
+# 	return True
+
+
