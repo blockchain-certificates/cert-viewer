@@ -6,7 +6,7 @@ pip install python-bitcoin-lib
 ```
 
 #### 1. Download the certificate and blockchain transaction
-To compare the local certificate to the certificate transacted on the Bitcoin blockchain, first download a copy of both the local certificate and the record of the certificate's transaction on the blockchain. The json of the local certificate can be found at https://coins.media.mit.edu/[TRANSACTION_ID]?format=json. The json from blockchain.info can be found at http://blockchain.info/[TRANSACTION_ID]?format=json.
+To compare the local certificate to the certificate transacted on the Bitcoin blockchain, first download a copy of both the local certificate and the record of the certificate's transaction on the blockchain. The json of the local certificate can be found at `https://coins.media.mit.edu/<TRANSACTION_ID>?format=json`. The json from [blockchain.info](http://blockchain.info) can be found at `http://blockchain.info/<TRANSACTION_ID>?format=json`.
 
 #### 2. Check that the certificate was authored by the Media Lab
 To check that the certificate was authored by the Media Lab, we will verify that the signature in the local certificate file was signed by the Media Lab's private key.
