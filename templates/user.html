@@ -9,17 +9,13 @@
 {% block content %}
 <div class="row">
   <div class="col-md-2 col-sm-2 col-xs-4">
-    <a href="http://media.mit.edu">
-      <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
-    </a>
+    <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
   </div>
 </div>
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12">
     <h3 class="heading font-bold name">{{user.info.name.givenName}} {{user.info.name.familyName}}</h3>
-    <p class="description font-light">
-        A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
-    </p>
+    <p class="description">Bitcoin Identity: <span class="font-light">{{user.pubkey}}</span></p>
   </div>
 </div>
 <div class="row" id="awards-row">
