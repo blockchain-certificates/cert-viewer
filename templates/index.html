@@ -4,7 +4,6 @@
 
 {% block css %}
   <link href="/static/css/index.css" rel="stylesheet">
-  <link href="/static/css/search.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -17,7 +16,7 @@
 </div>
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12">
-    <h3 class="heading font-bold">MIT Media Lab Coins</h3>
+    <h3 class="heading font-bold name">MIT Media Lab Coins</h3>
     <p class="description font-light">
         A project by the <a href="http://learn.media.mit.edu" target="_blank">Media Lab Learning Initiative</a> that critically explores notions of social capital and reputation, empathy and gift economies, and social behavior. Digital coins are registered on the blockchain, cryptographically signed, and tamper proof.
     </p>
@@ -36,7 +35,7 @@
     </form>
     <h3 class="heading font-bold">Recently Issued</h3> 
     {% for txid in recent_txids %}
-    <p class="description font-light">
+    <p class="description font-light long-word">
       <a href="/{{txid}}">{{txid}}</a>
     </p>
     {% endfor %}
@@ -49,5 +48,4 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="/static/js/register.js"></script>
 {% endblock %}

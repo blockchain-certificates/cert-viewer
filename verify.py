@@ -24,13 +24,12 @@ def get_rawtx(tx_index):
         tx_json = json.loads(data)
         return tx_json
 
-def get_hash_from_bc_op(tx_json, cert_marker):
+def get_hash_from_bc_op(tx_json):
         tx_outs = tx_json["out"]
         for o in tx_outs:
             if o.get("addr") == None:
                 op_tx = o
-        op_field = op_tx["script"].decode("hex")
-        hashed_json = op_field.split(cert_marker)[-1]
+        hashed_json = op_tx["script"].decode("hex")
         return hashed_json
 
 def get_address_from_bc_op(tx_json, address):
@@ -50,11 +49,11 @@ def check_revocation(tx_json, revoke_address):
 def computeHash(doc):
         return hashlib.sha256(doc).hexdigest()
 
-def fetchHashFromChain(tx_json, cert_marker):
+def fetchHashFromChain(tx_json):
         # tx_json = get_rawtx(tx_id)
         if tx_json == 'error':
                 return 'error'
-        hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json, cert_marker))
+        hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json))
         return hash_from_bc
 
 def compareHashes(hash1, hash2):

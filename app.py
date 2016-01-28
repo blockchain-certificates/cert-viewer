@@ -9,7 +9,7 @@ import secrets
 import verify as v
 from urllib import quote
 from forms import RegistrationForm, AddressForm, BitcoinForm
-from mail import send_confirm_email, check_token, send_reciept_email
+from mail import send_reciept_email
 
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
@@ -54,15 +54,14 @@ def get_award(identifier=None):
 		award, verification_info = helpers.get_id_info(certificate)
 		if len(award) > 0 and len(verification_info) > 0:
 			if request.args.get("format", None)=="json":
-				path = "%s%s.json" % (config.JSONS_PATH, verification_info["uid"])
-				return helpers.read_file(path)
+				return helpers.find_file_in_gridfs(str(certificate["_id"]))
 			return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
 	return "Sorry, this award does not exist."
 
 # Create Bitcoin identity for a user so they can request a certificate
-@app.route('/generatekeys', methods=['GET'])
+@app.route('/bitcoinkeys', methods=['GET'])
 def generate_keys():
-	return render_template('generatekeys.html')
+	return render_template('bitcoinkeys.html')
 
 # Request a certificate
 @app.route('/request', methods=['GET', 'POST'])
@@ -99,14 +98,13 @@ def prepareVerification(transactionID=None):
 def computeHash(uid=None):
 	if uid == None:
 		uid = request.args.get('uid')
-	signed_cert_path = config.JSONS_PATH+uid+".json"
-	signed_json = open(signed_cert_path).read()
+	signed_json = helpers.find_file_in_gridfs(uid)
 	hashed = v.computeHash(signed_json)
 	return hashed
 
 @app.route('/fetchHashFromChain')
 def fetchHashFromChain():
-	hashed = v.fetchHashFromChain(TX_JSON, config.CERT_MARKER)
+	hashed = v.fetchHashFromChain(TX_JSON)
 	return hashed
 
 @app.route('/compareHashes')
@@ -126,8 +124,7 @@ def compareHashes(uid=None, transactionID=None):
 def checkAuthor(uid=None):
 	if uid == None:
 		uid = request.args.get('uid')
-	signed_cert_path = config.JSONS_PATH+uid+".json"
-	signed_local_json = json.loads(helpers.read_file(signed_cert_path))
+	signed_local_json = json.loads(helpers.find_file_in_gridfs(uid))
 	issuing_address = helpers.read_file(config.MLPUBKEY_PATH)
 	verify_authors = v.checkAuthor(issuing_address, signed_local_json)
 	if verify_authors:

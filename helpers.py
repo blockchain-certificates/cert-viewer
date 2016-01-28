@@ -4,8 +4,17 @@ from bson.objectid import ObjectId
 import config
 import secrets
 from pymongo import MongoClient
+import gridfs
 
 client = MongoClient(host=secrets.MONGO_URI)
+fs = gridfs.GridFS(client.admin)
+
+def find_file_in_gridfs(uid):
+	filename = uid + ".json"
+	certfile = fs.find_one({"filename": filename})
+	if certfile:
+		return certfile.read()
+	return None
 
 def findUser_by_txid(txid):
 	user = None
@@ -61,19 +70,12 @@ def createCert(form):
 	client.admin.certificates.insert_one(certJson)
 	return certJson["pubkey"]
 
-def read_json(path):
-	with open(path) as json_file:
-		data = json.load(json_file)
-	json_file.close()
-	return data 
-
 def read_file(path):
 	with open(path) as f:
 		data = f.read()
 	f.close()
 	return data
  
-
 def check_display(award):
 	if award['display'] == 'FALSE':
 		award['subtitle'] = '';
@@ -82,7 +84,7 @@ def check_display(award):
 def get_id_info(cert):
 	pubkey_content = read_file(config.MLPUBKEY_PATH)
 	tx_id = cert["txid"]
-	json_info = read_json("%s%s.json" % (config.JSONS_PATH, cert["_id"]))
+	json_info = json.loads(find_file_in_gridfs(str(cert["_id"])))
 	verification_info = {
 		"uid": str(cert["_id"]),
 		"transactionID": tx_id
@@ -104,52 +106,3 @@ def get_id_info(cert):
 	}
 	award = check_display(award)
 	return award, verification_info
-
-# def addAddress(user, form):
-# 	userId = user["_id"]
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.streetAddress": form.address.data}})
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.city": form.city.data}})
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.state": form.state.data}})
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.zipcode": "\'"+form.zipcode.data}})
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"user.address.country": form.country.data}})
-# 	return True
-
-# def findUser_by_id(id):
-# 	user = None
-# 	user = client.admin.recipients.find_one({'_id':ObjectId(id)})
-# 	return user
-
-# def findUser_by_email(email):
-# 	user = client.admin.recipients.find_one({'info.email': email})
-# 	return user
-
-# def findUser_by_name(familyName, givenName):
-# 	query = givenName + " " + familyName
-# 	try:
-# 		userId = list(client.admin.coins.find({'$text': {'$search': query}}, fields={'user.name.familyName':100, 'user.name.givenName':100}))[0]["_id"]
-# 		user = client.admin.coins.find_one(userId)
-# 		return user
-# 	except IndexError:
-# 		return None
-
-# def showIssuedOnly(certs):
-# 	issued_certs = []
-# 	for cert in certs:
-# 		if cert['issued'] == True:
-# 			issued_certs.append(cert)
-# 	return issued_certs
-
-# def makeListOfAllNames():
-# 	names = {}
-# 	users = list(client.admin.coins.find({}))
-# 	for doc in users:
-# 		fullname = str(doc["user"]["name"]["givenName"]+ " " + doc["user"]["name"]["familyName"])
-# 		names[fullname]=str(doc["_id"])
-# 	return names
-
-# def updateRequested(user):
-# 	userId = user["_id"]
-# 	client.admin.coins.update_one({"_id": userId}, {"$set":{"requested": True}})
-# 	return True
-
-

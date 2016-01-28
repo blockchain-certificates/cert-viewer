@@ -1,13 +1,5 @@
 /* styles for award.html pages */
 
-body{
-	padding: 35px;
-}
-
-.name{
-	margin-top: 35px;
-	margin-bottom: 15px;
-}
 
 .subtitle{
 	margin: 3px 0px 3px 0px;
@@ -33,7 +25,6 @@ body{
 }
 
 #progress-msg{
-	/*display: inline;*/
 	font-size: 12px;
 	text-align: left;
 	display: none;
@@ -56,42 +47,10 @@ body{
 	line-height: 1.5;
 }
 
-.okay-field{
-	float: right;
-}
-
-.return-fields{
-	font-size: 8px;
-	margin-bottom: 12px;
-}
-
-.bottom-buttons {
-    margin-bottom: 2px;
-}
-
 @media print {
     div.divToPrint {
-        background-color: white;
-        position: fixed;
         top: 18%;
         left: 20%;
-        margin: 0;
     }
-
-    #logo{
-    	width: 100px;
-    }
-
-    a[href]:after {
-    	content: none !important;
-  	}
-
-  	.hide-on-print{
-  		display: none;
-  	}
 }
 
-@page {
-    size: auto;   /* auto is the initial value */
-    margin: 0;  /* this affects the margin in the printer settings */
-}

@@ -3,7 +3,7 @@
 {% block title %}ML Coins{% endblock %}
 
 {% block css %}
-  <link href="/static/css/index.css" rel="stylesheet">
+  <link href="/static/css/request.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +30,7 @@
         {% endwith %}
     </div>   
     {% else %}      
-    <h3 class="heading font-bold" id="prompt-header">ML Alums,<br>Request Your Coin</h3>
+    <h3 class="heading font-bold name" id="prompt-header">ML Alums,<br>Request Your Coin</h3>
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
         {% with messages = get_flashed_messages() %}
           {% if messages %}
@@ -58,8 +58,8 @@
           </div>
         </form>
         <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-          <a href="/generatekeys" target="_blank">
-            <button type="button" class="btn btn-default btn-margin font-light show-later" id="generate-keys-btn">Create Bitcoin Identity</button>
+          <a href="/bitcoinkeys" target="_blank">
+            <button type="button" class="btn btn-default btn-margin font-light btn-margin show-later" id="generate-keys-btn">Create Bitcoin Identity</button>
           </a>
         </div>
       </div>
@@ -89,7 +89,7 @@
         {{ render_radio_field(form.degree) }}
       </span>
       {{ render_errors(form.degree) }}
-      <div class="input-group input-group-lg first-group last-input" id="comments-input">
+      <div class="input-group input-group-lg first-group last-input btn-margin" id="comments-input">
         {{ form.comments(type='text',placeholder='Comments',**{'class':'form-control'})}}
       </div>
       {{ render_errors(form.comments) }}

@@ -27,6 +27,7 @@
 
 body{
   font-family: Neue Haas Grotesk, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  padding: 35px;
 }
 
 a,
@@ -78,6 +79,58 @@ a.no-decoration{
 
 .btn-margin{
   margin-top: 10px;
+}
+
+.errors{
+  color: #8B0000;
+}
+
+.heading{
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.description{
+  line-height: 1.3;
+  margin-top: -4px;
+}
+
+.hash{
+  line-height: 1.2;
+}
+
+.form-text{
+  margin-top: 5px;
+}
+
+.show-later{
+  display: none;
+}
+
+.no-padding-col{
+  padding: 0px;
+}
+
+.radio-label{
+  font-size: 18px;
+  padding-left: 0px !important;
+}
+
+.radio-error{
+  margin-top: -12px;
+}
+
+.name{
+  margin-top: 35px;
+  margin-bottom: 15px;
+}
+
+input.form-control{
+  -webkit-appearance: none;
+}
+
+#footer-info{
+  margin-top: 20px;
 }
 
   
@@ -162,7 +215,29 @@ input[type=radio]+.lbl.padding-8::before {
     margin-right: 8px;
 }
 
-.errors{
-  color: #8B0000;
+@media print {
+    div.divToPrint {
+        background-color: white;
+        position: fixed;
+        margin: 0;
+    }
+
+    #logo{
+      width: 100px;
+    }
+
+    a[href]:after {
+      content: none !important;
+    }
+
+    .hide-on-print{
+      display: none;
+    }
 }
+
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;  /* this affects the margin in the printer settings */
+}
+
 

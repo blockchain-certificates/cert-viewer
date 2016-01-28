@@ -6,8 +6,6 @@ itsdangerous==0.24
 Jinja2==2.7.3
 mandrill==1.0.57
 MarkupSafe==0.23
-Pygments==2.1
-pygments-style-monokailight==0.4
 pymongo==2.9
 python-bitcoinlib==0.5.0
 requests==2.8.1

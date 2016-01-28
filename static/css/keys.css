@@ -1,9 +1,18 @@
+
+.fold-text{
+  margin-top: -25px;
+  float: right;
+  font-size: 8px;
+}
+
+.wallet-warning{
+  padding-bottom: 15px;
+}
+
 #keys{
-	/*font-size: 10px;*/
 	padding-top: 10px;
 	border: 1px solid #333;
-	word-wrap:break-word;
-	display: none;
+	word-wrap: break-word;
 	max-width: 225px;
 	margin-left: 15px;
 	padding: 20px;
@@ -23,34 +32,12 @@
   border-bottom: 1px dashed #000;
 }
 
-p.fold-text{
-  margin-top: -25px;
-  float: right;
-  font-size: 8px;
-}
-
-.wallet-warning{
-  /*margin-top: -12px;*/
-  padding-bottom: 15px;
-}
-
 #to-load{
   padding-left: 10px;
   margin-top: 5px;
   text-align: left;
   float: left;
-}
-
-#copy-btn{
-  display: none;
-}
-
-#print-btn{
-	display: none;
-}
-
-#return-link{
-	display: none;
+  margin-bottom: 20px;
 }
 
 #logo{
@@ -59,23 +46,7 @@ p.fold-text{
 
 @media print {
     div.divToPrint {
-        background-color: white;
-        position: fixed;
         top: 20%;
         left: 45%;
-        margin: 0;
     }
-
-    a[href]:after {
-    	content: none !important;
-  	}
-
-  	.hide-on-print{
-  		display: none;
-  	}
-}
-
-@page {
-    size: auto;   /* auto is the initial value */
-    margin: 0;  /* this affects the margin in the printer settings */
 }
