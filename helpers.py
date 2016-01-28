@@ -19,7 +19,7 @@ def find_file_in_gridfs(uid):
 def findUser_by_txid(txid):
 	user = None
 	certificate = None
-	certificate = client.admin.certificates.find_one({'txid': txid}, filter={'issued': True} )
+	certificate = client.admin.certificates.find_one({'txid': txid, 'issued': True} )
 	if certificate:
 		user = client.admin.recipients.find_one({'pubkey': certificate['pubkey']})
 	return user, certificate
@@ -28,7 +28,7 @@ def findUser_by_pubkey(pubkey):
 	user = None
 	certificates = None
 	user = client.admin.recipients.find_one({'pubkey': pubkey})
-	certificates = client.admin.certificates.find({'pubkey': pubkey}, filter={'issued': True})
+	certificates = client.admin.certificates.find({'pubkey': pubkey, 'issued': True})
 	if user:
 		user["_id"] = str(user['_id'])
 	if certificates:
