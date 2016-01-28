@@ -32,14 +32,14 @@
     <p class="description key-text"> Bitcoin Public Address: </p>
     <p class="description font-light key-text" id="pubKey">
     </p>
-    <p><center><div id="pubKeyQr"></div></center></p>
+    <p><center><div id="pubKeyQr" class="enable-clear"></div></center></p>
     <p id="middle-section">
     </p>
     <p class="description font-light key-text fold-text">Fold along line to hide private key.</p>
     <p class="description key-text"> Private Key: </p>
     <p class="description font-light key-text" id="privKey">
     </p>
-    <p><center><div id="privKeyQr"></div></center></p>
+    <p><center><div id="privKeyQr" class="enable-clear"></div></center></p>
   </div>
 </div>
 <div class="row hide-on-print">
@@ -71,11 +71,10 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="/static/js/register.js"></script>
-<script type="text/javascript" src="/static/js/dotdotdot.js"></script>
-<script type="text/javascript" src="/static/js/bitcoinjs.min.js"></script>
-<script type="text/javascript" src="/static/js/qrcode.min.js"></script>
-<script type="text/javascript" src="/static/js/clipboard.min.js"></script>
-<script src="/static/js/bitcoinkeys.js"></script>
-<script src="/static/js/print.js"></script>
+<script type="text/javascript" src="/static/js/dist/dotdotdot.js"></script>
+<script type="text/javascript" src="/static/js/dist/bitcoinjs.min.js"></script>
+<script type="text/javascript" src="/static/js/dist/qrcode.min.js"></script>
+<script type="text/javascript" src="/static/js/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/static/js/bitcoinkeys.js"></script>
+<script type="text/javascript" src="/static/js/print.js"></script>
 {% endblock %}
