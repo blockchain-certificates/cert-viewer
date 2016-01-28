@@ -20,8 +20,8 @@ TX_JSON = None
 # Home page
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
-	recent_txids = ['880ca61b9d6c0f95675a382a80c8a0d7295a7df7dfdf4a54e09ed810a5743924', 
-					'880ca61b9d6c0f95675a382a80c8a0d7295a7df7dfdf4a54e09ed810a5743924']
+	recent_txids = ['5b8ba2f5eed0281fe2d47c7b651c22cf1d2fc942f59e9c5cd3950341d2c2112e', 
+					'5b8ba2f5eed0281fe2d47c7b651c22cf1d2fc942f59e9c5cd3950341d2c2112e']
 	if request.method == 'POST':
 		identifier = request.form.get('identifier', None)
 		return redirect(url_for('get_award', identifier=identifier))
@@ -41,6 +41,26 @@ def key_page(key_name=None):
 	else:
 		return 'Sorry, this page does not exist.'
 
+# Shows issuer in the /issuer folder
+@app.route('/issuer/<issuer_name>')
+def issuer_page(issuer_name=None):
+	if issuer_name in os.listdir(config.ISSUER_PATH):
+		content = helpers.read_file(config.ISSUER_PATH+issuer_name)
+		return content
+	else:
+		return 'Sorry, this page does not exist.'
+
+# Shows issuer in the /issuer folder
+@app.route('/criteria/<year>/<month>/<criteria_name>')
+def criteria_page(year, month, criteria_name):
+	filename = year+"-"+month+"-"+criteria_name
+	print filename
+	if filename in os.listdir(config.CRITERIA_PATH):
+		content = helpers.read_file(config.CRITERIA_PATH+filename)
+		return content
+	else:
+		return 'Sorry, this page does not exist.'
+
 # Render user's certificates or individual certificate based on search query
 @app.route('/<identifier>')
 def get_award(identifier=None):
@@ -49,7 +69,7 @@ def get_award(identifier=None):
 		awards, _ = helpers.get_info_for_certificates(certificates)
 		if len(awards) > 0:
 			return render_template('user.html', user=user, awards=awards)
-	_, certificate = helpers.findUser_by_txid(identifier)
+	_, certificate = helpers.findUser_by_txid_or_uid(identifier)
 	if certificate:
 		award, verification_info = helpers.get_id_info(certificate)
 		if len(award) > 0 and len(verification_info) > 0:

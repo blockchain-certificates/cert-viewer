@@ -1,4 +1,6 @@
 KEYS_PATH = 'keys/'
+ISSUER_PATH = 'issuer/'
+CRITERIA_PATH = 'criteria/'
 MLPUBKEY_PATH = KEYS_PATH + '/ml-certs-public-key.asc'
 MLREVOKEKEY_PATH = KEYS_PATH + '/ml-certs-revoke-key.asc'
 
