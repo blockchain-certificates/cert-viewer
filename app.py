@@ -20,8 +20,8 @@ TX_JSON = None
 # Home page
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
-	recent_txids = ['5b8ba2f5eed0281fe2d47c7b651c22cf1d2fc942f59e9c5cd3950341d2c2112e', 
-					'5b8ba2f5eed0281fe2d47c7b651c22cf1d2fc942f59e9c5cd3950341d2c2112e']
+	recent_txids = ['48f64ff1517554dac3496e9da0a28ca0ae492682b0898e38a4e17e7f90ee1295', 
+					'1e031ea6895a4f00a3cbb1b68650d1ee0f9bb555bf6490d404ede56a7a630afa']
 	if request.method == 'POST':
 		identifier = request.form.get('identifier', None)
 		return redirect(url_for('get_award', identifier=identifier))
@@ -35,11 +35,10 @@ def faq_page():
 # Shows keys in the /keys folder
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
-	if key_name in os.listdir(config.KEYS_PATH):
-		content = helpers.read_file(config.KEYS_PATH+key_name)
-		return content
-	else:
-		return 'Sorry, this page does not exist.'
+	key = helpers.get_keys(key_name)
+	if key:
+		return key
+	return 'Sorry, this page does not exist.'
 
 # Shows issuer in the /issuer folder
 @app.route('/issuer/<issuer_name>')
@@ -145,7 +144,7 @@ def checkAuthor(uid=None):
 	if uid == None:
 		uid = request.args.get('uid')
 	signed_local_json = json.loads(helpers.find_file_in_gridfs(uid))
-	issuing_address = helpers.read_file(config.MLPUBKEY_PATH)
+	issuing_address = helpers.get_keys(config.ML_PUBKEY)
 	verify_authors = v.checkAuthor(issuing_address, signed_local_json)
 	if verify_authors:
 		return "True"
@@ -155,7 +154,7 @@ def checkAuthor(uid=None):
 def checkRevocation(revokeKey=None, transactionID=None):
 	if transactionID == None or revokeKey == None:
 		transactionID = request.args.get('transactionID')
-		revokeKey = helpers.read_file(config.MLREVOKEKEY_PATH)
+		revokeKey = helpers.get_keys(config.ML_REVOKEKEY)
 	not_revoked = v.check_revocation(TX_JSON, revokeKey)
 	if not_revoked:
 		return "True"
@@ -167,7 +166,7 @@ def verify():
 	transactionID = request.args.get('transactionID')
 	verify_author = checkAuthor(uid)
 	verify_doc = compareHashes(uid, transactionID)
-	verify_not_revoked = checkRevocation(helpers.read_file(config.MLREVOKEKEY_PATH), transactionID)
+	verify_not_revoked = checkRevocation(helpers.get_keys(config.ML_REVOKEKEY), transactionID)
 	if verify_doc == 'error':
 		return 'Error! Could not connect to blockchain.info API. Please try again later.'
 	if verify_author == "True" and verify_doc == "True" and verify_not_revoked == "True":

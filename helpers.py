@@ -5,9 +5,18 @@ import config
 import secrets
 from pymongo import MongoClient
 import gridfs
+import datetime
+from collections import OrderedDict
 
 client = MongoClient(host=secrets.MONGO_URI)
 fs = gridfs.GridFS(client.admin)
+
+def get_keys(key_name):
+	key_mappings = {config.ML_PUBKEY: "issuer_address", config.ML_REVOKEKEY: "revocation_address"}
+	address = key_mappings.get(key_name, None)
+	issuer = json.loads(read_file(config.MLISSUER_PATH))
+	current = OrderedDict(( datetime.datetime( year=int(k.split("-")[0]),  month=int(k.split("-")[1]), day=int(k.split("-")[2])), v) for k, v in sorted(issuer.iteritems(), reverse=True))
+	return current.items()[0][1].get(address, None)
 
 def find_file_in_gridfs(uid):
 	filename = uid + ".json"
@@ -85,7 +94,7 @@ def check_display(award):
 	return award
 
 def get_id_info(cert):
-	pubkey_content = read_file(config.MLPUBKEY_PATH)
+	pubkey_content = get_keys(config.ML_PUBKEY)
 	tx_id = cert["txid"]
 	json_info = json.loads(find_file_in_gridfs(str(cert["_id"])))
 	verification_info = {
