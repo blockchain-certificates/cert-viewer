@@ -41,7 +41,7 @@ To check that the certificate was sent to the Bitcoin blockchain by the Media La
 ```python
 valid_hash = False
 blockchain_data = json.loads(open(<INSERT_PATH_TO_BLOCKCHAIN_TRANSACTION_FILE>).read())
-raw_coin_data = open("local-coin.json").read()
+raw_coin_data = open(<INSERT_PATH_TO_LOCAL_CERTIFICATE_FILE>).read()
 local_hash = hashlib.sha256(raw_coin_data).hexdigest()
 
 transaction_outs = blockchain_data["out"]
