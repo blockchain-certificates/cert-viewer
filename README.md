@@ -5,7 +5,7 @@ Check out the web application at [https://coins.media.mit.edu](https://coins.med
 
 Example Certificate
 ===
-Check out documentation of the certificate itself [here]().
+Check out documentation of the certificate itself [here](https://github.com/ml-learning/coins.media.mit.edu/blob/development/CERTIFICATE.md).
 
 
 Installation
