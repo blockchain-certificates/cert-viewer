@@ -1,3 +1,13 @@
+About
+===
+Check out the web application at [https://coins.media.mit.edu](https://coins.media.mit.edu).
+
+
+Example Certificate
+===
+Check out documentation of the certificate itself [here]().
+
+
 Installation
 ===
 
@@ -6,10 +16,47 @@ Installation
 * Run the flask server `python app.py`
 * Open http://localhost:5000
 
-Website
+
+Database Configuration
 ===
-Checkout the website itself at [https://certs.media.mit.edu](https://certs.media.mit.edu).
+This webapp uses MongoDB. There are two collections, one for recipients and one for certificates. GridFs is used to store the certificates themselves.
+
+Example of a recipient object:
+```
+{
+  "_id": ObjectId(),
+  "pubkey": "<recipient public key>",
+  "info": {
+    "email": "",
+    "name": {
+      "givenName": "",
+      "familyName": ""
+    },
+    "degree": "<mas-ms/mas-phd/other>",
+    "address": {
+      "streetAddress": "",
+      "city": "",
+      "state": "",
+      "zipcode": "",
+      "country": ""
+    }
+  }
+}
+```
+
+Example of a certificate object:
+```
+{
+  "_id": "<uid string of certificate file>",
+  "issued": <true/false>,
+  "pubkey": "<recipient public key>",
+  "txid": "<certificate transaction id>"
+}
+```
+
+A recipient object can have multiple certificate objects. The objects are linked together by the "pubkey" field.
+
 
 Contact
 ===
-Contact [certs@media.mit.edu](mailto:certs@media.mit.edu) with questions
+Contact [coins@media.mit.edu](mailto:coins@media.mit.edu) with questions
