@@ -2,7 +2,7 @@
 To manually verify a digital certificate, follow the instructions below. These instructions will require Python 2.7 and the Python [python-bitcoinlib](https://github.com/petertodd/python-bitcoinlib). These can be installed with:
 
 ```
-pip install python-bitcoin-lib
+pip install python-bitcoinlib
 ```
 
 #### 1. Download the certificate and blockchain transaction
