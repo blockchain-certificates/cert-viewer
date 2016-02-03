@@ -27,7 +27,7 @@ def get_rawtx(tx_index):
 def get_hash_from_bc_op(tx_json):
         tx_outs = tx_json["out"]
         for o in tx_outs:
-            if int(o.get("value")) == 0:
+            if int(o.get("value", 1)) == 0 or o.get("addr", None) == None:
                 op_tx = o
         hashed_json = op_tx["script"].decode("hex")
         return hashed_json
