@@ -1,6 +1,8 @@
 KEYS_PATH = 'keys/'
-MLPUBKEY_PATH = KEYS_PATH + '/ml-certs-public-key.asc'
-BLOCKCHAIN_ADDRESS = '1HYPitzbwR83M3Smw6GWs5XeQzBWoJAEeS'
-CERT_MARKER = 'MEDIALAB'
-DATA_PATH = 'data/'
-JSONS_PATH = DATA_PATH + 'jsons/'
+ISSUER_PATH = 'issuer/'
+CRITERIA_PATH = 'criteria/'
+
+MLISSUER_PATH = ISSUER_PATH + 'ml-issuer.json'
+
+ML_PUBKEY = 'ml-certs-public-key.asc'
+ML_REVOKEKEY = 'ml-certs-revoke-key.asc'

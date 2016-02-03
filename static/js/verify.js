@@ -3,10 +3,11 @@ loading_messages = [
 	{'message': 'Fetching hash in OP_RETURN field', 'results': 'DONE'}, 
 	{'message': 'Comparing local and blockchain hashes', 'results': {'True': 'PASS', 'False': 'FAIL', 'error': 'ERROR'}},
 	{'message': 'Checking Media Lab signature', 'results': {'True': 'PASS', 'False': 'FAIL'}},
+	{'message': 'Checking not revoked by issuer', 'results': {'True': 'PASS', 'False': 'FAIL'}},
 	{'message': '', 'results': {'True': 'PASS', 'False': 'FAIL'}}
 	]
 
-urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/verify']
+urls = ['/computeHash', '/fetchHashFromChain', '/compareHashes', '/checkAuthor', '/checkRevocation', '/verify']
 
 timeDelay = 2000;
 
@@ -41,6 +42,9 @@ function getMark(index, res){
 }
 
 $(document).ready(function() {
+	var prepare_url = '/prepareVerification?'+$( "#verify-button" ).attr('value');
+	$.get(prepare_url, function(res){});
+	
 	$( "#verify-button" ).click(function() {
 		$("#not-verified").hide();
 		$("#verified").hide();
