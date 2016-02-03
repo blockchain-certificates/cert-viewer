@@ -11,7 +11,7 @@ function renderResponse(i, len, data){
 		message = data[0];
 		value = data[1];
 		if(i != len-1){
-			$("#progress-msg").html($("#progress-msg").html()+message+'</span>');
+			$("#progress-msg").html($("#progress-msg").html()+'Step ' + count.toString() +' of ' + total.toString() + "... " +message+'</span>');
 		}
 		setTimeout(function(){
 			if(i == len-1){
@@ -25,7 +25,7 @@ function renderResponse(i, len, data){
 				}
 			}
 			else{
-				$("#progress-msg").html($("#progress-msg").html()+' ['+markMappings[value]+' '+count.toString()+'/'+total.toString()+']<br>')
+				$("#progress-msg").html($("#progress-msg").html()+'  ['+markMappings[value]+']<br>')
 			}
 		}, 1000)
 

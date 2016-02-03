@@ -1,4 +1,4 @@
-from wtforms import Form, TextField, validators, RadioField
+from wtforms import Form, TextField, TextAreaField, validators, RadioField
 
 class RegistrationForm(Form):
 	first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
@@ -11,7 +11,7 @@ class RegistrationForm(Form):
 	zipcode = TextField('ZIP/Postal Code', [validators.required(), validators.length(max=200)])
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
 	degree = RadioField('Degree', choices=[('mas-ms','MAS MS'),('mas-phd','MAS PhD'), ('other','It\'s complicated')], coerce=unicode)
-	comments = TextField('Comments', [validators.optional()])
+	comments = TextAreaField('Comments', [validators.optional()])
 
 class AddressForm(Form):
 	address = TextField('Mailing Address', [validators.required(), validators.length(max=200)])
@@ -21,4 +21,6 @@ class AddressForm(Form):
 	country = TextField('Country', [validators.required(), validators.length(max=200)])
 
 class BitcoinForm(Form):
-	identity = RadioField('Identity', choices=[('yes','Yes, I have a Bitcoin identity'),('no','No, I don\'t have a Bitcoin identity')], coerce=unicode)
+	identity = RadioField('Identity', choices=[
+		('yes','Yes, I have a Bitcoin identity'),
+		('no','No, I don\'t have a Bitcoin identity')], coerce=unicode)

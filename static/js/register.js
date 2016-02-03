@@ -61,21 +61,23 @@ $(document).ready(function() {
       $("#identity").attr('checked', 'checked');
     }
     $("#next-btn-1").click(function(){
-      identity = $("#identity:radio:checked").val();
-
+      $('.errors').remove();
+      identity = $(".identity:radio:checked").val();
       if( identity == "yes" ){
-        $("#bitcoin-form").hide();
+        $("#bitcoin-form").hide('slow', function(){});
+        $("#key-warning").show();
+        $("#generate-keys-btn").show();
         $("#reg-info").show();
-        $('html, body').animate({
-            scrollTop: $("#reg-info").offset().top - 50
-          }, 'slow');
         $("#next-btn-1").hide();
       }
-      else{
+      else if( identity == "no" ){
         $("#bitcoin-form").hide('slow', function(){});
         $("#generate-keys-btn").show();
         $("#reg-info").show();
         $("#next-btn-1").hide();
+      }
+      else{
+        $('<p class="font-light errors radio-error">Please select one.</p>').insertBefore($("#next-btn-1"));
       }
     })
 

@@ -46,8 +46,8 @@
   </div>
   <div class="row">
     <div class="col-md-6 col-sm-8 col-xs-12">
-      <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">&nbsp;{{award.mlPublicKey}}</span></a></h6>
-      <h6 class="signature-info">Blockchain Address: <a href="{{award.transactionIDURL}}"><span class="font-light long-word">&nbsp;{{award.transactionID}}</span></a></h6>
+      <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
+      <h6 class="signature-info">Blockchain Address: <a target="_blank" href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
     </div>
   </div>
 </div>
@@ -61,15 +61,11 @@
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12 hide-on-print">
     <h6 class="signature-info">
-      <a href="https://github.com/ml-learning/coins.media.mit.edu/blob/master/VERIFY.md" class="no-decoration">
-        Want to learn how to manually verify a certificate? Check out our tutorial here.
-      </a>
+      Want to learn how to manually verify a certificate? Check out our tutorial
+      <a href="https://github.com/ml-learning/coins.media.mit.edu/blob/master/VERIFY.md">here</a>.
     </h6>
   </div>
 </div>
-
-</div>
-{% block footer %}{% endblock %}
 {% endblock %}
 
 {% block scripts %}

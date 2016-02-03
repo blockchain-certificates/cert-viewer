@@ -15,16 +15,16 @@
 <div class="row hide-on-print">
   <div class="col-md-6 col-sm-8 col-xs-12">
     <h3 class="heading font-bold name">Create your Bitcoin identity</h3>
-    <p class="description font-light">
-        Please turn off your wifi and continue. Once your Bitcoin keys have been generated, please print them out and save them. Then return to coins.media.mit.edu.
+    <p class="description">
+        <span class="notice-text"> In order to keep your Bitcoin keys secure, please turn off your wifi before continuing.</span>
         <br>
-        <button id="generatekeys" class="btn btn-default btn-margin">Generate Keys</button><div id="to-load"></div>
+        <button id="generatekeys" class="btn btn-default btn-margin font-light">Generate Keys</button><div id="to-load"></div>
     </p>
   </div>
 </div>
 <div class="row">
   <div id="keys" class="col-md-6 col-sm-8 col-xs-12 show-later divToPrint">
-    <img id="logo" src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab" width="20px"/>
+    <img id="logo" src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
     <span class="heading font-bold"> DO NOT DISCARD<span><br><br>
     <p class="description font-light key-text wallet-warning">The Media Lab does not contain a copy of this information. </p>
     <p class="description key-text"> Bitcoin Public Address: </p>
@@ -42,6 +42,8 @@
 </div>
 <div class="row hide-on-print">
   <div class="col-md-6 col-sm-8 col-xs-12">
+    <br>
+    <p class="font-light show-later">Please print out your Bitcoin keys and save them.</p>
     <button id="print-btn" class="btn btn-default btn-margin font-light show-later">Print</button>
   </div>
 </div>
@@ -62,7 +64,7 @@
   <div class="col-md-6 col-sm-8 col-xs-12">
     <p class="description font-light">
       <br>
-      <a id="return-link" class="show-later" href="/request"> Return to the coin's request page >> </a>
+      <a id="return-link" class="show-later" href="/request"> Return to the coin request page </a>
     </p>
   </div>
 </div>

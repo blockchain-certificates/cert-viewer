@@ -34,6 +34,7 @@ a,
 a:hover,
 a:focus{
   color: #333;
+  text-decoration: underline;
 }
 
 a:hover,a:focus{
@@ -77,6 +78,11 @@ a.no-decoration{
 
 .errors{
   color: #8B0000;
+}
+
+.notice-text{
+  color: #8B0000;
+  font-weight: bold;
 }
 
 .heading{

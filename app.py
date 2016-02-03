@@ -16,16 +16,11 @@ app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
 client = MongoClient(host=secrets.MONGO_URI)
 
-TX_JSON = None
-
 # Home page
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
 	recent_txids = ['56aa4c9bf3a6a0125aaf24bf', 
-					'56aa4c9bf3a6a0125aaf24c7']
-	if request.method == 'POST':
-		identifier = request.form.get('identifier', None)
-		return redirect(url_for('get_award', identifier=identifier))
+				'56aa4c9bf3a6a0125aaf24c7']
 	return render_template('index.html', recent_txids=recent_txids)
 
 # FAQ page
@@ -81,7 +76,6 @@ def generate_keys():
 # Request a certificate
 @app.route('/request', methods=['GET', 'POST'])
 def request_page():
-	done=False
 	form = RegistrationForm(request.form)
 	bitcoin = BitcoinForm(request.form)
 	if request.method == 'POST' and form.validate():
@@ -94,11 +88,10 @@ def request_page():
 			hidden_email_parts = form.email.data.split("@")
 			hidden_email = hidden_email_parts[0][:2]+("*"*(len(hidden_email_parts[0])-2))+"@"+hidden_email_parts[1]
 			flash('We just sent a confirmation email to %s.' % (hidden_email))	
-			done=True
-			return render_template('request.html', form=form, done=done, bitcoin=bitcoin)
+			return redirect(url_for('home_page'))
 		except:
 			flash('There seems to be an erorr with our system. Please try again later.')
-	return render_template('request.html', form=form, done=done, bitcoin=bitcoin)
+	return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
 
 @app.route("/verify")
 def verify():

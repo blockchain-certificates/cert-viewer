@@ -42,11 +42,13 @@
 
 #logo{
 	float: right;
+  width: 20px;
 }
 
 @media print {
     div.divToPrint {
-        top: 20%;
-        left: 45%;
+        top: 10%;
+        left: 35%;
+        width: 30%;
     }
 }

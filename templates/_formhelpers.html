@@ -18,7 +18,7 @@
     {% for value, label, _ in field.iter_choices() %}
         <div class="radio">
             <label class="radio-label">
-                <input type="radio" class="radio-input" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">
+                <input type="radio" class="radio-input {{field.id}}" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">
                 <span class="font-light lbl padding-8">{{ label }}</span>
             </label>
         </div>

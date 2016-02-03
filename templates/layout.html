@@ -32,8 +32,22 @@
       <div class="row hide-on-print" id="footer-info">
         <div class="col-md-6 col-sm-8 col-xs-12">
           <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:coins@media.mit.edu">coins@media.mit.edu</a></span></h6>
-          <h6 id="footer-start">Questions? <span class="font-light"><a href="/faq">Check out our FAQ page</a></span></h6>
-          <h6><span class="no-wrap">Media Lab </span><span class="no-wrap">Learning Initiative</span></h6>
+          {% if request.path != "/faq" %}
+          <h6 id="footer-start">Questions? <span class="font-light">Check out our <a href="/faq">FAQ page</a></span></h6>
+          {% endif %}
+          {% if request.path != "/" %}
+          <h6 id="footer-start">
+            <span class="font-light">
+              <a href="/">Home</a>&nbsp;|&nbsp;<a href="http://learn.media.mit.edu"> Media Lab Learning Initiative </a>
+            </span>
+          </h6>
+          {% else %}
+          <h6 id="footer-start">
+            <span class="font-light">
+              <a href="http://learn.media.mit.edu"> Media Lab Learning Initiative </a>
+            </span>
+          </h6>
+          {% endif %}
         </div>
       </div>
       {% endblock %}

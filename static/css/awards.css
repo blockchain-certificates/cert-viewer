@@ -51,6 +51,10 @@
     div.divToPrint {
         top: 18%;
         left: 20%;
+        width: 60%;
+    }
+    a {
+    	text-decoration: none !important;
     }
 }
 
