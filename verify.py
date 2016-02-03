@@ -17,7 +17,7 @@ def fetchurl(url, data=None):
                 return 'error'
 
 def get_rawtx(tx_index):
-        url = "https://blockchain.info/rawtx/%s" % tx_index
+        url = "https://blockchain.info/rawtx/%s?cors=true" % tx_index
         data = fetchurl(url)
         if data == 'error':
                 return data
