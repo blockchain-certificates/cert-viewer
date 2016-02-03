@@ -10,6 +10,7 @@ import verify as v
 from urllib import quote
 from forms import RegistrationForm, AddressForm, BitcoinForm
 from mail import send_reciept_email
+import requests
 
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
@@ -99,79 +100,45 @@ def request_page():
 			flash('There seems to be an erorr with our system. Please try again later.')
 	return render_template('request.html', form=form, done=done, bitcoin=bitcoin)
 
-# Verify scripts
-@app.route('/prepareVerification')
-def prepareVerification(transactionID=None):
-	if transactionID == None:
-		transactionID = request.args.get('transactionID')
-	global TX_JSON
-	TX_JSON = v.get_rawtx(transactionID)
-	return "True"
-
-@app.route('/computeHash')
-def computeHash(uid=None):
-	if uid == None:
-		uid = request.args.get('uid')
-	signed_json = helpers.find_file_in_gridfs(uid)
-	hashed = v.computeHash(signed_json)
-	return hashed
-
-@app.route('/fetchHashFromChain')
-def fetchHashFromChain():
-	hashed = v.fetchHashFromChain(TX_JSON)
-	return hashed
-
-@app.route('/compareHashes')
-def compareHashes(uid=None, transactionID=None):
-	if uid == None or transactionID == None:
-		transactionID = request.args.get('transactionID')
-		uid = request.args.get('uid')
-	localHash = computeHash(uid)
-	globalHash = fetchHashFromChain()
-	if globalHash == 'error':
-		return 'error'
-	if v.compareHashes(localHash, globalHash) == True:
-		return "True"
-	return "False"
-
-@app.route('/checkAuthor')
-def checkAuthor(uid=None):
-	if uid == None:
-		uid = request.args.get('uid')
-	signed_local_json = json.loads(helpers.find_file_in_gridfs(uid))
-	issuing_address = helpers.get_keys(config.ML_PUBKEY)
-	verify_authors = v.checkAuthor(issuing_address, signed_local_json)
-	if verify_authors:
-		return "True"
-	return "False"
-
-@app.route('/checkRevocation')
-def checkRevocation(revokeKey=None, transactionID=None):
-	if transactionID == None or revokeKey == None:
-		transactionID = request.args.get('transactionID')
-		revokeKey = helpers.get_keys(config.ML_REVOKEKEY)
-	not_revoked = v.check_revocation(TX_JSON, revokeKey)
-	if not_revoked:
-		return "True"
-	return "False"
-
-@app.route('/verify')
+@app.route("/verify")
 def verify():
+	verify_response = []
+	verified = False
 	uid = request.args.get('uid')
 	transactionID = request.args.get('transactionID')
-	verify_author = checkAuthor(uid)
-	verify_doc = compareHashes(uid, transactionID)
-	verify_not_revoked = checkRevocation(helpers.get_keys(config.ML_REVOKEKEY), transactionID)
-	if verify_doc == 'error':
-		return 'Error! Could not connect to blockchain.info API. Please try again later.'
-	if verify_author == "True" and verify_doc == "True" and verify_not_revoked == "True":
-		return "Success! The certificate has been verified."
-	elif verify_doc == "False":
-		return "Oops! Certificate content could not be verified"
-	elif verify_author == "False":
-		return "Oops! Author could not be verfied"
-	else:
-		return "Oops! The certificate has been revoked by the issuer"
+
+	signed_local_file = helpers.find_file_in_gridfs(uid)
+	signed_local_json = json.loads(signed_local_file)
+
+	r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % (transactionID))
+	if r.status_code != 200:
+		return json.dumps(None)
+
+	verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
+	verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
+	remote_json = r.json()
+
+	# compare hashes
+	local_hash = v.computeHash(signed_local_file)
+	remote_hash = v.fetchHashFromChain(remote_json)
+	compare_hashes = v.compareHashes(local_hash, remote_hash)
+	verify_response.append(("Comparing local and blockchain hashes", compare_hashes))
+
+	# check author
+	issuing_address = helpers.get_keys(config.ML_PUBKEY)
+	verify_authors = v.checkAuthor(issuing_address, signed_local_json)
+	verify_response.append(("Checking Media Lab signature", verify_authors))
+
+	# check revocation
+	revocation_address = helpers.get_keys(config.ML_REVOKEKEY)
+	not_revoked = v.check_revocation(remote_json, revocation_address)
+	verify_response.append(("Checking not revoked by issuer", not_revoked))
+
+	if compare_hashes == True and verify_authors == True and not_revoked == True:
+		verified = True
+	verify_response.append(("Verified", verified))
+
+	return json.dumps(verify_response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

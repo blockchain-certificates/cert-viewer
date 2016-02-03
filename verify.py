@@ -8,38 +8,15 @@ import urllib2
 import config
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage, SignMessage
 
-def fetchurl(url, data=None):
-        try:
-                result = urllib2.urlopen(url, data=data)
-                return result.read()
-        except urllib2.URLError, e:
-                print e
-                return 'error'
-
-def get_rawtx(tx_index):
-        url = "https://blockchain.info/rawtx/%s?cors=true" % tx_index
-        data = fetchurl(url)
-        if data == 'error':
-                return data
-        tx_json = json.loads(data)
-        return tx_json
-
 def get_hash_from_bc_op(tx_json):
         tx_outs = tx_json["out"]
         for o in tx_outs:
-            if int(o.get("value", 1)) == 0 or o.get("addr", None) == None:
+            if int(o.get("value", 1)) == 0:
                 op_tx = o
         hashed_json = op_tx["script"].decode("hex")
         return hashed_json
 
-def get_address_from_bc_op(tx_json, address):
-        for tx in tx_json["inputs"]:
-                if tx["prev_out"]["addr"]==address:
-                        return True
-        return False
-
 def check_revocation(tx_json, revoke_address):
-    # tx_json = get_rawtx(tx_id)
     tx_outs = tx_json["out"]
     for o in tx_outs:
         if o.get("addr") == revoke_address and o.get("spent") == False:
@@ -50,9 +27,6 @@ def computeHash(doc):
         return hashlib.sha256(doc).hexdigest()
 
 def fetchHashFromChain(tx_json):
-        # tx_json = get_rawtx(tx_id)
-        if tx_json == 'error':
-                return 'error'
         hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json))
         return hash_from_bc
 
