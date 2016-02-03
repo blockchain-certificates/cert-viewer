@@ -25,16 +25,14 @@ def find_file_in_gridfs(uid):
 		return certfile.read()
 	return None
 
-def findUser_by_txid_or_uid(identifier):
+def findUser_by_txid_or_uid(txid=None, uid=None):
 	user = None
 	certificate = None
-	if len(identifier) == 24: # check if it is the length of a uid
-		certificate = client.admin.certificates.find_one({'_id': ObjectId(identifier), 'issued': True})
-	else:
-		certificate = client.admin.certificates.find_one({'txid': identifier, 'issued': True})
-	if certificate:
-		user = client.admin.recipients.find_one({'pubkey': certificate['pubkey']})
-	return user, certificate
+	if uid:
+		certificate = client.admin.certificates.find_one({'_id': uid, 'issued': True})
+	if txid:
+		certificate = client.admin.certificates.find_one({'txid': txid, 'issued': True})
+	return certificate
 
 def findUser_by_pubkey(pubkey):
 	user = None

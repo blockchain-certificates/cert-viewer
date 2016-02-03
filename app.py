@@ -20,8 +20,8 @@ TX_JSON = None
 # Home page
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
-	recent_txids = ['48f64ff1517554dac3496e9da0a28ca0ae492682b0898e38a4e17e7f90ee1295', 
-					'1e031ea6895a4f00a3cbb1b68650d1ee0f9bb555bf6490d404ede56a7a630afa']
+	recent_txids = ['56aa4c9bf3a6a0125aaf24bf', 
+					'56aa4c9bf3a6a0125aaf24c7']
 	if request.method == 'POST':
 		identifier = request.form.get('identifier', None)
 		return redirect(url_for('get_award', identifier=identifier))
@@ -63,19 +63,14 @@ def criteria_page(year, month, criteria_name):
 # Render user's certificates or individual certificate based on search query
 @app.route('/<identifier>')
 def get_award(identifier=None):
-	user, certificates = helpers.findUser_by_pubkey(identifier)
-	if user and certificates:
-		awards, _ = helpers.get_info_for_certificates(certificates)
-		if len(awards) > 0:
-			return render_template('user.html', user=user, awards=awards)
-	_, certificate = helpers.findUser_by_txid_or_uid(identifier)
+	certificate = helpers.findUser_by_txid_or_uid(uid=identifier)
 	if certificate:
 		award, verification_info = helpers.get_id_info(certificate)
 		if len(award) > 0 and len(verification_info) > 0:
 			if request.args.get("format", None)=="json":
 				return helpers.find_file_in_gridfs(str(certificate["_id"]))
 			return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
-	return "Sorry, this award does not exist."
+	return "Sorry, this page does not exist."
 
 # Create Bitcoin identity for a user so they can request a certificate
 @app.route('/bitcoinkeys', methods=['GET'])
