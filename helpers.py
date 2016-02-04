@@ -12,12 +12,11 @@ client = MongoClient(host=secrets.MONGO_URI)
 fs = gridfs.GridFS(client.admin)
 
 def get_keys(key_name):
-	key_mappings = {config.ML_PUBKEY: "issuer_address", config.ML_REVOKEKEY: "revocation_address"}
-	address = key_mappings.get(key_name, None)
+	key_mappings = {config.ML_PUBKEY: "issuer_key", config.ML_REVOKEKEY: "revocation_key"}
 	issuer = json.loads(read_file(config.MLISSUER_PATH))
-	current = OrderedDict(( datetime.datetime( year=int(k.split("-")[0]),  month=int(k.split("-")[1]), day=int(k.split("-")[2])), v) for k, v in sorted(issuer.iteritems(), reverse=True))
-	return current.items()[0][1].get(address, None)
-
+	address = key_mappings.get(key_name, None)
+	return issuer[address][0]["key"]
+	
 def find_file_in_gridfs(uid):
 	filename = uid + ".json"
 	certfile = fs.find_one({"filename": filename})

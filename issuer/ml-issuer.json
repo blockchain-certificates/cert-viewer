@@ -1,6 +1,14 @@
 {
-  "2015-06-01": {
-    "issuer_address": "1HYPitzbwR83M3Smw6GWs5XeQzBWoJAEeS",
-    "revocation_address": "1C6KaoDpUgdQE7wKM5B9HhVXXjA8ymbfU6"
-  }
+  "issuer_key": [
+    {
+      "date": "2015-06-01",
+      "key": "1HYPitzbwR83M3Smw6GWs5XeQzBWoJAEeS"
+    }
+  ],
+  "revocation_key": [
+    {
+      "date": "2015-06-01",
+      "key": "1C6KaoDpUgdQE7wKM5B9HhVXXjA8ymbfU6"
+    }
+  ]
 }
