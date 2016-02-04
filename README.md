@@ -13,6 +13,16 @@ Installation
 
 * Git clone the repository
 * Set up a virtual environment and install the dependencies from requirements.txt
+* Create a `secrets.py` file with the following structure
+
+```python
+MONGO_URI = "mongodb://<username>:<password>@<domain>:<mongo_port>"
+SECRET_KEY = "<random string>"
+
+# Setup your mandrill account at https://www.mandrill.com/
+MANDRILL_API_KEY = "<mandrill_api_key>"
+```
+
 * Run the flask server `python app.py`
 * Open http://localhost:5000
 
