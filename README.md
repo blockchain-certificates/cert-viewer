@@ -49,7 +49,8 @@ Example of a recipient object:
       "state": "",
       "zipcode": "",
       "country": ""
-    }
+    },
+    "approved": true/false
   }
 }
 ```
