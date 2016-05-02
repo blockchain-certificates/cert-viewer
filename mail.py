@@ -27,7 +27,7 @@ def send_reciept_email(email, name):
         result = mandrill_client.messages.send_template(template_name='receipt-template',
                                                         template_content=template_content, message=message, async=False)
         return result
-    except mandrill.Error, e:
+    except mandrill.Error as e:
         # Mandrill errors are thrown as exceptions
         print
         'A mandrill error occurred: %s - %s' % (e.__class__, e)
