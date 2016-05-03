@@ -1,23 +1,33 @@
+import sys
 import unittest
+import binascii
 
 import verify as v
+
+# todo: can refactor?
+unhexlify = binascii.unhexlify
+hexlify = binascii.hexlify
+if sys.version > '3':
+    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
+    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 
 class TestVerify(unittest.TestCase):
 
     # TODO: get a script
     def test_get_hash_from_bc_op(self):
-        tx_json = {u'out': [{u'addr': u'ADDR1', u'spent': False, u'value': 0, u'script': b''}]}
+        script = b'76a9147de516211b6e7d17ceb410ac3a761b9b3493faa588ac'
+        tx_json = {u'out': [{u'addr': u'ADDR1', u'spent': False, u'value': 0, u'script': script}]}
         hashed_json = v.get_hash_from_bc_op(tx_json=tx_json)
         #self.assertEqual(hashed_json, '')
         self.assertEqual(True, False)
 
     # TODO: get a script
     def test_get_hash_from_chain(self):
-        tx_json = {u'out': [{u'addr': u'ADDR1', u'spent': False, u'value': 0, u'script': b''}]}
-        #hashed_json = v.fetchHashFromChain(tx_json=tx_json)
+        tx_json = {u'out': [{u'addr': u'ADDR1', u'spent': False, u'value': 0, u'script': b'76a9147de516211b6e7d17ceb410ac3a761b9b3493faa588ac'}]}
+        hashed_json = v.fetchHashFromChain(tx_json=tx_json)
         #self.assertEqual(hashed_json, '')
-        self.assertEqual(True, False)
+        #self.assertEqual(True, False)
 
     def test_computeHash(self):
         hash_result = v.computeHash('abc123'.encode('utf-8'))
