@@ -10,7 +10,7 @@ import requests
 import verify as v
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import RegistrationForm, BitcoinForm
-from mail import send_reciept_email
+from mail import send_receipt_email
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -94,7 +94,7 @@ def request_page():
             if user == None:
                 user = helpers.createUser(form)
             pubkey = helpers.createCert(form)
-            sent = send_reciept_email(form.email.data,
+            sent = send_receipt_email(form.email.data,
                                       {"givenName": form.first_name.data, "familyName": form.last_name.data})
             hidden_email_parts = form.email.data.split("@")
             hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + \

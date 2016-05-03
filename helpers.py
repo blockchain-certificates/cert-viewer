@@ -88,7 +88,6 @@ def createCert(form):
 def read_file(path):
     with open(path) as f:
         data = f.read()
-    f.close()
     return data
 
 
