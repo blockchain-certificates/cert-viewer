@@ -1,5 +1,12 @@
+import sys
 from wtforms import Form, TextField, TextAreaField, validators, RadioField
 
+def get_coerce_val():
+    if sys.version_info.major < 3:
+        coerce_val = unicode
+    else:
+        coerce_val = str
+    return coerce_val
 
 class RegistrationForm(Form):
     first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
@@ -13,7 +20,7 @@ class RegistrationForm(Form):
     country = TextField('Country', [validators.required(), validators.length(max=200)])
     degree = RadioField('Degree',
                         choices=[('mas-ms', 'MAS MS'), ('mas-phd', 'MAS PhD'), ('other', 'It\'s complicated')],
-                        coerce=unicode)
+                        coerce=get_coerce_val())
     comments = TextAreaField('Comments', [validators.optional()])
 
 
@@ -28,4 +35,4 @@ class AddressForm(Form):
 class BitcoinForm(Form):
     identity = RadioField('Identity', choices=[
         ('yes', 'Yes, I have a Bitcoin identity'),
-        ('no', 'No, I don\'t have a Bitcoin identity')], coerce=unicode)
+        ('no', 'No, I don\'t have a Bitcoin identity')], coerce=get_coerce_val())
