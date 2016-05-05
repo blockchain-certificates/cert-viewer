@@ -5,13 +5,20 @@ import hashlib
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
 
+import sys
+
+unhexlify = binascii.unhexlify
+hexlify = binascii.hexlify
+if sys.version > '3':
+    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
+    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 def get_hash_from_bc_op(tx_json):
     tx_outs = tx_json["out"]
     for o in tx_outs:
         if int(o.get("value", 1)) == 0:
             op_tx = o
-    hashed_json = op_tx["script"].decode("hex")
+    hashed_json = unhexlify(op_tx["script"])
     return hashed_json
 
 
@@ -28,7 +35,7 @@ def computeHash(doc):
 
 
 def fetchHashFromChain(tx_json):
-    hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json))
+    hash_from_bc = hexlify(get_hash_from_bc_op(tx_json))
     return hash_from_bc
 
 
