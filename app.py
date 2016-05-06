@@ -10,7 +10,7 @@ import requests
 import verify as v
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import RegistrationForm, BitcoinForm
-from mail import send_reciept_email
+from mail import send_receipt_email
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -67,7 +67,7 @@ def criteria_page(year, month, criteria_name):
 # Render user's certificates or individual certificate based on search query
 @app.route('/<identifier>')
 def get_award(identifier=None):
-    certificate = helpers.findUser_by_txid_or_uid(uid=identifier)
+    certificate = helpers.find_user_by_txid_or_uid(uid=identifier)
     if certificate:
         award, verification_info = helpers.get_id_info(certificate)
         if len(award) > 0 and len(verification_info) > 0:
@@ -91,10 +91,10 @@ def request_page():
     if request.method == 'POST' and form.validate():
         try:
             user = client.admin.recipients.find_one({"pubkey": form.pubkey.data})
-            if user == None:
-                user = helpers.createUser(form)
-            pubkey = helpers.createCert(form)
-            sent = send_reciept_email(form.email.data,
+            if user is None:
+                user = helpers.create_user(form)
+            pubkey = helpers.create_cert(form)
+            sent = send_receipt_email(form.email.data,
                                       {"givenName": form.first_name.data, "familyName": form.last_name.data})
             hidden_email_parts = form.email.data.split("@")
             hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + \
@@ -108,43 +108,47 @@ def request_page():
 
 @app.route("/verify")
 def verify():
-    verify_response = []
-    verified = False
     uid = request.args.get('uid')
-    transactionID = request.args.get('transactionID')
+    transaction_id = request.args.get('transactionID')
 
-    signed_local_file = helpers.find_file_in_gridfs(uid)
-    signed_local_json = json.loads(signed_local_file)
-
-    r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % (transactionID))
-    if r.status_code != 200:
-        return json.dumps(None)
-
-    verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
-    verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
-    remote_json = r.json()
-
-    # compare hashes
-    local_hash = v.computeHash(signed_local_file)
-    remote_hash = v.fetchHashFromChain(remote_json)
-    compare_hashes = v.compareHashes(local_hash, remote_hash)
-    verify_response.append(("Comparing local and blockchain hashes", compare_hashes))
-
-    # check author
-    issuing_address = helpers.get_keys(config.ML_PUBKEY)
-    verify_authors = v.checkAuthor(issuing_address, signed_local_json)
-    verify_response.append(("Checking Media Lab signature", verify_authors))
-
-    # check revocation
-    revocation_address = helpers.get_keys(config.ML_REVOKEKEY)
-    not_revoked = v.check_revocation(remote_json, revocation_address)
-    verify_response.append(("Checking not revoked by issuer", not_revoked))
-
-    if compare_hashes == True and verify_authors == True and not_revoked == True:
-        verified = True
-    verify_response.append(("Verified", verified))
+    verify_response = get_verify_response(transaction_id, uid)
 
     return json.dumps(verify_response)
+
+
+def get_verify_response(transaction_id, uid):
+    signed_local_file = helpers.find_file_in_gridfs(uid)
+    signed_local_json = json.loads(signed_local_file)
+    r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
+    if r.status_code != 200:
+        return None
+    else:
+        verify_response = []
+        verified = False
+        verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
+        verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
+        remote_json = r.json()
+
+        # compare hashes
+        local_hash = v.computeHash(signed_local_file)
+        remote_hash = v.fetchHashFromChain(remote_json)
+        compare_hashes = v.compareHashes(local_hash, remote_hash)
+        verify_response.append(("Comparing local and blockchain hashes", compare_hashes))
+
+        # check author
+        issuing_address = helpers.get_keys(config.ML_PUBKEY)
+        verify_authors = v.checkAuthor(issuing_address, signed_local_json)
+        verify_response.append(("Checking Media Lab signature", verify_authors))
+
+        # check revocation
+        revocation_address = helpers.get_keys(config.ML_REVOKEKEY)
+        not_revoked = v.check_revocation(remote_json, revocation_address)
+        verify_response.append(("Checking not revoked by issuer", not_revoked))
+
+        if compare_hashes and verify_authors and not_revoked:
+            verified = True
+        verify_response.append(("Verified", verified))
+    return verify_response
 
 
 if __name__ == '__main__':

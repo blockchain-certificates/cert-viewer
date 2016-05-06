@@ -1,10 +1,18 @@
 import json
+import sys
 
 import secrets
 
+import binascii
 import config
 import gridfs
 from pymongo import MongoClient
+
+unhexlify = binascii.unhexlify
+hexlify = binascii.hexlify
+if sys.version > '3':
+    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
+    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 client = MongoClient(host=secrets.MONGO_URI)
 fs = gridfs.GridFS(client.admin)
@@ -25,8 +33,7 @@ def find_file_in_gridfs(uid):
     return None
 
 
-def findUser_by_txid_or_uid(txid=None, uid=None):
-    user = None
+def find_user_by_txid_or_uid(txid=None, uid=None):
     certificate = None
     if uid:
         certificate = client.admin.certificates.find_one({'_id': uid, 'issued': True})
@@ -35,7 +42,7 @@ def findUser_by_txid_or_uid(txid=None, uid=None):
     return certificate
 
 
-def findUser_by_pubkey(pubkey):
+def find_user_by_pubkey(pubkey):
     user = None
     certificates = None
     user = client.admin.recipients.find_one({'pubkey': pubkey})
@@ -57,7 +64,7 @@ def get_info_for_certificates(certificates):
     return awards, verifications
 
 
-def createUser(form):
+def create_user(form):
     userJson = {}
     userJson["pubkey"] = form.pubkey.data
     userJson["info"] = {}
@@ -76,7 +83,7 @@ def createUser(form):
     return userJson
 
 
-def createCert(form):
+def create_cert(form):
     certJson = {}
     certJson["pubkey"] = form.pubkey.data
     certJson["issued"] = False
@@ -88,22 +95,22 @@ def createCert(form):
 def read_file(path):
     with open(path) as f:
         data = f.read()
-    f.close()
     return data
 
 
 def check_display(award):
     if award['display'] == 'FALSE':
-        award['subtitle'] = '';
+        award['subtitle'] = ''
     return award
 
 
 def get_id_info(cert):
     pubkey_content = get_keys(config.ML_PUBKEY)
     tx_id = cert["txid"]
-    json_info = json.loads(find_file_in_gridfs(str(cert["_id"])))
+    uid = str(cert["_id"])
+    json_info = json.loads(find_file_in_gridfs(uid))
     verification_info = {
-        "uid": str(cert["_id"]),
+        "uid": uid,
         "transactionID": tx_id
     }
     award = {

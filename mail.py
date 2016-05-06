@@ -3,7 +3,7 @@ import secrets
 import mandrill
 
 
-def send_reciept_email(email, name):
+def send_receipt_email(email, name):
     mandrill_client = mandrill.Mandrill(secrets.MANDRILL_API_KEY)
     template_content = None
     message = {
