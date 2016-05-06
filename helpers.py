@@ -1,10 +1,18 @@
 import json
+import sys
 
 import secrets
 
+import binascii
 import config
 import gridfs
 from pymongo import MongoClient
+
+unhexlify = binascii.unhexlify
+hexlify = binascii.hexlify
+if sys.version > '3':
+    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
+    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 client = MongoClient(host=secrets.MONGO_URI)
 fs = gridfs.GridFS(client.admin)

@@ -1,17 +1,11 @@
 from __future__ import absolute_import, division, unicode_literals
 
-import binascii
 import hashlib
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
 
-import sys
+from helpers import unhexlify, hexlify
 
-unhexlify = binascii.unhexlify
-hexlify = binascii.hexlify
-if sys.version > '3':
-    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
-    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 def get_hash_from_bc_op(tx_json):
     tx_outs = tx_json["out"]

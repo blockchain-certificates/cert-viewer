@@ -1,31 +1,24 @@
-import sys
 import unittest
-import binascii
-import json
 
 import verify as v
-
-# todo: can refactor?
-unhexlify = binascii.unhexlify
-hexlify = binascii.hexlify
-if sys.version > '3':
-    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
-    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
+from helpers import hexlify
 
 
 class TestVerify(unittest.TestCase):
-
     def test_get_hash_from_bc_op(self):
-        script = hexlify(b'ddd7a9da081bf39bec8a049968010c0b429e969ea4b1b0f9badf9360d9d8886c')
+        script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'
+        script = hexlify(script_input)
         tx_json = {u'out': [{u'addr': u'ADDR1', u'spent': False, u'value': 0, u'script': script}]}
         hashed_json = v.get_hash_from_bc_op(tx_json=tx_json)
-        self.assertEqual(hashed_json, b'ddd7a9da081bf39bec8a049968010c0b429e969ea4b1b0f9badf9360d9d8886c')
+        self.assertEqual(hashed_json, script_input)
 
     def test_get_hash_from_chain(self):
-        script = hexlify(b'6a20ddd7a9da081bf39bec8a049968010c0b429e969ea4b1b0f9badf9360d9d8886c')
-        tx_json = {'out': [{ 'spent': False, 'tx_index': 145158287, 'type': 0, 'value': 0, 'n': 2, 'script': script}]}
+        script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'
+        script = hexlify(script_input)
+        tx_json = {'out': [{'spent': False, 'tx_index': 142155247, 'type': 0, 'value': 0, 'n': 2, 'script': script}]}
         hashed_json = v.fetchHashFromChain(tx_json=tx_json)
-        self.assertEqual(hashed_json, '3661323064646437613964613038316266333962656338613034393936383031306330623432396539363965613462316230663962616466393336306439643838383663')
+        self.assertEqual(hashed_json,
+                         '65656433613664613038316466333664656438613034363636383031306430643432366536363665613464316430663664616466363336306436643838383664')
 
     def test_computeHash(self):
         hash_result = v.computeHash('abc123'.encode('utf-8'))
