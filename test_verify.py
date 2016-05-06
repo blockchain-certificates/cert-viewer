@@ -16,12 +16,12 @@ class TestVerify(unittest.TestCase):
         script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'
         script = hexlify(script_input)
         tx_json = {'out': [{'spent': False, 'tx_index': 142155247, 'type': 0, 'value': 0, 'n': 2, 'script': script}]}
-        hashed_json = v.fetchHashFromChain(tx_json=tx_json)
+        hashed_json = v.fetch_hash_from_chain(tx_json=tx_json)
         self.assertEqual(hashed_json,
                          '65656433613664613038316466333664656438613034363636383031306430643432366536363665613464316430663664616466363336306436643838383664')
 
-    def test_computeHash(self):
-        hash_result = v.computeHash('abc123'.encode('utf-8'))
+    def test_compute_hash(self):
+        hash_result = v.compute_hash('abc123'.encode('utf-8'))
         self.assertEqual(hash_result, '6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090')
 
     def test_check_revocation_not_revoked(self):

@@ -2,21 +2,25 @@ import json
 import os
 import urllib
 
-import secrets
+import gridfs
+import requests
+from flask import Flask, render_template, request, flash, redirect, url_for
+from pymongo import MongoClient
 
 import config
 import helpers
-import requests
+import secrets
 import verify as v
-from flask import Flask, render_template, request, flash, redirect, url_for
+from certificates import Certificates
 from forms import RegistrationForm, BitcoinForm
 from mail import send_receipt_email
-from pymongo import MongoClient
 
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
 client = MongoClient(host=secrets.MONGO_URI)
 
+gridfs.GridFS(client['admin'])
+certificates = Certificates(client, gridfs)
 
 # Home page
 @app.route('/', methods=['GET', 'POST'])
@@ -67,12 +71,12 @@ def criteria_page(year, month, criteria_name):
 # Render user's certificates or individual certificate based on search query
 @app.route('/<identifier>')
 def get_award(identifier=None):
-    certificate = helpers.find_user_by_txid_or_uid(uid=identifier)
+    certificate = certificates.find_user_by_uid(uid=identifier)
     if certificate:
-        award, verification_info = helpers.get_id_info(certificate)
+        award, verification_info = certificates.get_id_info(certificate)
         if len(award) > 0 and len(verification_info) > 0:
             if request.args.get("format", None) == "json":
-                return helpers.find_file_in_gridfs(str(certificate["_id"]))
+                return certificates.find_file_in_gridfs(str(certificate["_id"]))
             return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
     return "Sorry, this page does not exist."
 
@@ -92,8 +96,8 @@ def request_page():
         try:
             user = client.admin.recipients.find_one({"pubkey": form.pubkey.data})
             if user is None:
-                user = helpers.create_user(form)
-            pubkey = helpers.create_cert(form)
+                user = certificates.create_user(form)
+            pubkey = certificates.create_cert(form)
             sent = send_receipt_email(form.email.data,
                                       {"givenName": form.first_name.data, "familyName": form.last_name.data})
             hidden_email_parts = form.email.data.split("@")
@@ -117,7 +121,7 @@ def verify():
 
 
 def get_verify_response(transaction_id, uid):
-    signed_local_file = helpers.find_file_in_gridfs(uid)
+    signed_local_file = certificates.find_file_in_gridfs(uid)
     signed_local_json = json.loads(signed_local_file)
     r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
     if r.status_code != 200:
@@ -130,14 +134,14 @@ def get_verify_response(transaction_id, uid):
         remote_json = r.json()
 
         # compare hashes
-        local_hash = v.computeHash(signed_local_file)
-        remote_hash = v.fetchHashFromChain(remote_json)
-        compare_hashes = v.compareHashes(local_hash, remote_hash)
+        local_hash = v.compute_hash(signed_local_file)
+        remote_hash = v.fetch_hash_from_chain(remote_json)
+        compare_hashes = v.compare_hashes(local_hash, remote_hash)
         verify_response.append(("Comparing local and blockchain hashes", compare_hashes))
 
         # check author
         issuing_address = helpers.get_keys(config.ML_PUBKEY)
-        verify_authors = v.checkAuthor(issuing_address, signed_local_json)
+        verify_authors = v.check_author(issuing_address, signed_local_json)
         verify_response.append(("Checking Media Lab signature", verify_authors))
 
         # check revocation
