@@ -1,9 +1,10 @@
 from __future__ import absolute_import, division, unicode_literals
 
-import binascii
 import hashlib
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
+
+from helpers import unhexlify, hexlify
 
 
 def get_hash_from_bc_op(tx_json):
@@ -11,7 +12,7 @@ def get_hash_from_bc_op(tx_json):
     for o in tx_outs:
         if int(o.get("value", 1)) == 0:
             op_tx = o
-    hashed_json = op_tx["script"].decode("hex")
+    hashed_json = unhexlify(op_tx["script"])
     return hashed_json
 
 
@@ -28,7 +29,7 @@ def computeHash(doc):
 
 
 def fetchHashFromChain(tx_json):
-    hash_from_bc = binascii.hexlify(get_hash_from_bc_op(tx_json))
+    hash_from_bc = hexlify(get_hash_from_bc_op(tx_json))
     return hash_from_bc
 
 
