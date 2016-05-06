@@ -1,4 +1,12 @@
-secrets.py
+conf.ini
 .DS_Store
 *.pyc
-venv/
+venv*/
+.idea/*
+
+.cache/
+.coverage
+.eggs/
+.tox/
+
+*.egg-info*
