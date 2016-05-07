@@ -46,27 +46,27 @@ class Certificates:
             certificates = list(certificates)
         return user, certificates
 
-    def create_user(self, form):
+    def create_user(self, user_data):
         userJson = {}
-        userJson["pubkey"] = form.pubkey.data
+        userJson["pubkey"] = user_data.pubkey
         userJson["info"] = {}
-        userJson["info"]["email"] = form.email.data
-        userJson["info"]["degree"] = form.degree.data
-        userJson["info"]["comments"] = form.comments.data
-        userJson["info"]["name"] = {"familyName": form.last_name.data, "givenName": form.first_name.data}
+        userJson["info"]["email"] = user_data.email
+        userJson["info"]["degree"] = user_data.degree
+        userJson["info"]["comments"] = user_data.comments
+        userJson["info"]["name"] = {"familyName": user_data.last_name, "givenName": user_data.first_name}
         userJson["info"]["address"] = {
-            "streetAddress": form.address.data,
-            "city": form.city.data,
-            "state": form.state.data,
-            "zipcode": "\'" + form.zipcode.data,
-            "country": form.country.data
+            "streetAddress": user_data.address,
+            "city": user_data.city,
+            "state": user_data.state,
+            "zipcode": "\'" + user_data.zipcode,
+            "country": user_data.country
         }
         self.client.admin.recipients.insert_one(userJson)
         return userJson
 
-    def create_cert(self, form):
+    def create_cert(self, pubkey):
         certJson = {}
-        certJson["pubkey"] = form.pubkey.data
+        certJson["pubkey"] = pubkey
         certJson["issued"] = False
         certJson["txid"] = None
         self.client.admin.certificates.insert_one(certJson)

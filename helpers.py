@@ -23,3 +23,8 @@ def read_file(path):
         data = f.read()
     return data
 
+
+def format_email(email):
+    hidden_email_parts = email.split("@")
+    hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + hidden_email_parts[1]
+    return hidden_email
