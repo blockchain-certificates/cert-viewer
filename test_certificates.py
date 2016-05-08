@@ -1,9 +1,8 @@
 import unittest
 
 import mongomock
-from mock import Mock
-
 from certificates import Certificates
+from mock import Mock
 from service import UserData
 
 

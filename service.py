@@ -1,11 +1,9 @@
 import json
 from collections import namedtuple
 
-import gridfs
-import requests
-
 import config
 import helpers
+import requests
 import verify as v
 from certificates import Certificates
 from mail import send_receipt_email

@@ -1,7 +1,8 @@
 import json
-from bson.objectid import ObjectId
+
 import config
 import helpers
+from bson.objectid import ObjectId
 
 
 class Certificates:
@@ -60,7 +61,6 @@ class Certificates:
         print(res)
         return user_json
 
-    # todo here and create_user: why was insert_one being used instead of insert?
     def create_cert(self, pubkey):
         cert_json = {'pubkey': pubkey, 'issued': False, 'txid': None}
         cert_id = self.insert_cert(cert_json=cert_json)

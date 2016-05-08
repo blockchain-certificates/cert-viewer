@@ -1,7 +1,6 @@
 import binascii
 import json
 import sys
-import urllib
 
 import config
 
