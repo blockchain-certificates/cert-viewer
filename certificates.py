@@ -35,8 +35,6 @@ class Certificates:
         # if certificate is missing pubkey, it will be returned by the filter below.
         if pubkey is None:
             return None, None
-        user = None
-        certificates = None
         user = self.client.admin.recipients.find_one({'pubkey': pubkey})
         certificates = self.client.admin.certificates.find({'pubkey': pubkey, 'issued': True})
         if user:
@@ -46,9 +44,7 @@ class Certificates:
         return user, certificates
 
     def create_user(self, user_data):
-        user_json = {}
-        user_json['pubkey'] = user_data.pubkey
-        user_json['info'] = {}
+        user_json = {'pubkey': user_data.pubkey, 'info': {}}
         user_json['info']['email'] = user_data.email
         user_json['info']['degree'] = user_data.degree
         user_json['info']['comments'] = user_data.comments
@@ -66,16 +62,13 @@ class Certificates:
 
     # todo here and create_user: why was insert_one being used instead of insert?
     def create_cert(self, pubkey):
-        cert_json = {}
-        cert_json['pubkey'] = pubkey
-        cert_json['issued'] = False
-        cert_json['txid'] = None
-        id = self.insert_cert(cert_json=cert_json)
-        return id
+        cert_json = {'pubkey': pubkey, 'issued': False, 'txid': None}
+        cert_id = self.insert_cert(cert_json=cert_json)
+        return cert_id
 
     def insert_cert(self, cert_json):
-        id = self.client.admin.certificates.insert_one(cert_json)
-        return id
+        cert_id = self.client.admin.certificates.insert_one(cert_json)
+        return cert_id
 
     def get_info_for_certificates(self, certificates):
         awards = []
@@ -111,9 +104,10 @@ class Certificates:
             'transactionIDURL': 'https://blockchain.info/tx/' + tx_id,
             'issuedOn': json_info['assertion']['issuedOn']
         }
-        award = Certificates.check_display(award)
+        award = Certificates.check_display(award)  # TODO: linter says verify
         return award, verification_info
 
+    @staticmethod
     def check_display(award):
         if award['display'] == 'FALSE':
             award['subtitle'] = ''
