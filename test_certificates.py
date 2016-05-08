@@ -4,6 +4,7 @@ import mongomock
 from mock import Mock
 
 from certificates import Certificates
+from service import UserData
 
 
 class TestHelpers(unittest.TestCase):
@@ -47,6 +48,19 @@ class TestHelpers(unittest.TestCase):
         self.assertIsNotNone(res2)
         self.assertEqual(res1['pubkey'], 'K1')
         self.assertEqual(res2[0]['pubkey'], 'K1')
+
+    def test_create_certificate(self):
+        cert = Certificates(client=self.client, fs=self.fs)
+        res = cert.create_cert('K2')
+        self.assertEqual(res, 'K2')
+
+    def test_create_user(self):
+        cert = Certificates(client=self.client, fs=self.fs)
+        user_data = UserData('K3', 'r@r.com', 'a.b.s', 'some comments', 'satoshi', 'nakamoto', '111 main st',
+                             'seattle', 'wa', '96666', 'usa')
+        user_object = cert.create_user(user_data)
+        self.assertEqual(user_object['info']['name']['givenName'], 'satoshi')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,6 +1,7 @@
 import binascii
 import json
 import sys
+import urllib
 
 import config
 
@@ -9,7 +10,6 @@ hexlify = binascii.hexlify
 if sys.version > '3':
     unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
     hexlify = lambda b: binascii.hexlify(b).decode('utf8')
-
 
 def get_keys(key_name):
     key_mappings = {config.ML_PUBKEY: "issuer_key", config.ML_REVOKEKEY: "revocation_key"}

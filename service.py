@@ -10,14 +10,14 @@ import verify as v
 from certificates import Certificates
 from mail import send_receipt_email
 
-UserData = namedtuple('User', ['pubkey', 'email', 'degree', 'comments', 'first_name', 'last_name',
-                               'street_address', 'city', 'state', 'zip_code', 'country'])
+UserData = namedtuple('UserData', ['pubkey', 'email', 'degree', 'comments', 'first_name', 'last_name',
+                                   'street_address', 'city', 'state', 'zip_code', 'country'])
 
 class Service:
     def __init__(self, client, fs):
         self.client = client
         self.fs = fs
-        self.certificates = Certificates(client, gridfs)
+        self.certificates = Certificates(client, fs)
 
     def get_formatted_certificate(self, identifier, format):
         certificate = self.certificates.find_user_by_uid(uid=identifier)

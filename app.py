@@ -13,12 +13,14 @@ from forms import RegistrationForm, BitcoinForm
 from service import Service
 from service import UserData
 
+from urllib.parse import urlencode
+
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
 client = MongoClient(host=secrets.MONGO_URI)
 
-gridfs.GridFS(client['admin'])
-service = Service(client, gridfs)
+gfs = gridfs.GridFS(client['admin'])
+service = Service(client, gfs)
 
 # Home page
 @app.route('/', methods=['GET', 'POST'])
@@ -72,7 +74,7 @@ def get_award(identifier=None):
     if award and format == "json":
         return award
     if award:
-        return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
+        return render_template('award.html', award=award, verification_info=urlencode(verification_info))
 
     return "Sorry, this page does not exist."
 
@@ -110,6 +112,7 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
+    # TODO: verify this is async
     verify_response = service.get_verify_response(transaction_id, uid)
     return json.dumps(verify_response)
 

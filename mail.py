@@ -6,6 +6,7 @@ import mandrill
 def send_receipt_email(email, name):
     mandrill_client = mandrill.Mandrill(secrets.MANDRILL_API_KEY)
     template_content = None
+    # TODO: make message parts configurable
     message = {
         "subject": "Your request for a Media Lab coin is being processed",
         "from_email": "coins@media.mit.edu",
