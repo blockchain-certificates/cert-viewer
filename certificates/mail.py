@@ -1,10 +1,9 @@
 import config
 import mandrill
-import secrets
 
 
 def send_receipt_email(recipient_email, name):
-    mandrill_client = mandrill.Mandrill(secrets.MANDRILL_API_KEY)
+    mandrill_client = mandrill.Mandrill(config.MANDRILL_API_KEY)
     template_content = None
     message = {
         'subject': config.SUBJECT,

@@ -4,7 +4,6 @@ from urllib.parse import urlencode
 
 import config
 import gridfs
-import secrets
 from certificates import helpers
 from certificates.service import Service
 from certificates.service import UserData
@@ -13,18 +12,22 @@ from forms import RegistrationForm, BitcoinForm
 from pymongo import MongoClient
 
 app = Flask(__name__)
-app.secret_key = secrets.SECRET_KEY
-client = MongoClient(host=secrets.MONGO_URI)
+app.secret_key = config.SECRET_KEY
+client = MongoClient(host=config.MONGO_URI)
 
 gfs = gridfs.GridFS(client['admin'])
 service = Service(client, gfs)
 
+# TODO (kim): fix config location
+# TODO (kim): fix all static file location
+# TODO (kim): markdown generator for docs
+# TODO (kim): config_template.py and collapse
+    # import os
+    # os.urandom(24)
+# TODO (kim): make db name configurable
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
 # TODO (kim): load recent txids
-# TODO (kim): fix config location
-# TODO (kim): fix all static file location
-
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
