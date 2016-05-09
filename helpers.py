@@ -10,6 +10,7 @@ if sys.version > '3':
     unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
     hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
+
 def get_keys(key_name):
     key_mappings = {config.ML_PUBKEY: "issuer_key", config.ML_REVOKEKEY: "revocation_key"}
     issuer = json.loads(read_file(config.MLISSUER_PATH))
@@ -24,6 +25,7 @@ def read_file(path):
 
 
 def format_email(email):
+    """TODO: what is the point of this?"""
     hidden_email_parts = email.split("@")
     hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + hidden_email_parts[1]
     return hidden_email

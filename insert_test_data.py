@@ -1,14 +1,7 @@
-import json
-import os
-import urllib
-
 import gridfs
-from pymongo import MongoClient
-
-import config
 import helpers
 import secrets
-from forms import RegistrationForm, BitcoinForm
+from pymongo import MongoClient
 from service import Service
 from service import UserData
 

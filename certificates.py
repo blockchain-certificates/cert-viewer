@@ -57,8 +57,9 @@ class Certificates:
             'zipcode': "\'" + user_data.zip_code,  # TODO why?
             'country': user_data.country
         }
-        res = self.client.admin.recipients.insert_one(user_json)
-        print(res)
+
+        rec_id = self.insert_shim(self.client.admin.recipients, user_json)
+
         return user_json
 
     def create_cert(self, pubkey):
@@ -67,8 +68,15 @@ class Certificates:
         return cert_id
 
     def insert_cert(self, cert_json):
-        cert_id = self.client.admin.certificates.insert_one(cert_json)
+        cert_id = self.insert_shim(self.client.admin.certificates, cert_json)
+        #cert_id = self.client.admin.certificates.insert_one(cert_json)
         return cert_id
+
+    def insert_shim(self, collection, document):
+        # todo: switch back to insert_one
+        inserted_id = collection.insert_one(document)
+        return inserted_id
+
 
     def get_info_for_certificates(self, certificates):
         awards = []
