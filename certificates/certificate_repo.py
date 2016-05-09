@@ -8,6 +8,7 @@ from certificates import helpers
 class CertificateRepo:
     def __init__(self, client, gfs):
         self.client = client
+        self.db = client[config.CERTIFICATES_DB]
         self.gfs = gfs
 
     def find_file_in_gridfs(self, uid):
@@ -23,26 +24,29 @@ class CertificateRepo:
     def find_user_by_txid(self, txid):
         certificate = None
         if txid:
-            certificate = self.client.admin.certificates.find_one({'txid': txid, 'issued': True})
+            certificate = self.db.certificates.find_one({'txid': txid, 'issued': True})
         return certificate
 
     def find_user_by_uid(self, uid=None):
         certificate = None
         if uid:
-            certificate = self.client.admin.certificates.find_one({'_id': ObjectId(uid), 'issued': True})
+            certificate = self.db.certificates.find_one({'_id': ObjectId(uid), 'issued': True})
         return certificate
 
-    def find_user_by_pubkey(self, pubkey):
+    def find_user_and_certificate_by_pubkey(self, pubkey):
         # if certificate is missing pubkey, it will be returned by the filter below.
         if pubkey is None:
             return None, None
-        user = self.client.admin.recipients.find_one({'pubkey': pubkey})
-        certificates = self.client.admin.certificates.find({'pubkey': pubkey, 'issued': True})
+        user = self.find_user_by_pub_key(pubkey)
+        certificates = self.db.certificates.find({'pubkey': pubkey, 'issued': True})
         if user:
             user["_id"] = str(user['_id'])
         if certificates:
             certificates = list(certificates)
         return user, certificates
+
+    def find_user_by_pub_key(self, pubkey):
+        return self.db.recipients.find_one({"pubkey": pubkey})
 
     def create_user(self, user_data):
         user_json = {'pubkey': user_data.pubkey, 'info': {}}
@@ -68,11 +72,11 @@ class CertificateRepo:
         return cert_id
 
     def insert_user(self, user_json):
-        user_id = CertificateRepo.insert_shim(self.client.admin.recipients, user_json)
+        user_id = CertificateRepo.insert_shim(self.db.recipients, user_json)
         return user_id
 
     def insert_cert(self, cert_json):
-        cert_id = CertificateRepo.insert_shim(self.client.admin.certificates, cert_json)
+        cert_id = CertificateRepo.insert_shim(self.db.certificates, cert_json)
         return cert_id
 
     @staticmethod

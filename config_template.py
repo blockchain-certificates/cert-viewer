@@ -2,6 +2,8 @@ MANDRILL_API_KEY = '<Mandrill API key>'
 MONGO_URI = '<Mongo connection string, e.g. mongodb://host:port>'
 SECRET_KEY = '<Flask secret key, to enable cryptographically signed sessions>'
 
+CERTIFICATES_DB = 'Mongo db to store certificates and recipients'
+
 KEYS_PATH = 'keys/'
 ISSUER_PATH = 'issuer/'
 CRITERIA_PATH = 'criteria/'

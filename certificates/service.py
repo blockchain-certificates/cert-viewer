@@ -27,7 +27,7 @@ class Service:
                 return award, verification_info
 
     def get_or_create_certificate(self, user_data):
-        user = self.client.admin.recipients.find_one({"pubkey": user_data.pubkey})
+        user = self.certificate_repo.find_user_by_pub_key(user_data.pubkey)
         if user is None:
             self.certificate_repo.create_user(user_data)
         self.certificate_repo.create_cert(user_data.pubkey)
