@@ -24,7 +24,6 @@ class TestCertificates(unittest.TestCase):
         self.patcher.start()
 
         self.certificate_repo = CertificateRepo(client=self.client, gfs=self.fs)
-        self.db = self.client['admin']
         self.test_doc_id = self.certificate_repo.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
         self.certificate_repo.insert_user({'pubkey': 'K1'})
 
@@ -52,13 +51,13 @@ class TestCertificates(unittest.TestCase):
         self.assertIsNone(res)
 
     def test_find_user_by_pubkey_none(self):
-        res1, res2 = self.certificate_repo.find_user_by_pubkey(None)
+        res1, res2 = self.certificate_repo.find_user_and_certificate_by_pubkey(None)
 
         self.assertIsNone(res1)
         self.assertIsNone(res2)
 
     def test_find_user_by_pubkey_none(self):
-        res1, res2 = self.certificate_repo.find_user_by_pubkey('K1')
+        res1, res2 = self.certificate_repo.find_user_and_certificate_by_pubkey('K1')
         self.assertIsNotNone(res1)
         self.assertIsNotNone(res2)
         self.assertEqual(res1['pubkey'], 'K1')
