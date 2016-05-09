@@ -21,7 +21,6 @@ service = Service(client, gfs)
 # TODO (kim): fix config location
 # TODO (kim): fix all static file location
 # TODO (kim): markdown generator for docs
-# TODO (kim): make db name configurable
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
 # TODO (kim): load recent txids
