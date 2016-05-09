@@ -114,7 +114,7 @@ class Certificates:
             'transactionIDURL': 'https://blockchain.info/tx/' + tx_id,
             'issuedOn': json_info['assertion']['issuedOn']
         }
-        award = Certificates.check_display(award)  # TODO: linter says verify
+        award = Certificates.check_display(award)  # TODO (kim): linter says verify
         return award, verification_info
 
     @staticmethod

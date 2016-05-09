@@ -5,10 +5,10 @@ from certificates import Certificates
 from mock import Mock
 from service import UserData
 import mock
-from mock import patch
-import certificates
 
-def lame_insert(collection, document):
+
+# mongo mock doesn't support insert_one, so we patch that with insert
+def mock_insert_workaround(collection, document):
     inserted_id = collection.insert(document)
     return inserted_id
 
@@ -19,8 +19,10 @@ class TestCertificates(unittest.TestCase):
         self.client = mongomock.MongoClient()
         self.fs = Mock(name='mockGridFS')
 
-        self.patcher = mock.patch.object(Certificates, 'insert_shim', side_effect=lame_insert)
+        # see mock_insert_workaround comment. We need to use this workaround for the scope of this entire test.
+        self.patcher = mock.patch.object(Certificates, 'insert_shim', side_effect=mock_insert_workaround)
         self.patcher.start()
+
         self.cert = Certificates(client=self.client, gfs=self.fs)
         self.db = self.client['admin']
         self.test_doc_id = self.cert.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})

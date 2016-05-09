@@ -19,6 +19,9 @@ client = MongoClient(host=secrets.MONGO_URI)
 gfs = gridfs.GridFS(client['admin'])
 service = Service(client, gfs)
 
+# TODO (kim): global exception handling
+# TODO (kim): ensure verify display is same after refactor (async)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
@@ -101,12 +104,12 @@ def request_page():
         try:
             user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
                                  form.first_name.data, form.last_name.data, form.address.data, form.city.data,
-                                 form.state.data, "\'" + form.zipcode.data, form.country.data)  # TODO zip???
+                                 form.state.data, form.zipcode.data, form.country.data)
 
-            # TODO: check for errors
             service.get_or_create_certificate(user_data)
 
-            # TODO: what is hidden email?
+            # TODO (Juliana): what is hidden email? This formatting seems to convert kim@kim.com to ki*@kim.com (see
+            # test_helpers.py
             hidden_email = helpers.format_email(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
             return redirect(url_for('home_page'))
@@ -119,7 +122,6 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    # TODO: verify this is async
     verify_response = service.get_verify_response(transaction_id, uid)
     return json.dumps(verify_response)
 

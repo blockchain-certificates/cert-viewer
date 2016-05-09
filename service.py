@@ -31,7 +31,7 @@ class Service:
         if user is None:
             self.certificates.create_user(user_data)
         self.certificates.create_cert(user_data.pubkey)
-        # TODO exceptions
+        # TODO(kim) handle exceptions
         sent = send_receipt_email(user_data.email,
                                   {"givenName": user_data.first_name, "familyName": user_data.last_name})
         return sent
