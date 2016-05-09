@@ -4,6 +4,7 @@ import sys
 
 import config
 
+
 unhexlify = binascii.unhexlify
 hexlify = binascii.hexlify
 if sys.version > '3':
@@ -24,8 +25,8 @@ def read_file(path):
     return data
 
 
-def format_email(email):
-    """TODO: what is the point of this?"""
+def obfuscate_email_display(email):
+    """Hides parts of email before displaying"""
     hidden_email_parts = email.split("@")
     hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + hidden_email_parts[1]
     return hidden_email

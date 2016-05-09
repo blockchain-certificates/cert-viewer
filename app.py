@@ -112,7 +112,7 @@ def request_page():
 
             # TODO (Juliana): what is hidden email? This formatting seems to convert kim@kim.com to ki*@kim.com (see
             # test_helpers.py
-            hidden_email = helpers.format_email(user_data.email)
+            hidden_email = helpers.obfuscate_email_display(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
             return redirect(url_for('home_page'))
         except:
