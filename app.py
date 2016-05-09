@@ -21,6 +21,7 @@ service = Service(client, gfs)
 
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
+# TODO (kim): load recent txids
 
 
 @app.route('/', methods=['GET', 'POST'])

@@ -1,6 +1,6 @@
-import secrets
 import config
 import mandrill
+import secrets
 
 
 def send_receipt_email(recipient_email, name):

@@ -1,12 +1,12 @@
 import json
 from collections import namedtuple
 
+import certificates.helpers as helpers
 import certificates.verify as v
 import config
 import requests
-from certificates.mail import send_receipt_email
 from certificates.certificate_repo import CertificateRepo
-import certificates.helpers as helpers
+from certificates.mail import send_receipt_email
 
 UserData = namedtuple('UserData', ['pubkey', 'email', 'degree', 'comments', 'first_name', 'last_name',
                                    'street_address', 'city', 'state', 'zip_code', 'country'])
