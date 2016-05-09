@@ -4,13 +4,13 @@ from urllib.parse import urlencode
 
 import config
 import gridfs
-import helpers
 import secrets
+from certificates import helpers
+from certificates.service import Service
+from certificates.service import UserData
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import RegistrationForm, BitcoinForm
 from pymongo import MongoClient
-from service import Service
-from service import UserData
 
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
@@ -21,6 +21,7 @@ service = Service(client, gfs)
 
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
+# TODO (kim): load recent txids
 
 
 @app.route('/', methods=['GET', 'POST'])

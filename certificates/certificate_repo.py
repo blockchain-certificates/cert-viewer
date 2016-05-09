@@ -1,11 +1,11 @@
 import json
 
 import config
-import helpers
 from bson.objectid import ObjectId
+from certificates import helpers
 
 
-class Certificates:
+class CertificateRepo:
     def __init__(self, client, gfs):
         self.client = client
         self.gfs = gfs
@@ -68,11 +68,11 @@ class Certificates:
         return cert_id
 
     def insert_user(self, user_json):
-        user_id = Certificates.insert_shim(self.client.admin.recipients, user_json)
+        user_id = CertificateRepo.insert_shim(self.client.admin.recipients, user_json)
         return user_id
 
     def insert_cert(self, cert_json):
-        cert_id = Certificates.insert_shim(self.client.admin.certificates, cert_json)
+        cert_id = CertificateRepo.insert_shim(self.client.admin.certificates, cert_json)
         return cert_id
 
     @staticmethod
@@ -114,7 +114,7 @@ class Certificates:
             'transactionIDURL': 'https://blockchain.info/tx/' + tx_id,
             'issuedOn': json_info['assertion']['issuedOn']
         }
-        award = Certificates.check_display(award)  # TODO (kim): linter says verify
+        award = CertificateRepo.check_display(award)  # TODO (kim): linter says verify
         return award, verification_info
 
     @staticmethod

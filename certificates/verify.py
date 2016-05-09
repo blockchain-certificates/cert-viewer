@@ -3,8 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 import hashlib
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
-
-from helpers import unhexlify, hexlify
+from certificates.helpers import unhexlify, hexlify
 
 
 def get_hash_from_bc_op(tx_json):
