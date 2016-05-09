@@ -23,7 +23,9 @@ service = Service(client, gfs)
 # TODO (kim): markdown generator for docs
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
-# TODO (kim): load recent txids
+# TODO (kim): load recent txids dynamically
+# TODO (kim): ensure zip display is ok
+# TODO: certificate_repo.check_display
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
@@ -110,9 +112,7 @@ def request_page():
 
             service.get_or_create_certificate(user_data)
 
-            # TODO (Juliana): what is hidden email? This formatting seems to convert kim@kim.com to ki*@kim.com (see
-            # test_helpers.py
-            hidden_email = helpers.format_email(user_data.email)
+            hidden_email = helpers.obfuscate_email_display(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
             return redirect(url_for('home_page'))
         except:
