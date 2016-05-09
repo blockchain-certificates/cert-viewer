@@ -22,6 +22,8 @@ service = Service(client, gfs)
 # TODO (kim): global exception handling
 # TODO (kim): ensure verify display is same after refactor (async)
 # TODO (kim): load recent txids
+# TODO (kim): fix config location
+# TODO (kim): fix all static file location
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -62,7 +64,7 @@ def issuer_page(issuer_name=None):
 def criteria_page(year, month, criteria_name):
     filename = year + '-' + month + '-' + criteria_name
     if filename in os.listdir(config.CRITERIA_PATH):
-        content = helpers.read_file(os.path.join(config.CRITERIA_PATH + filename))
+        content = helpers.read_file(os.path.join(config.CRITERIA_PATH, filename))
         return content
     else:
         return 'Sorry, this page does not exist.'
