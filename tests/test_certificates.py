@@ -1,10 +1,10 @@
 import unittest
 
-import mongomock
-from certificates import Certificates
-from mock import Mock
-from service import UserData
 import mock
+import mongomock
+from certificates.certificate_repo import CertificateRepo
+from certificates.service import UserData
+from mock import Mock
 
 
 # mongo mock doesn't support insert_one, so we patch that with insert
@@ -20,58 +20,58 @@ class TestCertificates(unittest.TestCase):
         self.fs = Mock(name='mockGridFS')
 
         # see mock_insert_workaround comment. We need to use this workaround for the scope of this entire test.
-        self.patcher = mock.patch.object(Certificates, 'insert_shim', side_effect=mock_insert_workaround)
+        self.patcher = mock.patch.object(CertificateRepo, 'insert_shim', side_effect=mock_insert_workaround)
         self.patcher.start()
 
-        self.cert = Certificates(client=self.client, gfs=self.fs)
+        self.certificate_repo = CertificateRepo(client=self.client, gfs=self.fs)
         self.db = self.client['admin']
-        self.test_doc_id = self.cert.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
-        self.cert.insert_user( {'pubkey': 'K1'})
+        self.test_doc_id = self.certificate_repo.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.certificate_repo.insert_user({'pubkey': 'K1'})
 
     def tearDown(self):
         self.patcher.stop()
 
     def test_find_user_by_uid(self):
-        self.test_doc_id = self.cert.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
-        self.cert.insert_user({'pubkey': 'K1'})
+        self.test_doc_id = self.certificate_repo.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.certificate_repo.insert_user({'pubkey': 'K1'})
 
-        res = self.cert.find_user_by_uid(self.test_doc_id)
+        res = self.certificate_repo.find_user_by_uid(self.test_doc_id)
 
         self.assertEqual(res['_id'], self.test_doc_id)
         self.assertEqual(res['aa'], 'bb')
         self.assertEqual(res['issued'], True)
 
     def test_find_user_by_uid_none(self):
-        res = self.cert.find_user_by_uid(None)
+        res = self.certificate_repo.find_user_by_uid(None)
 
         self.assertIsNone(res)
 
     def test_find_user_by_uid_no_match(self):
-        res = self.cert.find_user_by_uid('111111111111111111111111')
+        res = self.certificate_repo.find_user_by_uid('111111111111111111111111')
 
         self.assertIsNone(res)
 
     def test_find_user_by_pubkey_none(self):
-        res1, res2 = self.cert.find_user_by_pubkey(None)
+        res1, res2 = self.certificate_repo.find_user_by_pubkey(None)
 
         self.assertIsNone(res1)
         self.assertIsNone(res2)
 
     def test_find_user_by_pubkey_none(self):
-        res1, res2 = self.cert.find_user_by_pubkey('K1')
+        res1, res2 = self.certificate_repo.find_user_by_pubkey('K1')
         self.assertIsNotNone(res1)
         self.assertIsNotNone(res2)
         self.assertEqual(res1['pubkey'], 'K1')
         self.assertEqual(res2[0]['pubkey'], 'K1')
 
     def test_create_certificate(self):
-        res = self.cert.create_cert('K2')
+        res = self.certificate_repo.create_cert('K2')
         self.assertIsNotNone(res)
 
     def test_create_user(self):
         user_data = UserData('K3', 'r@r.com', 'a.b.s', 'some comments', 'satoshi', 'nakamoto', '111 main st',
                              'seattle', 'wa', '96666', 'usa')
-        user_object = self.cert.create_user(user_data)
+        user_object = self.certificate_repo.create_user(user_data)
         self.assertEqual(user_object['info']['name']['givenName'], 'satoshi')
 
 

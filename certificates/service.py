@@ -1,12 +1,12 @@
 import json
 from collections import namedtuple
 
+import certificates.verify as v
 import config
-import helpers
 import requests
-import verify as v
-from certificates import Certificates
-from mail import send_receipt_email
+from certificates.mail import send_receipt_email
+from certificates.certificate_repo import CertificateRepo
+import certificates.helpers as helpers
 
 UserData = namedtuple('UserData', ['pubkey', 'email', 'degree', 'comments', 'first_name', 'last_name',
                                    'street_address', 'city', 'state', 'zip_code', 'country'])
@@ -15,29 +15,29 @@ class Service:
     def __init__(self, client, fs):
         self.client = client
         self.fs = fs
-        self.certificates = Certificates(client, fs)
+        self.certificate_repo = CertificateRepo(client, fs)
 
     def get_formatted_certificate(self, identifier, format):
-        certificate = self.certificates.find_user_by_uid(uid=identifier)
+        certificate = self.certificate_repo.find_user_by_uid(uid=identifier)
         if certificate:
-            award, verification_info = self.certificates.get_id_info(certificate)
+            award, verification_info = self.certificate_repo.get_id_info(certificate)
             if len(award) > 0 and len(verification_info) > 0:
                 if format == "json":
-                    return self.certificates.find_file_in_gridfs(str(certificate["_id"])), None
+                    return self.certificate_repo.find_file_in_gridfs(str(certificate["_id"])), None
                 return award, verification_info
 
     def get_or_create_certificate(self, user_data):
         user = self.client.admin.recipients.find_one({"pubkey": user_data.pubkey})
         if user is None:
-            self.certificates.create_user(user_data)
-        self.certificates.create_cert(user_data.pubkey)
+            self.certificate_repo.create_user(user_data)
+        self.certificate_repo.create_cert(user_data.pubkey)
         # TODO(kim) handle exceptions
         sent = send_receipt_email(user_data.email,
                                   {"givenName": user_data.first_name, "familyName": user_data.last_name})
         return sent
 
     def get_verify_response(self, transaction_id, uid):
-        signed_local_file = self.certificates.find_file_in_gridfs(uid)
+        signed_local_file = self.certificate_repo.find_file_in_gridfs(uid)
         signed_local_json = json.loads(signed_local_file)
         r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
         if r.status_code != 200:
