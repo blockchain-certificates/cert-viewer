@@ -58,7 +58,7 @@ class Certificates:
             'country': user_data.country
         }
 
-        rec_id = self.insert_shim(self.client.admin.recipients, user_json)
+        rec_id = self.insert_user(user_json)
 
         return user_json
 
@@ -67,16 +67,18 @@ class Certificates:
         cert_id = self.insert_cert(cert_json=cert_json)
         return cert_id
 
+    def insert_user(self, user_json):
+        user_id = Certificates.insert_shim(self.client.admin.recipients, user_json)
+        return user_id
+
     def insert_cert(self, cert_json):
-        cert_id = self.insert_shim(self.client.admin.certificates, cert_json)
-        #cert_id = self.client.admin.certificates.insert_one(cert_json)
+        cert_id = Certificates.insert_shim(self.client.admin.certificates, cert_json)
         return cert_id
 
-    def insert_shim(self, collection, document):
-        # todo: switch back to insert_one
+    @staticmethod
+    def insert_shim(collection, document):
         inserted_id = collection.insert_one(document)
         return inserted_id
-
 
     def get_info_for_certificates(self, certificates):
         awards = []

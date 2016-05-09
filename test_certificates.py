@@ -19,31 +19,25 @@ class TestCertificates(unittest.TestCase):
         self.client = mongomock.MongoClient()
         self.fs = Mock(name='mockGridFS')
 
-        with mock.patch.object(Certificates, 'insert_shim', side_effect=lame_insert):
-            self.cert = Certificates(client=self.client, gfs=self.fs)
-            self.db = self.client['admin']
+        self.patcher = mock.patch.object(Certificates, 'insert_shim', side_effect=lame_insert)
+        self.patcher.start()
+        self.cert = Certificates(client=self.client, gfs=self.fs)
+        self.db = self.client['admin']
+        self.test_doc_id = self.cert.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.cert.insert_user( {'pubkey': 'K1'})
 
-            self.test_doc_id = self.cert.insert_shim(self.client['admin']['certificates'], {'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
-            self.cert.insert_shim(self.client['admin']['recipients'], {'pubkey': 'K1'})
+    def tearDown(self):
+        self.patcher.stop()
 
-    #@patch.object('certificates.Certificates', 'insert_shim')
     def test_find_user_by_uid(self):
+        self.test_doc_id = self.cert.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.cert.insert_user({'pubkey': 'K1'})
 
-        with mock.patch.object(Certificates, 'insert_shim', side_effect=lame_insert):
-            #mock_method = lame_insert
+        res = self.cert.find_user_by_uid(self.test_doc_id)
 
-            self.cert = Certificates(client=self.client, gfs=self.fs)
-            self.db = self.client['admin']
-
-            self.test_doc_id = self.cert.insert_shim(self.client['admin']['certificates'],
-                                                     {'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
-            self.cert.insert_shim(self.client['admin']['recipients'], {'pubkey': 'K1'})
-
-            res = self.cert.find_user_by_uid(self.test_doc_id)
-
-            self.assertEqual(res['_id'], self.test_doc_id)
-            self.assertEqual(res['aa'], 'bb')
-            self.assertEqual(res['issued'], True)
+        self.assertEqual(res['_id'], self.test_doc_id)
+        self.assertEqual(res['aa'], 'bb')
+        self.assertEqual(res['issued'], True)
 
     def test_find_user_by_uid_none(self):
         res = self.cert.find_user_by_uid(None)
