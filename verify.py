@@ -24,22 +24,22 @@ def check_revocation(tx_json, revoke_address):
     return False
 
 
-def computeHash(doc):
+def compute_hash(doc):
     return hashlib.sha256(doc).hexdigest()
 
 
-def fetchHashFromChain(tx_json):
+def fetch_hash_from_chain(tx_json):
     hash_from_bc = hexlify(get_hash_from_bc_op(tx_json))
     return hash_from_bc
 
 
-def compareHashes(hash1, hash2):
+def compare_hashes(hash1, hash2):
     if hash1 in hash2 or hash1 == hash2:
         return True
     return False
 
 
-def checkAuthor(address, signed_json):
+def check_author(address, signed_json):
     message = BitcoinMessage(signed_json["assertion"]["uid"])
     if signed_json.get("signature", None):
         signature = signed_json["signature"]

@@ -1,51 +1,53 @@
 import json
 import os
-import urllib
-
-import secrets
+from urllib.parse import urlencode
 
 import config
+import gridfs
 import helpers
-import requests
-import verify as v
+import secrets
 from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import RegistrationForm, BitcoinForm
-from mail import send_receipt_email
 from pymongo import MongoClient
+from service import Service
+from service import UserData
 
 app = Flask(__name__)
 app.secret_key = secrets.SECRET_KEY
 client = MongoClient(host=secrets.MONGO_URI)
 
+gfs = gridfs.GridFS(client['admin'])
+service = Service(client, gfs)
 
-# Home page
+
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
+    """Home page"""
     recent_txids = ['56aa4c9bf3a6a0125aaf24bf',
                     '56aa4c9bf3a6a0125aaf24c7']
     return render_template('index.html', recent_txids=recent_txids)
 
 
-# FAQ page
 @app.route('/faq', methods=['GET'])
 def faq_page():
+    """FAQs"""
     return render_template('faq.html')
 
 
-# Shows keys in the /keys folder
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
+    """Shows keys in the /keys folder"""
     key = helpers.get_keys(key_name)
     if key:
         return key
     return 'Sorry, this page does not exist.'
 
 
-# Shows issuer in the /issuer folder
 @app.route('/issuer/<issuer_name>')
 def issuer_page(issuer_name=None):
+    """Shows issuer in the /issuer folder"""
     if issuer_name in os.listdir(config.ISSUER_PATH):
-        content = helpers.read_file(config.ISSUER_PATH + issuer_name)
+        content = helpers.read_file(os.path.join(config.ISSUER_PATH, issuer_name))
         return content
     else:
         return 'Sorry, this page does not exist.'
@@ -54,55 +56,62 @@ def issuer_page(issuer_name=None):
 # Shows issuer in the /issuer folder
 @app.route('/criteria/<year>/<month>/<criteria_name>')
 def criteria_page(year, month, criteria_name):
-    filename = year + "-" + month + "-" + criteria_name
-    print
-    filename
+    filename = year + '-' + month + '-' + criteria_name
     if filename in os.listdir(config.CRITERIA_PATH):
-        content = helpers.read_file(config.CRITERIA_PATH + filename)
+        content = helpers.read_file(os.path.join(config.CRITERIA_PATH + filename))
         return content
     else:
         return 'Sorry, this page does not exist.'
 
 
-# Render user's certificates or individual certificate based on search query
 @app.route('/<identifier>')
 def get_award(identifier=None):
-    certificate = helpers.find_user_by_txid_or_uid(uid=identifier)
-    if certificate:
-        award, verification_info = helpers.get_id_info(certificate)
-        if len(award) > 0 and len(verification_info) > 0:
-            if request.args.get("format", None) == "json":
-                return helpers.find_file_in_gridfs(str(certificate["_id"]))
-            return render_template('award.html', award=award, verification_info=urllib.urlencode(verification_info))
+    """
+    Render user's certificates or individual certificate based on search query
+    :param identifier:
+    :return:
+    """
+
+    format = request.args.get("format", None)
+    award, verification_info = service.get_formatted_certificate(identifier=identifier, format=format)
+    if award and format == "json":
+        return award
+    if award:
+        return render_template('award.html', award=award, verification_info=urlencode(verification_info))
+
     return "Sorry, this page does not exist."
 
 
-# Create Bitcoin identity for a user so they can request a certificate
 @app.route('/bitcoinkeys', methods=['GET'])
 def generate_keys():
+    """
+    Create Bitcoin identity for a user so they can request a certificate
+    :return:
+    """
+
     return render_template('bitcoinkeys.html')
 
 
-# Request a certificate
 @app.route('/request', methods=['GET', 'POST'])
 def request_page():
+    """Request a certificate"""
     form = RegistrationForm(request.form)
     bitcoin = BitcoinForm(request.form)
     if request.method == 'POST' and form.validate():
         try:
-            user = client.admin.recipients.find_one({"pubkey": form.pubkey.data})
-            if user is None:
-                user = helpers.create_user(form)
-            pubkey = helpers.create_cert(form)
-            sent = send_receipt_email(form.email.data,
-                                      {"givenName": form.first_name.data, "familyName": form.last_name.data})
-            hidden_email_parts = form.email.data.split("@")
-            hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + \
-                           hidden_email_parts[1]
-            flash('We just sent a confirmation email to %s.' % (hidden_email))
+            user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
+                                 form.first_name.data, form.last_name.data, form.address.data, form.city.data,
+                                 form.state.data, "\'" + form.zipcode.data, form.country.data)  # TODO zip???
+
+            # TODO: check for errors
+            service.get_or_create_certificate(user_data)
+
+            # TODO: what is hidden email?
+            hidden_email = helpers.format_email(user_data.email)
+            flash('We just sent a confirmation email to %s.' % hidden_email)
             return redirect(url_for('home_page'))
         except:
-            flash('There seems to be an erorr with our system. Please try again later.')
+            flash('There seems to be an error with our system. Please try again later.')
     return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
 
 
@@ -110,45 +119,9 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-
-    verify_response = get_verify_response(transaction_id, uid)
-
+    # TODO: verify this is async
+    verify_response = service.get_verify_response(transaction_id, uid)
     return json.dumps(verify_response)
-
-
-def get_verify_response(transaction_id, uid):
-    signed_local_file = helpers.find_file_in_gridfs(uid)
-    signed_local_json = json.loads(signed_local_file)
-    r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
-    if r.status_code != 200:
-        return None
-    else:
-        verify_response = []
-        verified = False
-        verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
-        verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
-        remote_json = r.json()
-
-        # compare hashes
-        local_hash = v.computeHash(signed_local_file)
-        remote_hash = v.fetchHashFromChain(remote_json)
-        compare_hashes = v.compareHashes(local_hash, remote_hash)
-        verify_response.append(("Comparing local and blockchain hashes", compare_hashes))
-
-        # check author
-        issuing_address = helpers.get_keys(config.ML_PUBKEY)
-        verify_authors = v.checkAuthor(issuing_address, signed_local_json)
-        verify_response.append(("Checking Media Lab signature", verify_authors))
-
-        # check revocation
-        revocation_address = helpers.get_keys(config.ML_REVOKEKEY)
-        not_revoked = v.check_revocation(remote_json, revocation_address)
-        verify_response.append(("Checking not revoked by issuer", not_revoked))
-
-        if compare_hashes and verify_authors and not_revoked:
-            verified = True
-        verify_response.append(("Verified", verified))
-    return verify_response
 
 
 if __name__ == '__main__':

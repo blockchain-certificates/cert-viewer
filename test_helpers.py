@@ -1,14 +1,13 @@
 import unittest
+import helpers
 
 
-# TODO: mock out mongo client; otherwise can't use helpers.py
 class TestHelpers(unittest.TestCase):
+    def test_format_email(self):
+        """this test fails. Adding it because I can't figure out the point of format_email, so I want to track it"""
+        res = helpers.format_email('kim@kim.com')
+        self.assertEqual(res, 'kim@kim.com')
 
-    def test_find_user_by_txid_or_uid_both_none(self):
-        self.assertFalse(True)
-
-    def test_find_user_by_txid_or_uid_both_missing(self):
-        self.assertFalse(True)
 
 if __name__ == '__main__':
     unittest.main()
