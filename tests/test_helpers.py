@@ -1,6 +1,6 @@
 import unittest
 
-from certificates import helpers
+import helpers
 
 
 class TestHelpers(unittest.TestCase):

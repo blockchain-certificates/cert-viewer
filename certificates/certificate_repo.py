@@ -1,15 +1,29 @@
 import json
+import logging
 
 import config
+import gridfs
 from bson.objectid import ObjectId
-from certificates import helpers
+from pymongo import MongoClient
+
+CONFIG_SECTION = 'certificate_service'
 
 
 class CertificateRepo:
-    def __init__(self, client, gfs):
-        self.client = client
-        self.db = client[config.CERTIFICATES_DB]
-        self.gfs = gfs
+    def __init__(self, client=None, gfs=None):
+        self.certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
+
+        if client:
+            self.client = client
+        else:
+            self.client = MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
+
+        if gfs:
+            self.gfs = gfs
+        else:
+           self.gfs = gridfs.GridFS(self.client[self.certificates_db_name])
+
+        self.db = self.client[self.certificates_db_name]
 
     def find_file_in_gridfs(self, uid):
         filename = uid + '.json'
@@ -19,6 +33,7 @@ class CertificateRepo:
             if isinstance(contents, (bytes, bytearray)):
                 return contents.decode("utf-8")
             return contents
+        logging.warning('File not found in gridfs, uid=%s', uid)
         return None
 
     def find_user_by_txid(self, txid):
@@ -63,6 +78,7 @@ class CertificateRepo:
         }
 
         rec_id = self.insert_user(user_json)
+        logging.info('inserted user with recipient id=%s', rec_id)
 
         return user_json
 
@@ -79,11 +95,6 @@ class CertificateRepo:
         cert_id = CertificateRepo.insert_shim(self.db.certificates, cert_json)
         return cert_id
 
-    @staticmethod
-    def insert_shim(collection, document):
-        inserted_id = collection.insert_one(document)
-        return inserted_id
-
     def get_info_for_certificates(self, certificates):
         awards = []
         verifications = []
@@ -94,7 +105,7 @@ class CertificateRepo:
         return awards, verifications
 
     def get_id_info(self, cert):
-        pubkey_content = helpers.get_keys(config.ML_PUBKEY)
+        pubkey_content = config.get_key_by_type('CERT_PUBKEY')
         tx_id = cert['txid']
         uid = str(cert['_id'])
         gfs_file = self.find_file_in_gridfs(uid)
@@ -120,6 +131,11 @@ class CertificateRepo:
         }
         award = CertificateRepo.check_display(award)
         return award, verification_info
+
+    @staticmethod
+    def insert_shim(collection, document):
+        inserted_id = collection.insert_one(document)
+        return inserted_id
 
     @staticmethod
     def check_display(award):

@@ -1,9 +1,10 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import hashlib
+import logging
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
-from certificates.helpers import unhexlify, hexlify
+from helpers import unhexlify, hexlify
 
 
 def get_hash_from_bc_op(tx_json):
@@ -39,8 +40,11 @@ def compare_hashes(hash1, hash2):
 
 
 def check_author(address, signed_json):
-    message = BitcoinMessage(signed_json["assertion"]["uid"])
-    if signed_json.get("signature", None):
-        signature = signed_json["signature"]
+    uid = signed_json['assertion']['uid']
+    message = BitcoinMessage(uid)
+    if signed_json.get('signature', None):
+        signature = signed_json['signature']
+        logging.debug('Found signature for uid=%s; verifying message', uid)
         return VerifyMessage(address, message, signature)
+    logging.warn('Missing signature for uid=%s', uid)
     return False
