@@ -7,8 +7,7 @@ from forms import RegistrationForm, BitcoinForm
 import config
 import helpers
 from certificates.certificate_repo import CertificateRepo
-from certificates.service import Service
-from certificates.service import UserData
+from certificates.certificate_repo import UserData
 from flask import Flask, render_template, request, flash, redirect, url_for
 
 app = Flask(__name__)
@@ -16,9 +15,9 @@ app = Flask(__name__)
 app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
 certificate_repo = CertificateRepo()
-service = Service(certificate_repo)
 
-# TODO (kim): package structure
+# TODO (kim): package structure -- collapse certificates
+# TODO (kim): UI package structure. Use this: https://github.com/pallets/flask-website/search?utf8=%E2%9C%93&q=static
 # TODO (kim): fix all static file location
 # TODO (kim): markdown generator for docs
 # TODO (kim): global exception handling
@@ -83,7 +82,7 @@ def get_award(identifier=None):
     """
 
     format = request.args.get("format", None)
-    award, verification_info = service.get_formatted_certificate(identifier=identifier, format=format)
+    award, verification_info = certificate_repo.get_formatted_certificate(identifier=identifier, format=format)
     if award and format == "json":
         return award
     if award:
@@ -113,7 +112,7 @@ def request_page():
                                  form.first_name.data, form.last_name.data, form.address.data, form.city.data,
                                  form.state.data, form.zipcode.data, form.country.data)
 
-            service.get_or_create_certificate(user_data)
+            certificate_repo.request_certificate(user_data)
 
             hidden_email = helpers.obfuscate_email_display(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
@@ -127,7 +126,7 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = service.get_verify_response(transaction_id, uid)
+    verify_response = certificate_repo.get_verify_response(transaction_id, uid)
     return json.dumps(verify_response)
 
 

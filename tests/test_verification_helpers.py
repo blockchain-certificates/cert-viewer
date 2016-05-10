@@ -1,6 +1,6 @@
 import unittest
 
-from certificates import verify as v
+from certificates import verification_helpers as v
 from helpers import hexlify
 
 

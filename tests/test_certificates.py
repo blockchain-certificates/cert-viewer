@@ -3,7 +3,7 @@ import unittest
 import mock
 import mongomock
 from certificates.certificate_repo import CertificateRepo
-from certificates.service import UserData
+from certificates.certificate_repo import UserData
 from mock import Mock
 
 
@@ -24,14 +24,14 @@ class TestCertificates(unittest.TestCase):
         self.patcher.start()
 
         self.certificate_repo = CertificateRepo(client=self.client, gfs=self.fs)
-        self.test_doc_id = self.certificate_repo.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.test_doc_id = self.certificate_repo.insert_certificate({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
         self.certificate_repo.insert_user({'pubkey': 'K1'})
 
     def tearDown(self):
         self.patcher.stop()
 
     def test_find_user_by_uid(self):
-        self.test_doc_id = self.certificate_repo.insert_cert({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
+        self.test_doc_id = self.certificate_repo.insert_certificate({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
         self.certificate_repo.insert_user({'pubkey': 'K1'})
 
         res = self.certificate_repo.find_user_by_uid(self.test_doc_id)
@@ -64,7 +64,7 @@ class TestCertificates(unittest.TestCase):
         self.assertEqual(res2[0]['pubkey'], 'K1')
 
     def test_create_certificate(self):
-        res = self.certificate_repo.create_cert('K2')
+        res = self.certificate_repo.create_certificate('K2')
         self.assertIsNotNone(res)
 
     def test_create_user(self):

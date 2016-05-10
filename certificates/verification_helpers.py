@@ -46,5 +46,5 @@ def check_author(address, signed_json):
         signature = signed_json['signature']
         logging.debug('Found signature for uid=%s; verifying message', uid)
         return VerifyMessage(address, message, signature)
-    logging.warn('Missing signature for uid=%s', uid)
+    logging.warning('Missing signature for uid=%s', uid)
     return False
