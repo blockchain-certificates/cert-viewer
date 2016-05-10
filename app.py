@@ -18,7 +18,6 @@ app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 certificate_repo = CertificateRepo()
 service = Service(certificate_repo)
 
-# TODO!!! fix paths in ini
 # TODO (kim): package structure
 # TODO (kim): fix all static file location
 # TODO (kim): markdown generator for docs
@@ -56,7 +55,7 @@ def issuer_page(issuer_name=None):
     """Shows issuer in the /issuer folder"""
     issuer_path = config.get_config().get('keys', 'ISSUER_PATH')
     if issuer_name in os.listdir(issuer_path):
-        content = helpers.read_file(os.path.join(issuer_path, issuer_name))
+        content = helpers.read_file(os.path.join(config.BASE_DIR, issuer_path, issuer_name))
         return content
     else:
         return 'Sorry, this page does not exist.'
@@ -69,7 +68,7 @@ def criteria_page(year, month, criteria_name):
     criteria_path = config.get_config().get('ui', 'CRITERIA_PATH')
 
     if filename in os.listdir(criteria_path):
-        content = helpers.read_file(os.path.join(criteria_path, filename))
+        content = helpers.read_file(os.path.join(config.BASE_DIR, criteria_path, filename))
         return content
     else:
         return 'Sorry, this page does not exist.'

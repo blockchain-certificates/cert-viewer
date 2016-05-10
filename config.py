@@ -4,7 +4,9 @@ from configparser import ConfigParser  # TODO: switch for python 2/3
 
 import helpers
 
-DEFAULT_CONFIG_FILE = '/Users/kim/projects/coins.media.mit.edu/conf.ini'  # TODO: rel path
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+DEFAULT_CONFIG_FILE = os.path.join(BASE_DIR, 'conf.ini')
 
 
 def get_config_file():
@@ -36,6 +38,8 @@ def get_key_by_name(key_name):
     revokekey = get_config().get('keys', 'CERT_REVOKEKEY')
 
     key_mappings = {pubkey: "issuer_key", revokekey: "revocation_key"}
-    issuer = json.loads(helpers.read_file(get_config().get('keys', 'MLISSUER_PATH')))
+    issuer_path = get_config().get('keys', 'MLISSUER_PATH')
+    issuer_file = helpers.read_file(os.path.join(BASE_DIR, issuer_path))
+    issuer = json.loads(issuer_file)
     address = key_mappings.get(key_name, None)
     return issuer[address][0]["key"]
