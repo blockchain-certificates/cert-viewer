@@ -9,12 +9,6 @@ if sys.version > '3':
     hexlify = lambda b: binascii.hexlify(b).decode('utf8')
 
 
-def read_file(path):
-    with open(path) as f:
-        data = f.read()
-    return data
-
-
 def obfuscate_email_display(email):
     """Hides parts of email before displaying"""
     hidden_email_parts = email.split("@")

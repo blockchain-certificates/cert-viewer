@@ -2,7 +2,7 @@ import json
 import os
 from configparser import ConfigParser  # TODO: switch for python 2/3
 
-from certificates import helpers
+from certificates import ui_helpers
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
@@ -25,6 +25,11 @@ def create_config(config_file=None):
 CONFIG = create_config()
 
 
+def read_file(path):
+    with open(path) as f:
+        data = f.read()
+    return data
+
 def get_config():
     return CONFIG
 
@@ -39,7 +44,7 @@ def get_key_by_name(key_name):
 
     key_mappings = {pubkey: "issuer_key", revokekey: "revocation_key"}
     issuer_path = get_config().get('keys', 'MLISSUER_PATH')
-    issuer_file = helpers.read_file(os.path.join(BASE_DIR, issuer_path))
+    issuer_file = ui_helpers.read_file(os.path.join(BASE_DIR, issuer_path))
     issuer = json.loads(issuer_file)
     address = key_mappings.get(key_name, None)
     return issuer[address][0]["key"]

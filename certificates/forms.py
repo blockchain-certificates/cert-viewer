@@ -1,5 +1,7 @@
 import sys
+
 from wtforms import Form, TextField, TextAreaField, validators, RadioField
+
 
 def get_coerce_val():
     if sys.version_info.major < 3:

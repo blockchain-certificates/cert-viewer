@@ -66,6 +66,11 @@ Example of a certificate object:
 
 A recipient object can have multiple certificate objects. The objects are linked together by the "pubkey" field.
 
+TODO
+===
+  - markdown to rst for documentation (?)
+  - ok to rename project? change from coins?
+  - load recent txids dynamically
 
 Contact
 ===

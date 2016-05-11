@@ -1,4 +1,4 @@
-config.ini
+conf.ini
 .DS_Store
 *.pyc
 venv/

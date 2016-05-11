@@ -1,14 +1,19 @@
 import json
-import os
 from urllib.parse import urlencode
 
-import certificates.helpers as helpers
-from certificates.forms import RegistrationForm, BitcoinForm
-
+import certificates.ui_helpers as helpers
 from certificates import config
 from certificates.certificate_repo import CertificateRepo
 from certificates.certificate_repo import UserData
-from flask import Flask, render_template, request, flash, redirect, url_for
+from certificates.forms import RegistrationForm, BitcoinForm
+from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory, safe_join
+from werkzeug.routing import BaseConverter
+import logging
+import os
+
+###### DISPLAY
+# TODO (kim): ensure verify display is same after refactor (async)
+# TODO (kim): ensure zip entered is ok -- may need to edit ui
 
 app = Flask(__name__)
 
@@ -16,13 +21,35 @@ app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
 certificate_repo = CertificateRepo()
 
-# TODO (kim): fix all static file location
-# TODO (kim): markdown generator for docs
-# TODO (kim): global exception handling
-# TODO (kim): ensure verify display is same after refactor (async)
-# TODO (kim): load recent txids dynamically
-# TODO (kim): ensure zip display is ok
-# TODO: certificate_repo.check_display
+# Configure logging
+def initialize_logger(output_dir):
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    # create console handler and set level to info
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    # create file handler and set level to info
+    handler = logging.FileHandler(os.path.join(output_dir, "info.log"), "w", encoding=None, delay="true")
+    handler.setLevel(logging.INFO)
+    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+# TODO: clean this up
+initialize_logger('/tmp/')
+
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *items):
+        super(RegexConverter, self).__init__(url_map)
+        self.regex = items[0]
+
+app.url_map.converters['regex'] = RegexConverter
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
@@ -47,31 +74,29 @@ def key_page(key_name=None):
     return 'Sorry, this page does not exist.'
 
 
-@app.route('/issuer/<issuer_name>')
-def issuer_page(issuer_name=None):
-    """Shows issuer in the /issuer folder"""
-    issuer_path = config.get_config().get('keys', 'ISSUER_PATH')
-    if issuer_name in os.listdir(issuer_path):
-        content = helpers.read_file(os.path.join(config.BASE_DIR, issuer_path, issuer_name))
-        return content
-    else:
-        return 'Sorry, this page does not exist.'
+@app.route('/issuer/<path:issuer_filename>')
+def issuer_page(issuer_filename=None):
+    """Shows issuer in the /issuer folder, e.g. http://0.0.0.0:5000/issuer/ml-issuer.json
+    TODO (jules) note that I changed from http://0.0.0.0:5000/issuer/ml-issuer to http://0.0.0.0:5000/issuer/ml-issuer.json
+    """
+    return send_from_directory(safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False)
 
 
-# Shows issuer in the /issuer folder
-@app.route('/criteria/<year>/<month>/<criteria_name>')
-def criteria_page(year, month, criteria_name):
-    filename = year + '-' + month + '-' + criteria_name
-    criteria_path = config.get_config().get('ui', 'CRITERIA_PATH')
-
-    if filename in os.listdir(criteria_path):
-        content = helpers.read_file(os.path.join(config.BASE_DIR, criteria_path, filename))
-        return content
-    else:
-        return 'Sorry, this page does not exist.'
+@app.route('/criteria/<path:criteria_filename>')
+def criteria_page(criteria_filename):
+    """Shows criteria, e.g. https://coins.media.mit.edu/criteria/2016-01-alumni.json
+    TODO (jules) note that I changed from https://coins.media.mit.edu/criteria/2016/01/alumni to https://coins.media.mit.edu/criteria/2016-01-alumni.json
+    """
+    return send_from_directory(safe_join(app.root_path, 'criteria'), criteria_filename, as_attachment=False)
 
 
-@app.route('/<identifier>')
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(safe_join(app.root_path, 'static/img'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/<regex("[a-zA-Z0-9]{12,24}"):identifier>')
 def get_award(identifier=None):
     """
     Render user's certificates or individual certificate based on search query
@@ -127,6 +152,35 @@ def verify():
     verify_response = certificate_repo.get_verify_response(transaction_id, uid)
     return json.dumps(verify_response)
 
+
+@app.errorhandler(404)
+def page_not_found(error):
+    logging.error('Page not found: %s', request.path)
+    return 'This page does not exist', 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    logging.error('Server Error: %s', error)
+    return 'Server error: %s'.format(error), 500
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    logging.error('Unhandled Exception: %s', e)
+    return 'Unhandled exception: %s'.format(e), 500
+
+
+#def configure_app(app):
+#    config_name = os.getenv('FLAKS_CONFIGURATION', 'default')
+#    app.config.from_object(config[config_name])
+#    app.config.from_pyfile('config.cfg', silent=True)
+    # Configure logging
+#    handler = logging.FileHandler(app.config['LOGGING_LOCATION'])
+#    handler.setLevel(app.config['LOGGING_LEVEL'])
+#    formatter = logging.Formatter(app.config['LOGGING_FORMAT'])
+#    handler.setFormatter(formatter)
+#    app.logger.addHandler(handler)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

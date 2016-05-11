@@ -127,7 +127,7 @@ class CertificateRepo:
             'streetAddress': user_data.street_address,
             'city': user_data.city,
             'state': user_data.state,
-            'zipcode': "\'" + user_data.zip_code,  # TODO why?
+            'zipcode': user_data.zip_code,
             'country': user_data.country
         }
 

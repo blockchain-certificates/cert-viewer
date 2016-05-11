@@ -1,15 +1,15 @@
 import unittest
 
-from certificates import helpers
+from certificates import ui_helpers
 
 
-class TestHelpers(unittest.TestCase):
+class TestUIHelpers(unittest.TestCase):
     def test_format_email_short(self):
-        res = helpers.obfuscate_email_display('kim@kim.com')
+        res = ui_helpers.obfuscate_email_display('kim@kim.com')
         self.assertEqual(res, 'ki*@kim.com')
 
     def test_format_email_long(self):
-        res = helpers.obfuscate_email_display('kimlongeremail@kim.com')
+        res = ui_helpers.obfuscate_email_display('kimlongeremail@kim.com')
         self.assertEqual(res, 'ki************@kim.com')
 
 
