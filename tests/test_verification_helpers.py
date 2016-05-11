@@ -1,10 +1,59 @@
+import codecs
 import unittest
 
 from certificates import verification_helpers as v
 from certificates.ui_helpers import hexlify
+from certificates.verification_helpers import Verifier
+from mock import Mock
+
+
+def mock_json():
+    return {
+        "out": [
+            {
+                "spent": False,
+                "tx_index": 145158287,
+                "type": 0,
+                "addr": "1C1iqyXbk2rXVzGKyvs8HrFH79RMzTQQxA",
+                "value": 2750,
+                "n": 0,
+                "script": "76a91478cc504569ea233a1fc9873aaefbedd03f40a30d88ac"
+            },
+            {
+                "spent": False,
+                "tx_index": 145158287,
+                "type": 0,
+                "addr": "14X6w2V5GGxwFui5EuK6cydWAji461LMre",
+                "value": 2750,
+                "n": 1,
+                "script": "76a9142699cebbb24a29fda62de03b2faa14eac4b5f85c88ac"
+            },
+            {
+                "spent": False,
+                "tx_index": 145158287,
+                "type": 0,
+                "value": 0,
+                "n": 2,
+                "script": "6a20ddd7a9da081bf39bec8a049968010c0b429e969ea4b1b0f9badf9360d9d8886c"
+            }
+        ]
+    }
+
+
+def mock_transaction_lookup(transaction_id):
+    m = Mock(status_code=200)
+    m.json = mock_json
+    return m
 
 
 class TestVerify(unittest.TestCase):
+    def test_verify(self):
+        verifier = Verifier(mock_transaction_lookup)
+        f = codecs.open('66a00099a2b165359bd9ac2c.json', "r", "utf-8")
+        data = f.read()
+        response = verifier.verify('1111', data)
+        print(response)
+
     def test_get_hash_from_bc_op(self):
         script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'
         script = hexlify(script_input)
