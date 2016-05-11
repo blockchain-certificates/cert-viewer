@@ -48,7 +48,6 @@ def mock_transaction_lookup(transaction_id):
 
 class TestVerify(unittest.TestCase):
     def test_verify(self):
-        # TODO
         verifier = Verifier(mock_transaction_lookup)
         f = codecs.open('66a00099a2b165359bd9ac2c.json', "r", "utf-8")
         data = f.read()
