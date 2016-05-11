@@ -6,6 +6,7 @@ import logging
 
 import requests
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
+from certificates import config
 from certificates.ui_helpers import unhexlify, hexlify
 
 
@@ -40,15 +41,13 @@ class Verifier:
             verify_response.append(("Comparing local and blockchain hashes", compare_hash_result))
 
             # check author
-            # TODO issuing_address = config.get_key_by_type('CERT_PUBKEY')
-            # TODO verify_authors = check_author(issuing_address, signed_local_json)
-            verify_authors = 'TODO'
+            issuing_address = config.get_key_by_type('CERT_PUBKEY')
+            verify_authors = check_author(issuing_address, signed_local_json)
             verify_response.append(("Checking signature", verify_authors))
 
             # check revocation
-            # TODO revocation_address = config.get_key_by_type('CERT_REVOKEKEY')
-            # TODO not_revoked = check_revocation(remote_json, revocation_address)
-            not_revoked = True  # TODO
+            revocation_address = config.get_key_by_type('CERT_REVOKEKEY')
+            not_revoked = check_revocation(remote_json, revocation_address)
             verify_response.append(("Checking not revoked by issuer", not_revoked))
 
             if compare_hash_result and verify_authors and not_revoked:
