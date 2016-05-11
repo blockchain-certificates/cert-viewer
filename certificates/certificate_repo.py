@@ -34,21 +34,21 @@ class CertificateRepo:
 
     def get_formatted_certificate(self, identifier, format):
         logging.debug('Retrieving certificate for uid=%s', identifier)
-        certificate = self.certificate_repo.find_user_by_uid(uid=identifier)
+        certificate = self.find_user_by_uid(uid=identifier)
         if certificate:
-            award, verification_info = self.certificate_repo.get_award_and_verification_for_certificate(certificate)
+            award, verification_info = self.get_award_and_verification_for_certificate(certificate)
             if len(award) > 0 and len(verification_info) > 0:
                 if format == "json":
-                    return self.certificate_repo.find_file_in_gridfs(str(certificate["_id"])), None
+                    return self.find_file_in_gridfs(str(certificate["_id"])), None
                 return award, verification_info
 
     def request_certificate(self, user_data):
         # check if we already have a user associated with the public key
-        user = self.certificate_repo.find_user_by_pub_key(user_data.pubkey)
+        user = self.find_user_by_pub_key(user_data.pubkey)
         if user is None:
             logging.info('User not found for public key; creating user')
-            self.certificate_repo.create_user(user_data)
-        self.certificate_repo.create_certificate(user_data.pubkey)
+            self.create_user(user_data)
+        self.create_certificate(user_data.pubkey)
         logging.trace('Created certificate; sending receipt')
         sent = self.mail_sender.send_receipt_email(user_data.email,
                                                    {"givenName": user_data.first_name,
@@ -56,7 +56,7 @@ class CertificateRepo:
         return sent
 
     def get_verify_response(self, transaction_id, uid):
-        signed_local_file = self.certificate_repo.find_file_in_gridfs(uid)
+        signed_local_file = self.find_file_in_gridfs(uid)
         signed_local_json = json.loads(signed_local_file)
         r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
         if r.status_code != 200:
