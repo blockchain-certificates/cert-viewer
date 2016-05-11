@@ -68,7 +68,6 @@ A recipient object can have multiple certificate objects. The objects are linked
 
 TODO
 ===
-  - TODO (kim): more logging cleanup + factor out init code
   - mailchimp?
   - ok to rename project? change from coins?
   - everything other than UI is common

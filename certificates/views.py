@@ -4,7 +4,7 @@ from urllib.parse import urlencode
 
 import certificates.ui_helpers as helpers
 from certificates import app
-from certificates import certificate_repo
+from certificates import certificate_service
 from certificates import config
 from certificates.certificate_repo import UserData
 from certificates.forms import RegistrationForm, BitcoinForm
@@ -75,7 +75,7 @@ def get_award(identifier=None):
     """
 
     format = request.args.get("format", None)
-    award, verification_info = certificate_repo.get_formatted_certificate(identifier=identifier, format=format)
+    award, verification_info = certificate_service.get_formatted_certificate(identifier=identifier, format=format)
     if award and format == "json":
         return award
     if award:
@@ -105,7 +105,7 @@ def request_page():
                                  form.first_name.data, form.last_name.data, form.address.data, form.city.data,
                                  form.state.data, form.zipcode.data, form.country.data)
 
-            certificate_repo.request_certificate(user_data)
+            certificate_service.request_certificate(user_data)
 
             hidden_email = helpers.obfuscate_email_display(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
@@ -119,7 +119,7 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = certificate_repo.verify(transaction_id, uid)
+    verify_response = certificate_service.verify(transaction_id, uid)
     return json.dumps(verify_response)
 
 

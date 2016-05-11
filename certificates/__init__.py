@@ -10,16 +10,15 @@ from flask import Flask
 
 app = Flask(__name__)
 
-import certificates.views
-
-
 app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
-certificate_repo = CertificateRepo()
+certificate_service = CertificateRepo()
 
 
-# Configure logging
-def initialize_logger(output_dir):
+def initialize_logger():
+    """Configure logging settings"""
+    log_output_dir = config.get_config().get('logging', 'LOG_DIR')
+    log_file_name = config.get_config().get('logging', 'LOG_FILE_NAME')
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
@@ -31,15 +30,17 @@ def initialize_logger(output_dir):
     logger.addHandler(handler)
 
     # create file handler and set level to info
-    handler = logging.FileHandler(os.path.join(output_dir, "info.log"), "w", encoding=None, delay="true")
+    handler = logging.FileHandler(os.path.join(log_output_dir, log_file_name), "w", encoding=None, delay="true")
     handler.setLevel(logging.INFO)
     formatter = logging.Formatter("%(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+initialize_logger()
 
-# TODO: clean this up
-initialize_logger('/tmp/')
+# keep here to avoid circular dependencies
+import certificates.views
+
 
 
 
