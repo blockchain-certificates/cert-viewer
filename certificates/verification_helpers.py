@@ -4,7 +4,7 @@ import hashlib
 import logging
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
-from certificates.helpers import unhexlify, hexlify
+from certificates.ui_helpers import unhexlify, hexlify
 
 
 def get_hash_from_bc_op(tx_json):

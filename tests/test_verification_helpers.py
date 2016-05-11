@@ -1,7 +1,7 @@
 import unittest
 
 from certificates import verification_helpers as v
-from certificates.helpers import hexlify
+from certificates.ui_helpers import hexlify
 
 
 class TestVerify(unittest.TestCase):
