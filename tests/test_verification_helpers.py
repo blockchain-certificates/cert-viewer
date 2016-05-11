@@ -1,12 +1,11 @@
+import codecs
 import unittest
 
 from certificates import verification_helpers as v
 from certificates.ui_helpers import hexlify
 from certificates.verification_helpers import Verifier
 from mock import Mock
-from certificates import config
-import codecs
-import time
+
 
 def mock_json():
     return {
@@ -48,7 +47,6 @@ def mock_transaction_lookup(transaction_id):
 
 
 class TestVerify(unittest.TestCase):
-
     def test_verify(self):
         # TODO
         verifier = Verifier(mock_transaction_lookup)
@@ -56,7 +54,6 @@ class TestVerify(unittest.TestCase):
         data = f.read()
         response = verifier.verify('1111', data)
         print(response)
-
 
     def test_get_hash_from_bc_op(self):
         script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'

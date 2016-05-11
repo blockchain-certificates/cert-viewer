@@ -31,7 +31,7 @@ class CertificateRepo:
 
         self.db = self.client[self.certificates_db_name]
         self.mail_sender = Mail()
-        self.verifier = Verifier(mock_transaction_lookup)
+        self.verifier = Verifier()
 
     def get_formatted_certificate(self, identifier, format):
         logging.debug('Retrieving certificate for uid=%s', identifier)
