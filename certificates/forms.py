@@ -1,5 +1,7 @@
 import sys
+
 from wtforms import Form, TextField, TextAreaField, validators, RadioField
+
 
 def get_coerce_val():
     if sys.version_info.major < 3:
@@ -7,6 +9,7 @@ def get_coerce_val():
     else:
         coerce_val = str
     return coerce_val
+
 
 class RegistrationForm(Form):
     first_name = TextField('First Name', [validators.required(), validators.length(max=200)])

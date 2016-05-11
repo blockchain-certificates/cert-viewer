@@ -66,6 +66,19 @@ Example of a certificate object:
 
 A recipient object can have multiple certificate objects. The objects are linked together by the "pubkey" field.
 
+TODO
+===
+  - medialab mailchimp?
+  - ok to rename project? change from coins?
+  - everything other than UI is common
+  - changed some URLs, made things more general
+    - issuer and criteria
+  - docs from user entry to cert creation
+  - in general not happy with class, package and function names. revisit
+  - ensure no issues with zip entry, check leading 0s
+  - markdown to rst for documentation (?)
+  - load recent txids dynamically
+  - consider adding setup.py, easy install, etc
 
 Contact
 ===

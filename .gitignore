@@ -1,4 +1,5 @@
-secrets.py
+conf.ini
 .DS_Store
 *.pyc
 venv/
+.idea/*
