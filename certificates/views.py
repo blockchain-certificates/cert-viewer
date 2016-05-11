@@ -1,47 +1,15 @@
 import json
 import logging
-import os
 from urllib.parse import urlencode
 
 import certificates.ui_helpers as helpers
+from certificates import app
+from certificates import certificate_service
 from certificates import config
-from certificates.certificate_repo import CertificateRepo
 from certificates.certificate_repo import UserData
 from certificates.forms import RegistrationForm, BitcoinForm
-from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory, safe_join
+from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join
 from werkzeug.routing import BaseConverter
-
-# TODO (kim): more logging cleanup + factor out init code
-
-app = Flask(__name__)
-
-app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
-
-certificate_repo = CertificateRepo()
-
-
-# Configure logging
-def initialize_logger(output_dir):
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-
-    # create console handler and set level to info
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter("%(levelname)s - %(message)s")
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    # create file handler and set level to info
-    handler = logging.FileHandler(os.path.join(output_dir, "info.log"), "w", encoding=None, delay="true")
-    handler.setLevel(logging.INFO)
-    formatter = logging.Formatter("%(levelname)s - %(message)s")
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-
-# TODO: clean this up
-initialize_logger('/tmp/')
 
 
 class RegexConverter(BaseConverter):
@@ -107,7 +75,7 @@ def get_award(identifier=None):
     """
 
     format = request.args.get("format", None)
-    award, verification_info = certificate_repo.get_formatted_certificate(identifier=identifier, format=format)
+    award, verification_info = certificate_service.get_formatted_certificate(identifier=identifier, format=format)
     if award and format == "json":
         return award
     if award:
@@ -137,7 +105,7 @@ def request_page():
                                  form.first_name.data, form.last_name.data, form.address.data, form.city.data,
                                  form.state.data, form.zipcode.data, form.country.data)
 
-            certificate_repo.request_certificate(user_data)
+            certificate_service.request_certificate(user_data)
 
             hidden_email = helpers.obfuscate_email_display(user_data.email)
             flash('We just sent a confirmation email to %s.' % hidden_email)
@@ -151,7 +119,7 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = certificate_repo.verify(transaction_id, uid)
+    verify_response = certificate_service.verify(transaction_id, uid)
     return json.dumps(verify_response)
 
 
@@ -171,7 +139,3 @@ def internal_server_error(error):
 def unhandled_exception(e):
     logging.exception('Unhandled Exception: %s', e, exc_info=True)
     return 'Unhandled exception: {0}'.format(e), 500
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)

@@ -69,11 +69,13 @@ A recipient object can have multiple certificate objects. The objects are linked
 TODO
 ===
   - mailchimp?
-  - changed some URLs
+  - ok to rename project? change from coins?
+  - everything other than UI is common
+  - changed some URLs, made things more general
+    - issuer and criteria
   - glue between projects. from user entry to cert creation
   - ensure no issues with zip entry, check leading 0s
   - markdown to rst for documentation (?)
-  - ok to rename project? change from coins?
   - load recent txids dynamically
 
 Contact
