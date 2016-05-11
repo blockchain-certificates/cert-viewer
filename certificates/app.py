@@ -2,10 +2,10 @@ import json
 import os
 from urllib.parse import urlencode
 
-from forms import RegistrationForm, BitcoinForm
+import certificates.helpers as helpers
+from certificates.forms import RegistrationForm, BitcoinForm
 
-import config
-import helpers
+from certificates import config
 from certificates.certificate_repo import CertificateRepo
 from certificates.certificate_repo import UserData
 from flask import Flask, render_template, request, flash, redirect, url_for
@@ -16,8 +16,6 @@ app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
 certificate_repo = CertificateRepo()
 
-# TODO (kim): package structure -- collapse certificates
-# TODO (kim): UI package structure. Use this: https://github.com/pallets/flask-website/search?utf8=%E2%9C%93&q=static
 # TODO (kim): fix all static file location
 # TODO (kim): markdown generator for docs
 # TODO (kim): global exception handling

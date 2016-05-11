@@ -1,7 +1,7 @@
 import logging
 
-import config
 import mandrill
+from certificates import config
 
 CONFIG_SECTION = 'certificate_service'
 
