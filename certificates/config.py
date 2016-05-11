@@ -12,6 +12,7 @@ DEFAULT_CONFIG_FILE = os.path.join(BASE_DIR, 'conf.ini')
 def get_config_file():
     return os.environ.get('CONFIG_FILE', DEFAULT_CONFIG_FILE)
 
+
 CONFIG_FILE = get_config_file()
 
 
@@ -22,6 +23,7 @@ def create_config(config_file=None):
     parser.read(config_file or CONFIG_FILE)
     return parser
 
+
 CONFIG = create_config()
 
 
@@ -30,12 +32,15 @@ def read_file(path):
         data = f.read()
     return data
 
+
 def get_config():
     return CONFIG
+
 
 def get_key_by_type(key_type):
     key_name = get_config().get('keys', key_type)
     return get_key_by_name(key_name)
+
 
 def get_key_by_name(key_name):
     """Ugh, todo: clean this up"""

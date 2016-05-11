@@ -10,6 +10,7 @@ def get_coerce_val():
         coerce_val = str
     return coerce_val
 
+
 class RegistrationForm(Form):
     first_name = TextField('First Name', [validators.required(), validators.length(max=200)])
     last_name = TextField('Last Name', [validators.required(), validators.length(max=200)])

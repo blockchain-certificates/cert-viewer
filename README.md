@@ -68,6 +68,7 @@ A recipient object can have multiple certificate objects. The objects are linked
 
 TODO
 ===
+  - ensure no issues with zip entry, check leading 0s
   - markdown to rst for documentation (?)
   - ok to rename project? change from coins?
   - load recent txids dynamically

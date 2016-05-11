@@ -15,6 +15,7 @@ CONFIG_SECTION = 'certificate_service'
 UserData = namedtuple('UserData', ['pubkey', 'email', 'degree', 'comments', 'first_name', 'last_name',
                                    'street_address', 'city', 'state', 'zip_code', 'country'])
 
+
 class CertificateRepo:
     def __init__(self, client=None, gfs=None):
         self.certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
@@ -27,7 +28,7 @@ class CertificateRepo:
         if gfs:
             self.gfs = gfs
         else:
-           self.gfs = gridfs.GridFS(self.client[self.certificates_db_name])
+            self.gfs = gridfs.GridFS(self.client[self.certificates_db_name])
 
         self.db = self.client[self.certificates_db_name]
         self.mail_sender = Mail()
@@ -41,6 +42,8 @@ class CertificateRepo:
                 if format == "json":
                     return self.find_file_in_gridfs(str(certificate["_id"])), None
                 return award, verification_info
+        logging.warning('Certificate not found for uid=%s', identifier)
+        return None, None
 
     def request_certificate(self, user_data):
         # check if we already have a user associated with the public key
@@ -210,4 +213,3 @@ class CertificateRepo:
         if award['display'] == 'FALSE':
             award['subtitle'] = ''
         return award
-

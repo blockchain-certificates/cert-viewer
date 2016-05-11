@@ -1,4 +1,6 @@
 import json
+import logging
+import os
 from urllib.parse import urlencode
 
 import certificates.ui_helpers as helpers
@@ -8,18 +10,17 @@ from certificates.certificate_repo import UserData
 from certificates.forms import RegistrationForm, BitcoinForm
 from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory, safe_join
 from werkzeug.routing import BaseConverter
-import logging
-import os
 
 ###### DISPLAY
 # TODO (kim): ensure verify display is same after refactor (async)
-# TODO (kim): ensure zip entered is ok -- may need to edit ui
+# TODO (kim): more logging cleanup + factor out init code
 
 app = Flask(__name__)
 
 app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
 certificate_repo = CertificateRepo()
+
 
 # Configure logging
 def initialize_logger(output_dir):
@@ -40,13 +41,16 @@ def initialize_logger(output_dir):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+
 # TODO: clean this up
 initialize_logger('/tmp/')
+
 
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *items):
         super(RegexConverter, self).__init__(url_map)
         self.regex = items[0]
+
 
 app.url_map.converters['regex'] = RegexConverter
 
@@ -71,7 +75,7 @@ def key_page(key_name=None):
     key = config.get_key_by_name(key_name)
     if key:
         return key
-    return 'Sorry, this page does not exist.'
+    return 'Sorry, this page does not exist.', 404
 
 
 @app.route('/issuer/<path:issuer_filename>')
@@ -111,7 +115,7 @@ def get_award(identifier=None):
     if award:
         return render_template('award.html', award=award, verification_info=urlencode(verification_info))
 
-    return "Sorry, this page does not exist."
+    return "Sorry, this page does not exist.", 404
 
 
 @app.route('/bitcoinkeys', methods=['GET'])
@@ -161,26 +165,15 @@ def page_not_found(error):
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    logging.error('Server Error: %s', error)
-    return 'Server error: %s'.format(error), 500
+    logging.error('Server Error: %s', error, exc_info=True)
+    return 'Server error: {0}'.format(error), 500
 
 
 @app.errorhandler(Exception)
 def unhandled_exception(e):
-    logging.error('Unhandled Exception: %s', e)
-    return 'Unhandled exception: %s'.format(e), 500
+    logging.exception('Unhandled Exception: %s', e, exc_info=True)
+    return 'Unhandled exception: {0}'.format(e), 500
 
-
-#def configure_app(app):
-#    config_name = os.getenv('FLAKS_CONFIGURATION', 'default')
-#    app.config.from_object(config[config_name])
-#    app.config.from_pyfile('config.cfg', silent=True)
-    # Configure logging
-#    handler = logging.FileHandler(app.config['LOGGING_LOCATION'])
-#    handler.setLevel(app.config['LOGGING_LEVEL'])
-#    formatter = logging.Formatter(app.config['LOGGING_FORMAT'])
-#    handler.setFormatter(formatter)
-#    app.logger.addHandler(handler)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

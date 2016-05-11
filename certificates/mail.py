@@ -37,11 +37,11 @@ class Mail:
         try:
             logging.trace('sending mandrill receipt template')
             result = mandrill_client.messages.send_template(template_name='receipt-template',
-                                                            template_content=template_content, message=message, async=False)
-            # TODO (kim): determine if result needs to be inspected
+                                                            template_content=template_content, message=message,
+                                                            async=False)
             return result
         except mandrill.Error as e:
             error_message = 'A mandrill error occurred: %s - %s' % (e.__class__, e)
-            logging.error(error_message)
+            logging.exception(error_message, e)
             # A mandrill error occurred: <class 'mandrill.InvalidKeyError'> - Invalid API key
             raise
