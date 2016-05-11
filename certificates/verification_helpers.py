@@ -24,12 +24,13 @@ class Verifier:
     def verify(self, transaction_id, signed_local_file):
         signed_local_json = json.loads(signed_local_file)
         r = self.transaction_lookup(transaction_id)
+        verify_response = []
+        verified = False
         if r.status_code != 200:
-            logging.warning('Error looking up by transaction_id=%s, status_code=%d', transaction_id, r.status_code)
-            return None
+            logging.error('Error looking up by transaction_id=%s, status_code=%d', transaction_id, r.status_code)
+            verify_response.append(('Looking up by transaction_id', False))
+            verify_response.append(("Verified", False))
         else:
-            verify_response = []
-            verified = False
             verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
             verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
             remote_json = r.json()
