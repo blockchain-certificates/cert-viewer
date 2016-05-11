@@ -153,7 +153,7 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = certificate_repo.get_verify_response(transaction_id, uid)
+    verify_response = certificate_repo.verify(transaction_id, uid)
     return json.dumps(verify_response)
 
 
