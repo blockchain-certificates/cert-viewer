@@ -5,8 +5,8 @@ from collections import namedtuple
 import gridfs
 from bson.objectid import ObjectId
 from certificates import config
-from certificates import verification_helpers
 from certificates.mail import Mail
+from certificates.verification_helpers import Verifier
 from pymongo import MongoClient
 
 CONFIG_SECTION = 'certificate_service'
@@ -31,6 +31,7 @@ class CertificateRepo:
 
         self.db = self.client[self.certificates_db_name]
         self.mail_sender = Mail()
+        self.verifier = Verifier(mock_transaction_lookup)
 
     def get_formatted_certificate(self, identifier, format):
         logging.debug('Retrieving certificate for uid=%s', identifier)
@@ -59,7 +60,7 @@ class CertificateRepo:
 
     def verify(self, transaction_id, uid):
         signed_local_file = self.find_file_in_gridfs(uid)
-        return verification_helpers.verify(transaction_id, signed_local_file)
+        return self.verifier.verify(transaction_id, signed_local_file)
 
     def find_user_by_txid(self, txid):
         certificate = None

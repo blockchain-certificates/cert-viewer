@@ -11,8 +11,6 @@ from certificates.forms import RegistrationForm, BitcoinForm
 from flask import Flask, render_template, request, flash, redirect, url_for, send_from_directory, safe_join
 from werkzeug.routing import BaseConverter
 
-###### DISPLAY
-# TODO (kim): ensure verify display is same after refactor (async)
 # TODO (kim): more logging cleanup + factor out init code
 
 app = Flask(__name__)
