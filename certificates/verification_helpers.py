@@ -4,7 +4,7 @@ import hashlib
 import logging
 
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
-from helpers import unhexlify, hexlify
+from certificates.helpers import unhexlify, hexlify
 
 
 def get_hash_from_bc_op(tx_json):
@@ -46,5 +46,5 @@ def check_author(address, signed_json):
         signature = signed_json['signature']
         logging.debug('Found signature for uid=%s; verifying message', uid)
         return VerifyMessage(address, message, signature)
-    logging.warn('Missing signature for uid=%s', uid)
+    logging.warning('Missing signature for uid=%s', uid)
     return False

@@ -1,23 +1,23 @@
 import logging
 
-import config
 import mandrill
+from certificates import config
 
 CONFIG_SECTION = 'certificate_service'
 
 
 class Mail:
     def __init__(self):
-        self.api_key = config.get_config().get(CONFIG_SECTION, 'MANDRILL_API_KEY') # TODO make names consistent
-        self.email_subject = config.get_config().get(CONFIG_SECTION, 'SUBJECT')
+        self.mandrill_api_key = config.get_config().get(CONFIG_SECTION, 'MANDRILL_API_KEY')
+        self.subject = config.get_config().get(CONFIG_SECTION, 'SUBJECT')
         self.from_email = config.get_config().get(CONFIG_SECTION, 'FROM_EMAIL')
         self.from_name = config.get_config().get(CONFIG_SECTION, 'FROM_NAME')
 
     def send_receipt_email(self, recipient_email, name):
-        mandrill_client = mandrill.Mandrill(self.api_key)
+        mandrill_client = mandrill.Mandrill(self.mandrill_api_key)
         template_content = None
         message = {
-            'subject': self.email_subject,
+            'subject': self.subject,
             'from_email': self.from_email,
             'from_name': self.from_name,
             'to': [{

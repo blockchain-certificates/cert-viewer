@@ -1,9 +1,9 @@
 import secrets
-
-import gridfs
-import helpers
 from certificates.service import Service
 from certificates.service import UserData
+
+import gridfs
+from certificates import helpers
 from pymongo import MongoClient
 
 client = MongoClient(host=secrets.MONGO_URI)
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     cert_json['pubkey'] = 'K3'
     cert_json['issued'] = True
     cert_json['txid'] = 't1'
-    cert_id = service.certificate_repo.insert_cert(cert_json)
+    cert_id = service.certificate_repo.insert_certificate(cert_json)
     file_name = str(cert_id.inserted_id) + '.json'
     data = helpers.read_file('66a00099a2b165359bd9ac2c.json')
 
