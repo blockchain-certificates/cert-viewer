@@ -1,0 +1,19 @@
+mongodb:
+  image: mongo:3.0.2
+  ports:
+    - "27017:27017"
+
+mongo-seed:
+  build: ./mongo-seed
+  links:
+    - mongodb
+
+web:
+  build: .
+  command: python -u /deployment/run.py
+  ports:
+    - "5000:5000"
+  links:
+    - mongodb
+
+
