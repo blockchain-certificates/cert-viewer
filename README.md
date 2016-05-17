@@ -107,7 +107,7 @@ git clone https://github.com/learningmachine/coins.media.mit.edu.git
 
 2. Install [mongodb](https://docs.mongodb.com/v3.0/installation/)
 
-3. Set up a virtual environment and run setup
+3. Set up a virtual environment [details](http://docs.python-guide.org/en/latest/dev/virtualenvs/) and run setup
 
 ```bash
 cd coins.media.mit.edu
@@ -174,12 +174,11 @@ A recipient object can have multiple certificate objects. The objects are linked
 TODO
 ===
   - note: we will rename this repo to certificate-viewer after merging back to MIT
-  - Better sample data
-  - Switch to configargparse
+  - better sample data
+  - switch to configargparse
   - document from user entry to cert creation
-  - ensure no issues with zip entry, check leading 0s
+  - ensure issues with zip entry export
   - load recent txids dynamically
-  - medialab mailchimp
 
 Contact
 ===
