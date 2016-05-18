@@ -7,13 +7,13 @@ import gridfs
 from . import config
 from . import formatters
 from .verification_helpers import Verifier
-from .mail import Mail
+from .notifier import Notifier
 
 CONFIG_SECTION = 'certificate_service'
 
 
 class CertificateStore:
-    def __init__(self, client=None, gfs=None, verifier=Verifier(), notifier=Mail()):
+    def __init__(self, client=None, gfs=None, verifier=Verifier(), notifier=Notifier.factory()):
         self.certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
 
         if client:
@@ -39,7 +39,8 @@ class CertificateStore:
             self.create_user(user_data)
         self.create_certificate_request(user_data.pubkey)
         logging.trace('Created certificate; sending receipt')
-        sent = self.notifier.send_receipt_email(user_data.user_email, user_data.first_name, user_data.last_name)
+        sent = self.notifier.notify(user_data.email, user_data.first_name, user_data.last_name)
+        logging.trace('Finished requesting certificate')
         return sent
 
     def get_formatted_certificate(self, certificate_uid, format):
@@ -116,24 +117,26 @@ class CertificateStore:
     def create_user(self, user_data):
         user_json = formatters.user_data_to_json(user_data)
         rec_id = self.insert_user(user_json)
-        logging.info('inserted user with recipient id=%s', rec_id)
+        logging.info('Inserted user with recipient id=%s', rec_id)
 
         return user_json
 
     def create_certificate_request(self, pubkey):
         cert_json = formatters.pubkey_to_cert_request(pubkey)
         cert_id = self.insert_certificate(cert_json=cert_json)
+        logging.info('Inserted certificate request with uid=%s', cert_id)
+
         return cert_id
 
     def insert_user(self, user_json):
         """Exposed separately to ease testing"""
         user_id = CertificateStore.insert_shim(self.db.recipients, user_json)
-        return user_id
+        return user_id.inserted_id
 
     def insert_certificate(self, cert_json):
         """Exposed separately to ease testing"""
         cert_id = CertificateStore.insert_shim(self.db.certificates, cert_json)
-        return cert_id
+        return cert_id.inserted_id
 
     @staticmethod
     def insert_shim(collection, document):

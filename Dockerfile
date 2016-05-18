@@ -28,4 +28,7 @@ RUN /deployment/env/bin/pip install wheel
 RUN /deployment/env/bin/pip install -r /deployment/requirements.txt
 
 COPY . /deployment
+
+# Copy sample configuration file to conf.ini
+COPY conf_sample.ini /deployment/conf.ini
 RUN pip install /deployment
