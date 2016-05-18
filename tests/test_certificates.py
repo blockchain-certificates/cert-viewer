@@ -5,12 +5,13 @@ import mongomock
 from certificate_viewer.certificate_store import CertificateStore
 from certificate_viewer.models import UserData
 from mock import Mock
+from pymongo.results import InsertOneResult
 
 
 # mongo mock doesn't support insert_one, so we patch that with insert
 def mock_insert_workaround(collection, document):
     inserted_id = collection.insert(document)
-    return inserted_id
+    return InsertOneResult(inserted_id, True)
 
 
 class TestCertificates(unittest.TestCase):

@@ -8,53 +8,47 @@ import requests
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
 from . import config
 from .ui_helpers import unhexlify, hexlify
+from functools import partial
 
 
 def lookup_transaction_from_blockchain(transaction_id):
     return requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
 
 
-class Verifier:
-    def __init__(self, transaction_lookup=None):
-        if not transaction_lookup:
-            self.transaction_lookup = lookup_transaction_from_blockchain
-        else:
-            self.transaction_lookup = transaction_lookup
+def verify_with_lookup_function(transaction_id, signed_local_file, transaction_lookup):
+    signed_local_json = json.loads(signed_local_file)
+    r = transaction_lookup(transaction_id)
+    verify_response = []
+    verified = False
+    if r.status_code != 200:
+        logging.error('Error looking up by transaction_id=%s, status_code=%d', transaction_id, r.status_code)
+        verify_response.append(('Looking up by transaction_id', False))
+        verify_response.append(("Verified", False))
+    else:
+        verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
+        verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
+        remote_json = r.json()
 
-    def verify(self, transaction_id, signed_local_file):
-        signed_local_json = json.loads(signed_local_file)
-        r = self.transaction_lookup(transaction_id)
-        verify_response = []
-        verified = False
-        if r.status_code != 200:
-            logging.error('Error looking up by transaction_id=%s, status_code=%d', transaction_id, r.status_code)
-            verify_response.append(('Looking up by transaction_id', False))
-            verify_response.append(("Verified", False))
-        else:
-            verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
-            verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
-            remote_json = r.json()
+        # compare hashes
+        local_hash = compute_hash(signed_local_file)
+        remote_hash = fetch_hash_from_chain(remote_json)
+        compare_hash_result = compare_hashes(local_hash, remote_hash)
+        verify_response.append(("Comparing local and blockchain hashes", compare_hash_result))
 
-            # compare hashes
-            local_hash = compute_hash(signed_local_file)
-            remote_hash = fetch_hash_from_chain(remote_json)
-            compare_hash_result = compare_hashes(local_hash, remote_hash)
-            verify_response.append(("Comparing local and blockchain hashes", compare_hash_result))
+        # check author
+        issuing_address = config.get_key_by_type('CERT_PUBKEY')
+        verify_authors = check_author(issuing_address, signed_local_json)
+        verify_response.append(("Checking signature", verify_authors))
 
-            # check author
-            issuing_address = config.get_key_by_type('CERT_PUBKEY')
-            verify_authors = check_author(issuing_address, signed_local_json)
-            verify_response.append(("Checking signature", verify_authors))
+        # check revocation
+        revocation_address = config.get_key_by_type('CERT_REVOKEKEY')
+        not_revoked = check_revocation(remote_json, revocation_address)
+        verify_response.append(("Checking not revoked by issuer", not_revoked))
 
-            # check revocation
-            revocation_address = config.get_key_by_type('CERT_REVOKEKEY')
-            not_revoked = check_revocation(remote_json, revocation_address)
-            verify_response.append(("Checking not revoked by issuer", not_revoked))
-
-            if compare_hash_result and verify_authors and not_revoked:
-                verified = True
-            verify_response.append(("Verified", verified))
-        return verify_response
+        if compare_hash_result and verify_authors and not_revoked:
+            verified = True
+        verify_response.append(("Verified", verified))
+    return verify_response
 
 
 def get_hash_from_bc_op(tx_json):
@@ -101,3 +95,6 @@ def check_author(address, signed_json):
         return VerifyMessage(address, message, signature)
     logging.warning('Missing signature for uid=%s', uid)
     return False
+
+
+default_verifier = partial(verify_with_lookup_function, transaction_lookup=lookup_transaction_from_blockchain)

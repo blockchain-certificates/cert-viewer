@@ -6,14 +6,29 @@ from . import config
 CONFIG_SECTION = 'certificate_service'
 
 
-class Mail:
+class Notifier(object):
+    def factory():
+        notifier = config.get_config().get(CONFIG_SECTION, 'NOTIFIER_TYPE')
+        if notifier == 'mail': return Mail()
+        if notifier == 'noop': return NoOp()
+        assert 0, "Unrecognized notifier type: " + type
+    factory = staticmethod(factory)
+
+
+class NoOp(Notifier):
+    def notify(self, recipient_email, first_name, last_name):
+        logging.warning('A notification would have been sent to first_name=%s,last_name=%s,email=%s, but no notifier is configured',
+                        first_name, last_name, recipient_email)
+        return False
+
+class Mail(Notifier):
     def __init__(self):
         self.mandrill_api_key = config.get_config().get(CONFIG_SECTION, 'MANDRILL_API_KEY')
         self.subject = config.get_config().get(CONFIG_SECTION, 'SUBJECT')
         self.from_email = config.get_config().get(CONFIG_SECTION, 'FROM_EMAIL')
         self.from_name = config.get_config().get(CONFIG_SECTION, 'FROM_NAME')
 
-    def send_receipt_email(self, recipient_email, first_name, last_name):
+    def notify(self, recipient_email, first_name, last_name):
         mandrill_client = mandrill.Mandrill(self.mandrill_api_key)
         template_content = None
         message = {
@@ -34,7 +49,7 @@ class Mail:
             'global_merge_vars': [{'name': 'first_name', 'content': first_name}]
         }
         try:
-            logging.trace('sending mandrill receipt template')
+            logging.debug('sending mandrill receipt template')
             result = mandrill_client.messages.send_template(template_name='receipt-template',
                                                             template_content=template_content, message=message,
                                                             async=False)

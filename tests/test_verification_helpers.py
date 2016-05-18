@@ -3,8 +3,9 @@ import unittest
 
 from certificate_viewer import verification_helpers as v
 from certificate_viewer.ui_helpers import hexlify
-from certificate_viewer.verification_helpers import Verifier
 from mock import Mock
+from certificate_viewer import verification_helpers
+from functools import partial
 
 
 def mock_json():
@@ -47,11 +48,11 @@ def mock_transaction_lookup(transaction_id):
 
 class TestVerify(unittest.TestCase):
 
-    def test_verify(self):
-        verifier = Verifier(mock_transaction_lookup)
+    def test_do_verify(self):
+        mock_verify = partial(verification_helpers.verify_with_lookup_function, transaction_lookup=mock_transaction_lookup)
         f = codecs.open('sample-cert.json', "r", "utf-8")
         data = f.read()
-        response = verifier.verify('1111', data)
+        response = mock_verify('1111', data)
         print(response)
 
     def test_get_hash_from_bc_op(self):
