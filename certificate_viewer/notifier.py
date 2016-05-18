@@ -49,7 +49,7 @@ class Mail(Notifier):
             'global_merge_vars': [{'name': 'first_name', 'content': first_name}]
         }
         try:
-            logging.trace('sending mandrill receipt template')
+            logging.debug('sending mandrill receipt template')
             result = mandrill_client.messages.send_template(template_name='receipt-template',
                                                             template_content=template_content, message=message,
                                                             async=False)

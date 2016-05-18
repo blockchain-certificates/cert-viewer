@@ -6,28 +6,22 @@ from pymongo import MongoClient
 import gridfs
 from . import config
 from . import formatters
-from .verification_helpers import Verifier
 from .notifier import Notifier
+from .verification_helpers import default_verifier
 
 CONFIG_SECTION = 'certificate_service'
 
 
 class CertificateStore:
-    def __init__(self, client=None, gfs=None, verifier=Verifier(), notifier=Notifier.factory()):
-        self.certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
 
-        if client:
-            self.client = client
-        else:
-            self.client = MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
-
-        if gfs:
-            self.gfs = gfs
-        else:
-            self.gfs = gridfs.GridFS(self.client[self.certificates_db_name])
-
-        self.db = self.client[self.certificates_db_name]
-
+    def __init__(self,
+                 client=MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI')),
+                 gfs=None,
+                 verifier=default_verifier,
+                 notifier=Notifier.factory()):
+        certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
+        self.gfs = gfs or gridfs.GridFS(client[certificates_db_name])
+        self.db = client[certificates_db_name]
         self.notifier = notifier
         self.verifier = verifier
 
@@ -38,9 +32,9 @@ class CertificateStore:
             logging.info('User not found for public key; creating user')
             self.create_user(user_data)
         self.create_certificate_request(user_data.pubkey)
-        logging.trace('Created certificate; sending receipt')
+        logging.debug('Created certificate request; sending notification')
         sent = self.notifier.notify(user_data.email, user_data.first_name, user_data.last_name)
-        logging.trace('Finished requesting certificate')
+        logging.debug('Finished requesting certificate')
         return sent
 
     def get_formatted_certificate(self, certificate_uid, format):
@@ -55,10 +49,10 @@ class CertificateStore:
             else:
                 award, verification_info = self.get_award_and_verification_for_certificate(certificate)
         else:
-            logging.warning('Certificate metadata not found for recipient uid=%s', certificate_uid)
+            logging.warning('Certificate metadata not found for certificate uid=%s', certificate_uid)
 
         if certificate and not award:
-            logging.error('Problem looking up certificate for recipient=%s, '
+            logging.error('Problem looking up certificate for certificate uid=%s, '
                           'but certificate metadata was found', certificate_uid)
         return award, verification_info
 

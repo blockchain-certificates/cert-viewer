@@ -102,18 +102,19 @@ def request_page():
     form = RegistrationForm(request.form)
     bitcoin = BitcoinForm(request.form)
     if request.method == 'POST' and form.validate():
-        try:
-            user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
-                                 form.first_name.data, form.last_name.data, form.address.data, form.city.data,
-                                 form.state.data, form.zipcode.data, form.country.data)
+        user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
+                             form.first_name.data, form.last_name.data, form.address.data, form.city.data,
+                             form.state.data, form.zipcode.data, form.country.data)
 
-            certificate_service.request_certificate(user_data)
-
-            hidden_email = ui_helpers.obfuscate_email_display(user_data.email)
+        sent = certificate_service.request_certificate(user_data)
+        logging.debug('finished requesting certificate')
+        hidden_email = ui_helpers.obfuscate_email_display(user_data.email)
+        if sent:
             flash('We just sent a confirmation email to %s.' % hidden_email)
-            return redirect(url_for('home_page'))
-        except:
-            flash('There seems to be an error with our system. Please try again later.')
+        else:
+            flash('We received your request and will respond to %s.' % hidden_email)
+        return redirect(url_for('home_page'))
+
     return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
 
 

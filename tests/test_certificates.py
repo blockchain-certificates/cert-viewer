@@ -8,7 +8,7 @@ from mock import Mock
 from pymongo.results import InsertOneResult
 
 
-# mongo mock doesn't support insert_one, so we patch that with insert and make the return result consistent
+# mongo mock doesn't support insert_one, so we patch that with insert
 def mock_insert_workaround(collection, document):
     inserted_id = collection.insert(document)
     return InsertOneResult(inserted_id, True)
