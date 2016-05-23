@@ -32,5 +32,6 @@ setup(
         'WTForms==2.0.2',
         'mock==2.0.0',
         'mongomock==2.0.0',
-        'tox==2.3.1'
+        'tox==2.3.1',
+        'recommonmark==0.4.0'
     ], )

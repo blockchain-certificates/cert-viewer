@@ -8,5 +8,6 @@ venv*/
 .coverage
 .eggs/
 .tox/
+build/
 
 *.egg-info*
