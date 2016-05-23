@@ -1,3 +1,4 @@
+# Certificate format
 Show below is the certificate format for the ML alumni coins. To see a rendered certificate, please go to [coins.media.mit.edu](https://coins.media.mit.edu).
 
 ```json
