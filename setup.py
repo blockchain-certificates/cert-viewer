@@ -9,9 +9,9 @@ with open(os.path.join(here, 'README.md')) as f:
 setup(
     name='viewer',
     version='0.0.1',
-    url='https://github.com/ml-learning/coins.media.mit.edu',
+    url='https://github.com/digital-certificates/viewer',
     license='MIT',
-    author='MIT Media Labs certificates',
+    author='MIT Media Labs Digital Certificates',
     author_email='coins@media.mit.edu',
     description='',
     packages=['viewer'],
