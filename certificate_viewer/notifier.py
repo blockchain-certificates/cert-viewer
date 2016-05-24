@@ -3,7 +3,7 @@ import logging
 import mandrill
 from . import config
 
-CONFIG_SECTION = 'certificate_service'
+CONFIG_SECTION = 'certificates'
 
 
 class Notifier(object):

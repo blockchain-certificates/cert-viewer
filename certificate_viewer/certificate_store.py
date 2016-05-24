@@ -9,20 +9,25 @@ from . import formatters
 from .notifier import Notifier
 from .verification_helpers import default_verifier
 
-CONFIG_SECTION = 'certificate_service'
+CONFIG_SECTION = 'certificates'
 
 
 class CertificateStore:
 
     def __init__(self,
-                 client=MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI')),
+                 client=None,
                  gfs=None,
                  verifier=default_verifier,
-                 notifier=Notifier.factory()):
+                 notifier=None):
+        if client is None:
+            client=MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
         certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
         self.gfs = gfs or gridfs.GridFS(client[certificates_db_name])
         self.db = client[certificates_db_name]
-        self.notifier = notifier
+        if notifier is None:
+            self.notifier = Notifier.factory()
+        else:
+            self.notifier = notifier
         self.verifier = verifier
 
     def request_certificate(self, user_data):
