@@ -6,13 +6,6 @@
 Welcome to Certificate viewer's documentation!
 ==============================================
 
-Contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   modules
-
 Specifications:
 
 .. toctree::
@@ -20,6 +13,15 @@ Specifications:
 
    CERTIFICATE
    VERIFY
+
+
+API docs:
+
+.. toctree::
+   :maxdepth: 2
+
+   modules
+
 
 Indices and tables
 ==================
