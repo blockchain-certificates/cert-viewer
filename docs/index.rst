@@ -6,7 +6,8 @@
 Welcome to Digital Certificates' Viewer Documentation!
 ======================================================
 
-Specifications:
+Specifications
+--------------
 
 .. toctree::
    :glob:
@@ -15,7 +16,8 @@ Specifications:
    VERIFY
 
 
-API docs:
+API docs
+--------
 
 .. toctree::
    :maxdepth: 2
@@ -25,7 +27,7 @@ API docs:
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
