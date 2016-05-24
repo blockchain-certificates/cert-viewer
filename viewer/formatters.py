@@ -1,3 +1,4 @@
+"""Utilities to convert certificates to user-friendly award display"""
 import json
 
 

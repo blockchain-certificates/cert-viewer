@@ -8,14 +8,35 @@ Welcome to Digital Certificates' Viewer Documentation!
 
 Get the code: https://github.com/digital-certificates/viewer
 
-Specifications
---------------
+
+Getting started
+---------------
 
 .. toctree::
-   :glob:
+   :maxdepth: 2
 
-   CERTIFICATE
-   VERIFY
+   quick_start
+   installation
+   testing
+
+
+Data format
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   certificate
+   database_collections
+
+
+Verifying a certificate
+------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   verify
 
 
 API docs
@@ -35,3 +56,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+Contact
+-------
+Contact coins@media.mit.edu with questions

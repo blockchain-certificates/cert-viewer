@@ -1,4 +1,4 @@
-"""Maintains certificates in mongo."""
+"""Retrieves certificates from mongodb and stores certificate requests.  """
 import logging
 
 
@@ -18,20 +18,30 @@ class CertificateStore:
     def __init__(self,
                  client=None,
                  gfs=None,
-                 verifier=default_verifier,
+                 verifier=None,
                  notifier=None):
-        if client is None:
-            client=MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
+        """Create a CertificateStore
+
+        :param client: mongo client
+        :param gfs: gridfs
+        :param verifier: verifier
+        :param notifier: notifier
+
+        """
+        self.client = client or MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
         certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
-        self.gfs = gfs or gridfs.GridFS(client[certificates_db_name])
-        self.db = client[certificates_db_name]
-        if notifier is None:
-            self.notifier = Notifier.factory()
-        else:
-            self.notifier = notifier
-        self.verifier = verifier
+        self.gfs = gfs or gridfs.GridFS(self.client[certificates_db_name])
+        self.db = self.client[certificates_db_name]
+        self.notifier = notifier or Notifier.factory()
+        self.verifier = verifier or default_verifier
 
     def request_certificate(self, user_data):
+        """Request a certificate
+
+        :param user_data: User data
+        :type user_data: viewer.models.UserData
+
+        """
         # check if we already have a user associated with the public key
         user = self.find_recipient_by_pub_key(user_data.pubkey)
         if user is None:
