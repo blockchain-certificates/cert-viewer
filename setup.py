@@ -7,14 +7,14 @@ with open(os.path.join(here, 'README.md')) as f:
     README = f.read()
 
 setup(
-    name='certificate-viewer',
+    name='viewer',
     version='0.0.1',
     url='https://github.com/ml-learning/coins.media.mit.edu',
     license='MIT',
     author='MIT Media Labs certificates',
     author_email='coins@media.mit.edu',
     description='',
-    packages=['certificate_viewer'],
+    packages=['viewer'],
     include_package_data=True,
     install_requires=[
         'docopt==0.4.0',

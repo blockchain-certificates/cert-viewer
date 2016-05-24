@@ -1,10 +1,10 @@
-.. Certificate viewer documentation master file, created by
-   sphinx-quickstart on Mon May 23 16:42:45 2016.
+.. viewer documentation master file, created by
+   sphinx-quickstart on Tue May 24 12:06:50 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Certificate viewer's documentation!
-==============================================
+Welcome to Digital Certificate Viewer's documentation!
+======================================================
 
 Specifications:
 
@@ -21,6 +21,7 @@ API docs:
    :maxdepth: 2
 
    modules
+
 
 
 Indices and tables

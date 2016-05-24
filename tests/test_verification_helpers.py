@@ -1,10 +1,10 @@
 import codecs
 import unittest
 
-from certificate_viewer import verification_helpers as v
-from certificate_viewer.ui_helpers import hexlify
+from viewer import verification_helpers as v
+from viewer.ui_helpers import hexlify
 from mock import Mock
-from certificate_viewer import verification_helpers
+from viewer import verification_helpers
 from functools import partial
 
 

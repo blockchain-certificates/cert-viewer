@@ -1,6 +1,6 @@
 import unittest
 
-from certificate_viewer import ui_helpers
+from viewer import ui_helpers
 
 
 class TestUIHelpers(unittest.TestCase):
