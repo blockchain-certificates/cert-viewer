@@ -1,3 +1,4 @@
+"""Maintains certificates in mongo."""
 import logging
 
 
