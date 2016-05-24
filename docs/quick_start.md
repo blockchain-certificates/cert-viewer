@@ -10,7 +10,7 @@ example, mac instructions start at [https://docs.docker.com/engine/installation/
 
 2. Git clone the repository
 
-    `git clone https://github.com/learningmachine/coins.media.mit.edu.git`
+    `git clone https://github.com/digital-certificates/viewer.git`
 
 3. Build the container with docker-compose
 
