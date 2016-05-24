@@ -1,78 +1,86 @@
-certificate_viewer Package
+certificate_viewer package
 ==========================
 
-:mod:`certificate_viewer` Package
----------------------------------
+Submodules
+----------
 
-:mod:`certificate_store` Module
--------------------------------
+certificate_viewer.certificate_store module
+-------------------------------------------
 
 .. automodule:: certificate_viewer.certificate_store
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`config` Module
---------------------
+certificate_viewer.config module
+--------------------------------
 
 .. automodule:: certificate_viewer.config
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`formatters` Module
-------------------------
+certificate_viewer.formatters module
+------------------------------------
 
 .. automodule:: certificate_viewer.formatters
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`forms` Module
--------------------
+certificate_viewer.forms module
+-------------------------------
 
 .. automodule:: certificate_viewer.forms
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`models` Module
---------------------
+certificate_viewer.models module
+--------------------------------
 
 .. automodule:: certificate_viewer.models
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`notifier` Module
-----------------------
+certificate_viewer.notifier module
+----------------------------------
 
 .. automodule:: certificate_viewer.notifier
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`ui_helpers` Module
-------------------------
+certificate_viewer.ui_helpers module
+------------------------------------
 
 .. automodule:: certificate_viewer.ui_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`verification_helpers` Module
-----------------------------------
+certificate_viewer.verification_helpers module
+----------------------------------------------
 
 .. automodule:: certificate_viewer.verification_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`views` Module
--------------------
+certificate_viewer.views module
+-------------------------------
 
 .. automodule:: certificate_viewer.views
     :members:
     :undoc-members:
     :show-inheritance:
 
+
+Module contents
+---------------
+
+.. automodule:: certificate_viewer
+    :members:
+    :undoc-members:
+    :show-inheritance:
