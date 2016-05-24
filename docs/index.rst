@@ -6,6 +6,8 @@
 Welcome to Digital Certificates' Viewer Documentation!
 ======================================================
 
+Get the code: https://github.com/digital-certificates/viewer
+
 Specifications
 --------------
 
