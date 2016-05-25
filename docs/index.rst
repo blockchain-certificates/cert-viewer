@@ -3,8 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Digital Certificates' Viewer Documentation!
-======================================================
+Welcome to Viewer's Documentation!
+==================================
+The Viewer project is part of the MIT Media Lab Digital Certificates incubation project. We're looking for feedback,
+contributions, and general discussion. This is not currently intended for production release, but we are improving
+our approach for future releases. Read more about the Digital Certificates Project at http://certificates.media.mit.edu/.
+
 
 Get the code: https://github.com/digital-certificates/viewer
 
@@ -61,4 +65,4 @@ Indices and tables
 
 Contact
 -------
-Contact coins@media.mit.edu with questions
+Contact certs@media.mit.edu with questions
