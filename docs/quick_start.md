@@ -29,13 +29,12 @@ About Docker Setup
 The quick start steps do the following:
 
 1. Creates a container that runs the certificate-viewer Flask app with MongoDB using Docker Compose [details](http://containertutorials.com/docker-compose/flask-mongo-compose.html)
-2. Seeds the MongoDB database with sample data. This data is located in the mongo-seed folder
+2. Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder
 3. Starts the container. This configuration exposes port 5000.
 
 
-Limitations
------------
+Limitations/Warnings
+--------------------
 - The quick start configuration is for demo purposes and not intended for production release. See "Detailed Installation"
-- As of now, I've only populated an unverified certificate; see `http://<hostname>:5000/572f76d4faf8904cc0dc0e21`. More
-will be available soon
-
+- As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
+'Verify' to see details on how verification can fail.

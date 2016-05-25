@@ -32,9 +32,9 @@
     </p>
     {% endif %}
     <h3 class="heading font-bold">Recently Issued</h3> 
-    {% for txid in recent_txids %}
+    {% for certid in recent_certids %}
     <p class="description font-light long-word">
-      <a href="/{{txid}}">{{txid}}</a>
+      <a href="/{{certid}}">{{certid}}</a>
     </p>
     {% endfor %}
     {% if not messages %}

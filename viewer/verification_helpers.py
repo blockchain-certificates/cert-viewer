@@ -12,12 +12,12 @@ from functools import partial
 
 
 def lookup_transaction_from_blockchain(transaction_id):
-    return requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
+    return
 
 
-def verify_with_lookup_function(transaction_id, signed_local_file, transaction_lookup):
+def verify(transaction_id, signed_local_file):
     signed_local_json = json.loads(signed_local_file)
-    r = transaction_lookup(transaction_id)
+    r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
     verify_response = []
     verified = False
     if r.status_code != 200:
@@ -95,6 +95,3 @@ def check_author(address, signed_json):
         return VerifyMessage(address, message, signature)
     logging.warning('Missing signature for uid=%s', uid)
     return False
-
-
-default_verifier = partial(verify_with_lookup_function, transaction_lookup=lookup_transaction_from_blockchain)

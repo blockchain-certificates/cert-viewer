@@ -8,7 +8,7 @@ import gridfs
 from . import config
 from . import formatters
 from .notifier import Notifier
-from .verification_helpers import default_verifier
+from . import verification_helpers
 
 CONFIG_SECTION = 'certificates'
 
@@ -18,13 +18,11 @@ class CertificateStore:
     def __init__(self,
                  client=None,
                  gfs=None,
-                 verifier=None,
                  notifier=None):
         """Create a CertificateStore
 
         :param client: mongo client
         :param gfs: gridfs
-        :param verifier: verifier
         :param notifier: notifier
 
         """
@@ -33,7 +31,6 @@ class CertificateStore:
         self.gfs = gfs or gridfs.GridFS(self.client[certificates_db_name])
         self.db = self.client[certificates_db_name]
         self.notifier = notifier or Notifier.factory()
-        self.verifier = verifier or default_verifier
 
     def request_certificate(self, user_data):
         """Request a certificate
@@ -85,8 +82,10 @@ class CertificateStore:
         return award, verification_info
 
     def verify(self, transaction_id, uid):
-        signed_local_file = self.find_file_in_gridfs(uid)
-        return self.verifier.verify(transaction_id, signed_local_file)
+        signed_local_file = self.find_file_in_gridfs(formatters.certificate_uid_to_filename(uid))
+        if not signed_local_file:
+            return False
+        return verification_helpers.verify(transaction_id, signed_local_file)
 
     def find_certificate_by_txid(self, txid):
         certificate = None

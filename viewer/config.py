@@ -10,7 +10,7 @@ else:
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
-DEFAULT_CONFIG_FILE = os.path.join(BASE_DIR, 'conf_sample.ini')
+DEFAULT_CONFIG_FILE = os.path.join(BASE_DIR, 'conf.ini')
 
 
 def get_config_file():

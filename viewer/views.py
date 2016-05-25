@@ -30,9 +30,13 @@ app.url_map.converters['regex'] = RegexConverter
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     """Home page"""
-    recent_txids = ['56aa4c9bf3a6a0125aaf24bf',
-                    '56aa4c9bf3a6a0125aaf24c7']
-    return render_template('index.html', recent_txids=recent_txids)
+    recent_certids_from_config = config.get_config().get('certificates', 'RECENT_CERTIDS')
+    if recent_certids_from_config:
+        recent_certids = str.split(recent_certids_from_config, ',')
+    else:
+        # keeping for backcompat; either way we should update this from mongo
+        recent_certids =  ['56aa4c9bf3a6a0125aaf24bf','56aa4c9bf3a6a0125aaf24c7']
+    return render_template('index.html', recent_certids=recent_certids)
 
 
 @app.route('/faq', methods=['GET'])
