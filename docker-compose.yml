@@ -1,5 +1,6 @@
 mongodb:
   image: mongo:3.0.2
+  command: --smallfiles
   ports:
     - "27017:27017"
 
