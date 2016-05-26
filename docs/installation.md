@@ -16,7 +16,7 @@ should be changed if you're using this for anything other than demo purposes.
 3. Set up a virtual environment [details](http://docs.python-guide.org/en/latest/dev/virtualenvs/) and run setup
 
     ```bash
-    cd coins.media.mit.edu
+    cd viewer
     pip install .
     ```
 
