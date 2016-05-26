@@ -43,8 +43,8 @@ def gfs_file_to_award(gfs_file, pubkey_content, certificate):
         'organization': json_certificate['certificate']['issuer']['name'],
         'text': json_certificate['certificate']['description'],
         'signatureImg': json_certificate['assertion']['image:signature'],
-        'mlPublicKey': pubkey_content,
-        'mlPublicKeyURL': json_certificate['verify']['signer'],
+        'publicKey': pubkey_content,
+        'publicKeyURL': json_certificate['verify']['signer'],
         'transactionID': parse_txid(certificate),
         'transactionIDURL': 'https://blockchain.info/tx/' + parse_txid(certificate),
         'issuedOn': json_certificate['assertion']['issuedOn']

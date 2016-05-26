@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 
-{% block title %}ML Coins{% endblock %}
-
 {% block css %}
 <link href="/static/css/awards.css" rel="stylesheet">
 {% endblock %}
@@ -10,7 +8,7 @@
 <div class="divToPrint">
   <div class="row">
     <div class="col-md-2 col-sm-2 col-xs-4">
-      <img src="{{award.logoImg}}" id="logo" class="img-responsive" alt="MIT Media Lab"/>
+      <img src="{{award.logoImg}}" id="logo" class="img-responsive" alt="Your logo"/>
     </div>
   </div>
   <div class="row">
@@ -46,7 +44,7 @@
   </div>
   <div class="row">
     <div class="col-md-6 col-sm-8 col-xs-12">
-      <h6 class="signature-info">Public Key: <a href="{{award.mlPublicKeyURL}}"><span class="font-light long-word">{{award.mlPublicKey}}</span></a></h6>
+      <h6 class="signature-info">Public Key: <a href="{{award.publicKeyURL}}"><span class="font-light long-word">{{award.publicKey}}</span></a></h6>
       <h6 class="signature-info">Blockchain Address: <a target="_blank" href="{{award.transactionIDURL}}"><span class="font-light long-word">{{award.transactionID}}</span></a></h6>
     </div>
   </div>
@@ -56,14 +54,6 @@
     <a href="" class="no-decoration">
       <button class="btn btn-sm btn-default hide-on-print" id="print-btn">Print</button>
     </a>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12 hide-on-print">
-    <h6 class="signature-info">
-      Want to learn how to manually verify a certificate? Check out our tutorial
-      <a href="https://github.com/ml-learning/coins.media.mit.edu/blob/master/VERIFY.md">here</a>.
-    </h6>
   </div>
 </div>
 {% endblock %}
