@@ -32,7 +32,7 @@ Certificate
 Example of a certificate object:
 ```
 {
-  "_id": "<uid string of certificate file>",
+  "_id": ObjectId(<uid of certificate file>),
   "issued": <true/false>,
   "pubkey": "<recipient public key>",
   "txid": "<certificate transaction id>"
