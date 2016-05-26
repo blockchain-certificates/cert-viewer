@@ -22,7 +22,7 @@ class RegistrationForm(Form):
     zipcode = TextField('ZIP/Postal Code', [validators.required(), validators.length(max=200)])
     country = TextField('Country', [validators.required(), validators.length(max=200)])
     degree = RadioField('Degree',
-                        choices=[('mas-ms', 'MAS MS'), ('mas-phd', 'MAS PhD'), ('other', 'It\'s complicated')],
+                        choices=[('option1', 'Option 1'), ('option2', 'Option 2'), ('other', 'It\'s complicated')],
                         coerce=get_coerce_val())
     comments = TextAreaField('Comments', [validators.optional()])
 

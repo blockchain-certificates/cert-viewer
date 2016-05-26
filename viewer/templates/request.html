@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 
-{% block title %}ML Coins{% endblock %}
-
 {% block css %}
   <link href="/static/css/request.css" rel="stylesheet">
 {% endblock %}
@@ -9,12 +7,12 @@
 {% block content %}
 <div class="row">
   <div class="col-md-2 col-sm-2 col-xs-4">
-    <img src="/static/img/mllogo.png" class="img-responsive" alt="MIT Media Lab"/>
+    <img src="/static/img/logo.png" class="img-responsive" alt="Your logo"/>
   </div>
 </div>
 <div class="row">
   <div class="col-md-6 col-sm-8 col-xs-12">     
-    <h3 class="heading font-bold name" id="prompt-header">ML Alums,<br>Request Your Coin</h3>
+    <h3 class="heading font-bold name" id="prompt-header">Request Your <br>Certificate</h3>
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
         {% with messages = get_flashed_messages() %}
           {% if messages %}
@@ -28,7 +26,7 @@
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
       <p class="description font-light"> 
-        The Media Lab coins are created using the Bitcoin blockchain. In order to issue you a coin, you need to have a Bitcoin identity. Never used Bitcoin before? Please create a bitcoin identity below.
+        The digital certificates are created using the Bitcoin blockchain. In order to issue you a coin, you need to have a Bitcoin identity. Never used Bitcoin before? Please create a bitcoin identity below.
       </p>
       <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
         {% from "_formhelpers.html" import render_errors, render_radio_field %}
@@ -42,7 +40,7 @@
           </div>
         </form>
         <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-          <p id="key-warning" class="notice-text">If you have a pre-existing Bitcoin identity, it is recommended that you make a new Bitcoin identity (public address and private key) to hold your Media Lab coin.</p>
+          <p id="key-warning" class="notice-text">If you have a pre-existing Bitcoin identity, it is recommended that you make a new Bitcoin identity (public address and private key) to hold your certificate.</p>
           <a href="/bitcoinkeys" target="_blank">
             <button type="button" class="btn btn-default btn-margin font-light btn-margin show-later" id="generate-keys-btn">Create Bitcoin Identity</button>
           </a>
@@ -69,7 +67,6 @@
         {{ form.email(type='email',placeholder='Email',**{'class':'form-control'})}}
       </div>
       {{ render_errors(form.email) }}
-      <p class="font-light form-text">Please use an @media or @mit email if possible.</p>
       <span class="first-group">
         {{ render_radio_field(form.degree) }}
       </span>
@@ -82,7 +79,7 @@
       </span>
       <span id="shipping-info" class="show-later">
         <h3 class="heading font-bold">Shipping Address</h3>
-        <p class="description font-light"> We will send your physical Media Lab coin here.</p>
+        <p class="description font-light"> We will send your physical certificate here.</p>
         <div class="input-group input-group-lg">{{ form.address(type='text',placeholder='Address',**{'class':'form-control'})}}</div>
         {{ render_errors(form.address) }}
         <div class="input-group input-group-lg">{{ form.city(type='text',placeholder='City',**{'class':'form-control'})}}</div>
