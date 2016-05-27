@@ -46,14 +46,8 @@ def mock_transaction_lookup(transaction_id):
     m.json = mock_json
     return m
 
-class TestVerify(unittest.TestCase):
 
-    def test_do_verify(self):
-        mock_verify = partial(verification_helpers.verify_with_lookup_function, transaction_lookup=mock_transaction_lookup)
-        f = codecs.open('sample-cert.json', "r", "utf-8")
-        data = f.read()
-        response = mock_verify('1111', data)
-        print(response)
+class TestVerify(unittest.TestCase):
 
     def test_get_hash_from_bc_op(self):
         script_input = b'eed3a6da081df36ded8a046668010d0d426e666ea4d1d0f6dadf6360d6d8886d'
