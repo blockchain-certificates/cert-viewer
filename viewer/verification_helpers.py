@@ -11,10 +11,6 @@ from .ui_helpers import unhexlify, hexlify
 from functools import partial
 
 
-def lookup_transaction_from_blockchain(transaction_id):
-    return
-
-
 def verify(transaction_id, signed_local_file):
     signed_local_json = json.loads(signed_local_file)
     r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
