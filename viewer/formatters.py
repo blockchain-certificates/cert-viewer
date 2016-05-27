@@ -69,7 +69,7 @@ def user_data_to_json(user_data):
         'streetAddress': user_data.street_address,
         'city': user_data.city,
         'state': user_data.state,
-        'zipcode': user_data.zip_code,
+        'zipcode': "\'" + user_data.zip_code,  # TODO: per discussion, ' was added to help export. Find another way
         'country': user_data.country
     }
     return user_json

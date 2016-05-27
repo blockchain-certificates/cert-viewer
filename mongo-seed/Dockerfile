@@ -10,6 +10,6 @@ CMD mongorestore --host mongodb --db admin /dump/admin/
 # example:
 # COPY recipients.json /recipients.json
 # COPY certificates.json /certificates.json
-# CMD mongoimport --host mongodb --db admin --collection recipients --type json --file /recipients.json --jsonArray
-# CMD mongoimport --host mongodb --db admin --collection certificates --type json --file /certificates.json --jsonArray
+# CMD mongoimport --db admin --collection recipients --type json --file recipients.json --jsonArray
+# CMD mongoimport --db admin --collection certificates --type json --file certificates.json --jsonArray
 
