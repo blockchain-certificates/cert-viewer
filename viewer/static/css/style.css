@@ -1,243 +1,56 @@
-/*
- * global styles for certs.media
- */
 
-
-/* FONT */
-
-@font-face {
-  font-family: Neue Haas Grotesk Light;
-  font-weight: 350;
-  src: url("/static/fonts/NHaasGroteskDSPro-35XLt.otf") format("opentype");
+.verified{
+	display: block;
+	font-size: 12px;
+	color: rgba(0,0,0,.6);
+	margin-left: -16px;
 }
 
-@font-face {
-  font-family: Neue Haas Grotesk;
-  font-weight: 550;
-  src: url("/static/fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
+.success{
+	background-image: url("/static/img/verified.svg");
+	background-repeat: no-repeat;
+	background-size: 17px;
+	padding-left: 20px;
+	margin-left: 8px;
 }
 
-@font-face {
-  font-family: Neue Haas Grotesk Bold;
-  font-weight: 750;
-  src: url("/static/fonts/NHaasGroteskDSPro-75Bd.otf") format("opentype");
+
+.issuer-logo{margin-bottom: 30px;max-width: 350px;}
+.issuer-logo img{width: 100%;}
+.certificate-owner{margin-bottom: 15px;}
+.certificate-meta{font-size: 1.85rem;line-height: 1.4;font-weight: 400;letter-spacing: -0.05rem;}
+.issuer-name{display: block;}
+.date-span{display: block;}
+
+.main-content{margin: 80px auto 0 auto;}
+
+.contact-information{margin-top: 2rem;}
+.contact-information li {list-style-type: none;padding-left: 28px; background-repeat: no-repeat; background-size: 18px; background-position-y: 5px; }
+.contact-information li.location{background-image: url("/static/img/location.svg");}
+.contact-information li.link{background-image: url("/static/img/link.svg");}
+.contact-information li.email{background-image: url("/static/img/email.svg");}
+.contact-information a{color: #000;}
+
+.description{margin-top: 3rem;font-weight: 200;}
+
+.public-key, .blockchain-address, .done-verifying{margin-top: 12px; overflow-wrap:break-word;}
+.done-verifying{text-align: center; top: 48px;}
+.verify{margin: 48px 0 24px 0;font-size: 1.3rem;}
+.verify p{margin-bottom: 10px;}
+.verified, .not-verified{display: inline;margin-left: 12px;font-weight: bold;color: #000;}
+.verified img, .not-verified img{width: 20px;top:5px; position: relative;}
+.not-verified{color: #D80028;}
+ul.verifying{
+	list-style-type: none;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 12px;
+	margin-bottom: 24px;
+	margin-top: 12px;
 }
+.public-key, .blockchain-address{font-size: 1.3rem;}
 
-/* GLOBAL STYLES */
 
-body{
-  font-family: Neue Haas Grotesk, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  padding: 35px;
-}
 
-a,
-a:hover,
-a:focus{
-  color: #333;
-  text-decoration: underline;
-}
 
-a:hover,a:focus{
-  text-decoration: underline;
-}
-
-a.no-decoration{
-  text-decoration: none !important;
-}
-
-/* Custom default button */
-.btn-default,
-.btn-default:hover,
-.btn-default:focus {
-  color: #fff;
-  text-shadow: none; /* Prevent inheritence from `body` */
-  background-color: #222;
-  border: 1px solid #222;
-  border-radius: 0px;
-}
-
-.font-light{
-  font-family: Neue Haas Grotesk Light, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-.font-bold{
-  font-family: Neue Haas Grotesk Bold, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-}
-
-.no-wrap{
-  white-space: nowrap;
-}
-
-.long-word{
-  word-wrap: break-word;
-}
-
-.btn-margin{
-  margin-top: 10px;
-}
-
-.errors{
-  color: #8B0000;
-}
-
-.notice-text{
-  color: #8B0000;
-  font-weight: bold;
-}
-
-.heading{
-  margin-top: 25px;
-  margin-bottom: 10px;
-}
-
-.description{
-  line-height: 1.3;
-  margin-top: -4px;
-}
-
-.hash{
-  line-height: 1.2;
-}
-
-.form-text{
-  margin-top: 5px;
-}
-
-.show-later{
-  display: none;
-}
-
-.no-padding-col{
-  padding: 0px;
-}
-
-.radio-label{
-  font-size: 18px;
-  padding-left: 0px !important;
-}
-
-.radio-error{
-  margin-top: -12px;
-}
-
-.name{
-  margin-top: 35px;
-  margin-bottom: 15px;
-}
-
-input.form-control{
-  -webkit-appearance: none;
-}
-
-#footer-info{
-  margin-top: 20px;
-}
-
-  
-/* Hiding default checkbox and Radio button design */
-input[type=radio] {
-    opacity: 0;
-    position: absolute;
-    z-index: 12;
-    width: 18px;
-    height: 18px;
-}
- 
-/* Disable outline when clicked*/
-input[type=radio]:checked,input[type=radio]:focus {
-    outline: none !important;
-}
- 
-input[type=radio]+.lbl {
-    position: relative;
-    z-index: 11;
-    display: inline-block;
-    margin: 0;
-    line-height: 20px;
-    min-height: 14px;
-    min-width: 14px;
-    font-weight: normal;
-}
-
-/* Basic Checkbox styles */
-input[type=radio]+.lbl::before {
-  content: url('../img/radio.png');
-  border-radius: 0;
-  display: inline-block;
-  text-align: center;
-  vertical-align: middle;
-  height: 13px;
-  line-height: 1px;
-  min-width: 13px;
-  margin-right: 1px;
-  margin-top: -7px;
-}
-
-/* Checked state styles */
-input[type=radio]:checked+.lbl::before {
-  display: inline-block;
-  content: url('../img/radio-selected.png');
-  background-color: #F5F8FC;
-  border-color: #adb8c0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05),inset 15px 10px -12px rgba(255, 255, 255, 0.1);
-}
-
-/* Hover state styles */
-input[type=radio]:hover+.lbl::before,input[type=radio]+.lbl:hover::before {
-  border-color: #1c7aad;
-}
-
-/* Shadow when checked or Active */
-input[type=radio]:active+.lbl::before,input[type=radio]:checked:active+.lbl::before {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),inset 0px 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Disabled state styles */
-input[type=radio]:disabled+.lbl::before,input[type=radio][disabled]+.lbl::before,input[type=radio].disabled+.lbl::before {
-  background-color: #DDD !important;
-  border-color: #CCC !important;
-  box-shadow: none !important;
-  color: #BBB;
-}
-
-/* Styles for Radio button */
-input[type=radio]+.lbl::before {
-  border-radius: 32px;
-  font-family: Arial,Helvetica,sans-serif;
-  font-size: 36px;
-}
-
-input[type=radio]:checked+.lbl::before {
-  content: url('../img/radio-selected.png');
-}
-
-input[type=radio]+.lbl.padding-8::before {
-    margin-right: 8px;
-}
-
-@media print {
-    div.divToPrint {
-        background-color: white;
-        position: fixed;
-        margin: 0;
-    }
-
-    #logo{
-      width: 100px;
-    }
-
-    a[href]:after {
-      content: none !important;
-    }
-
-    .hide-on-print{
-      display: none;
-    }
-}
-
-@page {
-    size: auto;   /* auto is the initial value */
-    margin: 0;  /* this affects the margin in the printer settings */
-}
 
 

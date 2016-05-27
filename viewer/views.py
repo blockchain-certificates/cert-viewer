@@ -85,41 +85,9 @@ def get_award(identifier=None):
     if award and format == "json":
         return award
     if award:
-        return render_template('award.html', award=award, verification_info=urlencode(verification_info))
+        return render_template('award_lm.html', award=award, verification_info=urlencode(verification_info))
 
     return "Sorry, this page does not exist.", 404
-
-
-@app.route('/bitcoinkeys', methods=['GET'])
-def generate_keys():
-    """
-    Create Bitcoin identity for a user so they can request a certificate
-    :return:
-    """
-
-    return render_template('bitcoinkeys.html')
-
-
-@app.route('/request', methods=['GET', 'POST'])
-def request_page():
-    """Request a certificate"""
-    form = RegistrationForm(request.form)
-    bitcoin = BitcoinForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
-                             form.first_name.data, form.last_name.data, form.address.data, form.city.data,
-                             form.state.data, form.zipcode.data, form.country.data)
-
-        sent = certificate_service.request_certificate(user_data)
-        logging.debug('finished requesting certificate')
-        hidden_email = ui_helpers.obfuscate_email_display(user_data.email)
-        if sent:
-            flash('We just sent a confirmation email to %s.' % hidden_email)
-        else:
-            flash('We received your request and will respond to %s.' % hidden_email)
-        return redirect(url_for('home_page'))
-
-    return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
 
 
 @app.route("/verify")

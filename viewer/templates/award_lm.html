@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <title>Verified Certificate</title>
+  <meta name="description" content="Verified Digital Certificate by Learning Machine">
+  <meta name="author" content="Learning Machine">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/static/img/favicon.png">
+
+</head>
+<body>
+
+
+  <!-- Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <div class="container">
+    
+      <div class="issuer-logo">
+        <img src="/static/img/learning-machine.jpg"/>
+      </div>
+
+      <div class="certificate-owner">
+        <h1>{{award.name}}</h1>
+      </div>
+
+      <div class="certificate-meta">
+        <span class="certificate-name">{{award.title}}</span>
+        <span class="issuer-name">{{award.organization}}</span>
+        <span class="date-span">{{award.subtitle}}</span>
+      </div>
+
+      <div class="description">
+        <p>{{award.text}}</p>
+      </div>
+
+      <div class="contact-information">
+        <ul>
+          <li class="location"><a href="">Cambridge, MA</a></li>
+          <li class="link"><a href="">Learningmachine.com</a></li>
+          <li class="email"><a href="">info@learningmachine.com</a></li>
+        </ul>
+      </div>
+
+      <div class="verify">
+        <p>This certificate was digitally signed by Learning Machine and registered on the Bitcoin blockchain.</p>
+        <button> Verify certificate</button>
+        <span class="verified"><img id="verified-icon" src="/static/img/verified.svg"> Verified </span>
+        <span class="not-verified"><img id="verified-icon" src="/static/img/not-verified.svg"> Not Verified </span>
+        
+        <ul class="verifying">
+            <li>Step 1 of 5... Computing SHA256 digest of local certificate [DONE]</li>
+            <li>Step 2 of 5... Fetching hash in OP_RETURN field [DONE]</li>
+            <li>Step 3 of 5... Comparing local and blockchain hashes [PASS]</li>
+            <li>Step 4 of 5... Checking Media Lab signature [PASS]</li>
+            <li>Step 5 of 5... Checking not revoked by issuer [PASS]</li>
+            <li>Success! The certificate has been verified.</li>
+        </ul>
+      </div>
+
+      <div class="public-key">
+        <strong>Public Key:</strong> <span class="key">{{award.publicKeyURL}}</span>
+      </div>
+
+      <div class="row blockchain-address">
+        <strong>Blockchain Address:</strong> <span class="address">{{award.transactionIDURL}}</span>
+      </div>
+
+  </div>
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
