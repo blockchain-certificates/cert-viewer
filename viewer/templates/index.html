@@ -1,49 +1,17 @@
-
-{% block css %}
-  <link href="/static/css/index.css" rel="stylesheet">
-{% endblock %}
+{% extends "layout.html" %}
 
 {% block content %}
-{% with messages = get_flashed_messages() %}
-<div class="row">
-  <div class="col-md-2 col-sm-2 col-xs-4">
-    <img src="/static/img/logo.png" class="img-responsive" alt="Your logo"/>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <h3 class="heading font-bold name">Digital Certificates Viewer</h3>
-    <p class="description font-light">
-        <a href="https://hr.learningmachine.com/133d92fd32cc06bd63d3a653">Chris</a><br>
-        <a href="https://hr.learningmachine.com/1973d69f43d78eebb27b476a">Paul</a><br>
-        <a href="https://hr.learningmachine.com/28801c249f715c1d794f4e23">Dan</a><br>
-        <a href="https://hr.learningmachine.com/29bfb45963e03e87c5e8adf7">Randy</a><br>
-        <a href="https://hr.learningmachine.com/3630d05812476e64f2d3a64b">Justin</a><br>
-        <a href="https://hr.learningmachine.com/384a52daa37f1bc704b5e085">Brian</a><br>
-        <a href="https://hr.learningmachine.com/3ef0aed1b5aefc2766a05c52">Adan</a><br>
-        <a href="https://hr.learningmachine.com/4537b5913f26cbd4d0593fa0">Matthieu</a><br>
-        <a href="https://hr.learningmachine.com/4cef37216bce47fab444e9ce">Philip</a><br>
-        <a href="https://hr.learningmachine.com/4f4ce4b4ae5f57da2e8d7f88">Ted</a><br>
-        <a href="https://hr.learningmachine.com/61db7ef11a1897fb1f7b8baa">Dimi</a><br>
-        <a href="https://hr.learningmachine.com/72c66131f89b39c243b40983">Natalie</a><br>
-        <a href="https://hr.learningmachine.com/7713c6a7e21443703d863dcd">Chad</a><br>
-        <a href="https://hr.learningmachine.com/7c1891b6c41887a67f1a46b1">Josh</a><br>
-        <a href="https://hr.learningmachine.com/a3059aab8b62548f2b7911d5">Kim</a><br>
-        <a href="https://hr.learningmachine.com/c83013081cb4c0c4af87f7b8">Ryan</a><br>
-        <a href="https://hr.learningmachine.com/d065a9de49f49600b3e4aa6a">Eric</a><br>
-        <a href="https://hr.learningmachine.com/dfe939b6202751de857fcb7b">Derek</a><br>
-    </p>
-    <h3 class="heading font-bold">Recently Issued</h3> 
-    {% for certid in recent_certids %}
-    <p class="description font-light long-word">
-      <a href="/{{certid}}">{{certid}}</a>
-    </p>
-    {% endfor %}
+
+  <div class="container">
+
+      <div class="issuer-logo">
+        <img src="/static/img/lm.jpg"/>
+      </div>
+
+      <div class="certificate-owner">
+        <h1>Learning Machine</h1>
+      </div>
 
   </div>
-</div>
-{% endwith %}
-{% endblock %}
 
-{% block scripts %}
 {% endblock %}

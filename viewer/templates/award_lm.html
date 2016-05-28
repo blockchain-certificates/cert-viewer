@@ -1,33 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "layout.html" %}
 
-  <meta charset="utf-8">
-  <title>Verified Certificate</title>
-  <meta name="description" content="Verified Digital Certificate by Learning Machine">
-  <meta name="author" content="Learning Machine">
+{% block title %}
+Verified Certificate
+{% endblock %}
 
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="/static/css/normalize.css">
-  <link rel="stylesheet" href="/static/css/base.css">
-  <link rel="stylesheet" href="/static/css/style.css">
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="/static/img/favicon.png">
-
-</head>
-<body>
-
-
+{% block content %}
   <!-- Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-
   <div class="container">
 
       <div class="issuer-logo">
@@ -50,9 +29,9 @@
 
       <div class="contact-information">
         <ul>
-          <li class="location"><a href="">Cambridge, MA</a></li>
-          <li class="link"><a href="">Learningmachine.com</a></li>
-          <li class="email"><a href="">info@learningmachine.com</a></li>
+          <li class="location">Cambridge, MA</li>
+          <li class="link"><a href="http://www.learningmachine.com" target="_blank">Learningmachine.com</a></li>
+          <li class="email"><a href="mailto:info@learningmachine.com">info@learningmachine.com</a></li>
         </ul>
       </div>
 
@@ -81,11 +60,8 @@
       </div>
 
   </div>
+{% endblock %}
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+{% block scripts %}
   <script src="/static/js/verification.js"></script>
-
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-</body>
-</html>
+{% endblock %}
