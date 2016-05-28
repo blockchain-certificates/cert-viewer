@@ -42,7 +42,7 @@ def gfs_file_to_award(gfs_file, pubkey_content, certificate):
         'display': json_certificate['certificate']['subtitle']['display'],
         'organization': json_certificate['certificate']['issuer']['name'],
         'text': json_certificate['certificate']['description'],
-        'signatureImg': json_certificate['assertion']['image:signature'],
+        #'signatureImg': json_certificate['assertion']['image:signature'],
         'publicKey': pubkey_content,
         'publicKeyURL': json_certificate['verify']['signer'],
         'transactionID': parse_txid(certificate),
