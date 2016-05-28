@@ -52,5 +52,12 @@ ul.verifying{
 
 
 
+#verified, #not-verified{
+	display: none;
+}
+
+#progress-msg{
+  display: none;
+}
 
 

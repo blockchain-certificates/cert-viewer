@@ -29,7 +29,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
   <div class="container">
-    
+
       <div class="issuer-logo">
         <img src="/static/img/lm.jpg"/>
       </div>
@@ -58,11 +58,11 @@
 
       <div class="verify">
         <p>This certificate was digitally signed by Learning Machine and registered on the Bitcoin blockchain.</p>
-        <button> Verify certificate</button>
-        <span class="verified"><img id="verified-icon" src="/static/img/verified.svg"> Verified </span>
-        <span class="not-verified"><img id="verified-icon" src="/static/img/not-verified.svg"> Not Verified </span>
-        
-        <ul class="verifying">
+        <button id="verify-button" value="{{verification_info}}">Verify certificate</button>
+        <span id="verified" class="verified"><img id="verified-icon" src="/static/img/verified.svg"> Verified </span>
+        <span id="not-verified" class="not-verified"><img id="not-verified-icon" src="/static/img/not-verified.svg"> Not Verified </span>
+
+        <ul id="progress-msg" class="verifying">
             <li>Step 1 of 5... Computing SHA256 digest of local certificate [DONE]</li>
             <li>Step 2 of 5... Fetching hash in OP_RETURN field [DONE]</li>
             <li>Step 3 of 5... Comparing local and blockchain hashes [PASS]</li>
@@ -82,6 +82,8 @@
 
   </div>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="/static/js/verification.js"></script>
 
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
