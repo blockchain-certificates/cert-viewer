@@ -52,11 +52,12 @@ Verified Certificate
       </div>
 
       <div class="public-key">
-        <strong>Public Key:</strong> <span class="key">{{award.publicKeyURL}}</span>
+        <strong>Public Key:</strong> <span class="key"><a href="{award.publicKeyURL}}">{award.publicKeyURL}}</a></span>
       </div>
 
       <div class="row blockchain-address">
-        <strong>Blockchain Address:</strong> <span class="address">{{award.transactionIDURL}}</span>
+        <strong>Blockchain Address:</strong> <span class="address">
+          <a href="{{award.transactionIDURL}}">{{award.transactionIDURL}}</a> </span>
       </div>
 
   </div>
