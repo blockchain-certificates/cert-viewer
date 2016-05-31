@@ -1,77 +1,77 @@
-cert-viewer package
+cert_viewer package
 ==============
 
 Submodules
 ----------
 
-cert-viewer.certificate_store module
+cert_viewer.certificate_store module
 -------------------------------
 
-.. automodule:: cert-viewer.certificate_store
+.. automodule:: cert_viewer.certificate_store
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.config module
+cert_viewer.config module
 --------------------
 
-.. automodule:: cert-viewer.config
+.. automodule:: cert_viewer.config
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.formatters module
+cert_viewer.formatters module
 ------------------------
 
-.. automodule:: cert-viewer.formatters
+.. automodule:: cert_viewer.formatters
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.forms module
+cert_viewer.forms module
 -------------------
 
-.. automodule:: cert-viewer.forms
+.. automodule:: cert_viewer.forms
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.models module
+cert_viewer.models module
 --------------------
 
-.. automodule:: cert-viewer.models
+.. automodule:: cert_viewer.models
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.notifier module
+cert_viewer.notifier module
 ----------------------
 
-.. automodule:: cert-viewer.notifier
+.. automodule:: cert_viewer.notifier
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.ui_helpers module
+cert_viewer.ui_helpers module
 ------------------------
 
-.. automodule:: cert-viewer.ui_helpers
+.. automodule:: cert_viewer.ui_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.verification_helpers module
+cert_viewer.verification_helpers module
 ----------------------------------
 
-.. automodule:: cert-viewer.verification_helpers
+.. automodule:: cert_viewer.verification_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-cert-viewer.views module
+cert_viewer.views module
 -------------------
 
-.. automodule:: cert-viewer.views
+.. automodule:: cert_viewer.views
     :members:
     :undoc-members:
     :show-inheritance:
@@ -80,7 +80,7 @@ cert-viewer.views module
 Module contents
 ---------------
 
-.. automodule:: cert-viewer
+.. automodule:: cert_viewer
     :members:
     :undoc-members:
     :show-inheritance:
