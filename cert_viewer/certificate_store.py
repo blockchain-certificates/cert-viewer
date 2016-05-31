@@ -36,7 +36,7 @@ class CertificateStore:
         """Request a certificate
 
         :param user_data: User data
-        :type user_data: viewer.models.UserData
+        :type user_data: cert_viewer.models.UserData
 
         """
         # check if we already have a user associated with the public key

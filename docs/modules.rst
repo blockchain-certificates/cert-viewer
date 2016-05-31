@@ -1,7 +1,7 @@
-viewer
-======
+cert_viewer
+===========
 
 .. toctree::
    :maxdepth: 4
 
-   viewer
+   cert_viewer

@@ -1,77 +1,77 @@
-viewer package
+cert-viewer package
 ==============
 
 Submodules
 ----------
 
-viewer.certificate_store module
+cert-viewer.certificate_store module
 -------------------------------
 
-.. automodule:: viewer.certificate_store
+.. automodule:: cert-viewer.certificate_store
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.config module
+cert-viewer.config module
 --------------------
 
-.. automodule:: viewer.config
+.. automodule:: cert-viewer.config
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.formatters module
+cert-viewer.formatters module
 ------------------------
 
-.. automodule:: viewer.formatters
+.. automodule:: cert-viewer.formatters
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.forms module
+cert-viewer.forms module
 -------------------
 
-.. automodule:: viewer.forms
+.. automodule:: cert-viewer.forms
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.models module
+cert-viewer.models module
 --------------------
 
-.. automodule:: viewer.models
+.. automodule:: cert-viewer.models
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.notifier module
+cert-viewer.notifier module
 ----------------------
 
-.. automodule:: viewer.notifier
+.. automodule:: cert-viewer.notifier
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.ui_helpers module
+cert-viewer.ui_helpers module
 ------------------------
 
-.. automodule:: viewer.ui_helpers
+.. automodule:: cert-viewer.ui_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.verification_helpers module
+cert-viewer.verification_helpers module
 ----------------------------------
 
-.. automodule:: viewer.verification_helpers
+.. automodule:: cert-viewer.verification_helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-viewer.views module
+cert-viewer.views module
 -------------------
 
-.. automodule:: viewer.views
+.. automodule:: cert-viewer.views
     :members:
     :undoc-members:
     :show-inheritance:
@@ -80,7 +80,7 @@ viewer.views module
 Module contents
 ---------------
 
-.. automodule:: viewer
+.. automodule:: cert-viewer
     :members:
     :undoc-members:
     :show-inheritance:

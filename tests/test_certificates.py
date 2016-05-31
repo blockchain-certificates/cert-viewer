@@ -2,8 +2,8 @@ import unittest
 
 import mock
 import mongomock
-from viewer.certificate_store import CertificateStore
-from viewer.models import UserData
+from cert_viewer.certificate_store import CertificateStore
+from cert_viewer.models import UserData
 from mock import Mock
 from pymongo.results import InsertOneResult
 

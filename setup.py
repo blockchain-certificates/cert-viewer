@@ -7,14 +7,14 @@ with open(os.path.join(here, 'README.md')) as f:
     README = f.read()
 
 setup(
-    name='viewer',
+    name='cert-viewer',
     version='0.0.1',
-    url='https://github.com/digital-certificates/viewer',
+    url='https://github.com/digital-certificates/cert-viewer',
     license='MIT',
     author='MIT Media Lab Digital Certificates',
     author_email='coins@media.mit.edu',
     description='',
-    packages=['viewer'],
+    packages=['cert_viewer'],
     include_package_data=True,
     install_requires=[
         'docopt==0.4.0',

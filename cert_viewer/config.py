@@ -53,7 +53,7 @@ def get_key_by_name(key_name):
     key_mappings = {pubkey: "issuer_key", revokekey: "revocation_key"}
     issuer_path = get_config().get('keys', 'MLISSUER_PATH')
     # TODO: load this through flask at startup
-    issuer_file = read_file(os.path.join(BASE_DIR, 'viewer', issuer_path))
+    issuer_file = read_file(os.path.join(BASE_DIR, 'issuer', issuer_path))
     issuer = json.loads(issuer_file)
     address = key_mappings.get(key_name, None)
     return issuer[address][0]["key"]

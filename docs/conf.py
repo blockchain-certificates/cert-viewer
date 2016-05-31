@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# viewer documentation build configuration file, created by
+# cert-viewer documentation build configuration file, created by
 # sphinx-quickstart on Tue May 24 12:06:50 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -61,7 +61,7 @@ source_parsers = {
 master_doc = 'index'
 
 # General information about the project.
-project = 'viewer'
+project = 'cert-viewer'
 copyright = '2016, MIT Media Lab Digital Certificates'
 author = 'MIT Media Lab Digital Certificates'
 
@@ -136,7 +136,7 @@ todo_include_todos = True
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-#html_title = 'viewer v0.0.1'
+#html_title = 'cert-viewer v0.0.1'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -240,7 +240,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'viewer.tex', 'viewer Documentation',
+    (master_doc, 'cert-viewer.tex', 'cert-viewer Documentation',
      'MIT Media Lab Digital Certificates', 'manual'),
 ]
 
@@ -270,7 +270,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'viewer', 'viewer Documentation',
+    (master_doc, 'cert-viewer', 'cert-viewer Documentation',
      [author], 1)
 ]
 
@@ -284,8 +284,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'viewer', 'viewer Documentation',
-     author, 'viewer', 'One line description of project.',
+    (master_doc, 'cert-viewer', 'cert-viewer Documentation',
+     author, 'cert-viewer', 'One line description of project.',
      'Miscellaneous'),
 ]
 
