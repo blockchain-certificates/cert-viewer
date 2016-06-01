@@ -35,19 +35,19 @@ class TestCertificates(unittest.TestCase):
         self.test_doc_id = self.certificate_store.insert_certificate({'aa': 'bb', 'issued': True, 'pubkey': 'K1'})
         self.certificate_store.insert_user({'pubkey': 'K1'})
 
-        res = self.certificate_store.find_certificate_by_certificate_uid(self.test_doc_id)
+        res = self.certificate_store.find_certificate_by_uid(self.test_doc_id)
 
         self.assertEqual(res['_id'], self.test_doc_id)
         self.assertEqual(res['aa'], 'bb')
         self.assertEqual(res['issued'], True)
 
     def test_find_user_by_uid_none(self):
-        res = self.certificate_store.find_certificate_by_certificate_uid(None)
+        res = self.certificate_store.find_certificate_by_uid(None)
 
         self.assertIsNone(res)
 
     def test_find_user_by_uid_no_match(self):
-        res = self.certificate_store.find_certificate_by_certificate_uid('111111111111111111111111')
+        res = self.certificate_store.find_certificate_by_uid('111111111111111111111111')
 
         self.assertIsNone(res)
 

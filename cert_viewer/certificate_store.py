@@ -1,20 +1,18 @@
 """Retrieves certificates from mongodb and stores certificate requests.  """
 import logging
 
-
+import gridfs
 from bson.objectid import ObjectId
 from pymongo import MongoClient
-import gridfs
 from . import config
 from . import formatters
-from .notifier import Notifier
 from . import verification_helpers
+from .notifier import Notifier
 
 CONFIG_SECTION = 'certificates'
 
 
 class CertificateStore:
-
     def __init__(self,
                  client=None,
                  gfs=None,
@@ -26,7 +24,9 @@ class CertificateStore:
         :param notifier: notifier
 
         """
-        self.client = client or MongoClient(host=config.get_config().get(CONFIG_SECTION, 'MONGO_URI'))
+        self.client = client or MongoClient(
+            host=config.get_config().get(
+                CONFIG_SECTION, 'MONGO_URI'))
         certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
         self.gfs = gfs or gridfs.GridFS(self.client[certificates_db_name])
         self.db = self.client[certificates_db_name]
@@ -46,23 +46,30 @@ class CertificateStore:
             self.create_user(user_data)
         self.create_certificate_request(user_data.pubkey)
         logging.debug('Created certificate request; sending notification')
-        sent = self.notifier.notify(user_data.email, user_data.first_name, user_data.last_name)
+        sent = self.notifier.notify(
+            user_data.email,
+            user_data.first_name,
+            user_data.last_name)
         logging.debug('Finished requesting certificate')
         return sent
 
-    def get_formatted_certificate(self, certificate_uid, format):
+    def get_formatted_certificate(self, certificate_uid, requested_format):
         logging.debug('Retrieving certificate for uid=%s', certificate_uid)
         award = None
         verification_info = None
-        certificate = self.find_certificate_by_certificate_uid(uid=certificate_uid)
+        certificate = self.find_certificate_by_uid(uid=certificate_uid)
         if certificate:
-            if format == "json":
-                award = self.find_file_in_gridfs(formatters.certificate_to_filename(certificate))
+            if requested_format == "json":
+                award = self.find_file_in_gridfs(
+                    formatters.certificate_to_filename(certificate))
                 verification_info = None
             else:
-                award, verification_info = self.get_award_and_verification_for_certificate(certificate)
+                award, verification_info = self.get_award_and_verification_for_certificate(
+                    certificate)
         else:
-            logging.warning('Certificate metadata not found for certificate uid=%s', certificate_uid)
+            logging.warning(
+                'Certificate metadata not found for certificate uid=%s',
+                certificate_uid)
 
         if certificate and not award:
             logging.error('Problem looking up certificate for certificate uid=%s, '
@@ -77,12 +84,14 @@ class CertificateStore:
             return None, None
 
         pubkey_content = config.get_key_by_type('CERT_PUBKEY')
-        award = formatters.gfs_file_to_award(gfs_file, pubkey_content, certificate)
+        award = formatters.gfs_file_to_award(
+            gfs_file, pubkey_content, certificate)
         verification_info = formatters.format_verification_info(certificate)
         return award, verification_info
 
     def verify(self, transaction_id, uid):
-        signed_local_file = self.find_file_in_gridfs(formatters.certificate_uid_to_filename(uid))
+        signed_local_file = self.find_file_in_gridfs(
+            formatters.certificate_uid_to_filename(uid))
         if not signed_local_file:
             return False
         return verification_helpers.verify(transaction_id, signed_local_file)
@@ -90,26 +99,36 @@ class CertificateStore:
     def find_certificate_by_txid(self, txid):
         certificate = None
         if txid:
-            certificate = self.db.certificates.find_one({'txid': txid, 'issued': True})
+            certificate = self.db.certificates.find_one(
+                {'txid': txid, 'issued': True})
         return certificate
 
-    def find_certificate_by_certificate_uid(self, uid=None):
+    def find_certificate_by_uid(self, uid=None):
+        """
+        Find certificate by certificate uid
+        :param uid: certificate uid
+        :return: certificate from certificates collection
+        """
         certificate = None
         if uid:
-            certificate = self.db.certificates.find_one({'_id': ObjectId(uid), 'issued': True})
+            certificate = self.db.certificates.find_one(
+                {'_id': ObjectId(uid), 'issued': True})
         return certificate
 
     def find_recipient_by_pub_key(self, pubkey):
         return self.db.recipients.find_one({'pubkey': pubkey})
 
     def find_user_and_certificate_by_pubkey(self, pubkey):
-        # if certificate is missing pubkey, it will be returned by the filter below.
+        # if certificate is missing pubkey, it will be returned by the filter
+        # below.
         if pubkey is None:
             return None, None
         user = self.find_recipient_by_pub_key(pubkey)
-        certificates = self.db.certificates.find({'pubkey': pubkey, 'issued': True})
+        certificates = self.db.certificates.find(
+            {'pubkey': pubkey, 'issued': True})
         if user:
-            user['_id'] = formatters.parse_user_uid(user)  # TODO: create new object instead of overwriting
+            # TODO: create new object instead of overwriting
+            user['_id'] = formatters.parse_user_uid(user)
         if certificates:
             certificates = list(certificates)
         return user, certificates

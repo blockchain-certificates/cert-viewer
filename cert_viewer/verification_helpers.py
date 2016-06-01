@@ -1,27 +1,33 @@
 from __future__ import absolute_import, division, unicode_literals
 
-import hashlib
 import json
 import logging
 
+import hashlib
 import requests
 from bitcoin.signmessage import BitcoinMessage, VerifyMessage
 from . import config
 from .ui_helpers import unhexlify, hexlify
-from functools import partial
+from .errors import InvalidTransactionError
 
 
 def verify(transaction_id, signed_local_file):
     signed_local_json = json.loads(signed_local_file)
-    r = requests.get("https://blockchain.info/rawtx/%s?cors=true" % transaction_id)
+    r = requests.get(
+        "https://blockchain.info/rawtx/%s?cors=true" %
+        transaction_id)
     verify_response = []
     verified = False
     if r.status_code != 200:
-        logging.error('Error looking up by transaction_id=%s, status_code=%d', transaction_id, r.status_code)
+        logging.error(
+            'Error looking up by transaction_id=%s, status_code=%d',
+            transaction_id,
+            r.status_code)
         verify_response.append(('Looking up by transaction_id', False))
         verify_response.append(("Verified", False))
     else:
-        verify_response.append(("Computing SHA256 digest of local certificate", "DONE"))
+        verify_response.append(
+            ("Computing SHA256 digest of local certificate", "DONE"))
         verify_response.append(("Fetching hash in OP_RETURN field", "DONE"))
         remote_json = r.json()
 
@@ -29,7 +35,8 @@ def verify(transaction_id, signed_local_file):
         local_hash = compute_hash(signed_local_file)
         remote_hash = fetch_hash_from_chain(remote_json)
         compare_hash_result = compare_hashes(local_hash, remote_hash)
-        verify_response.append(("Comparing local and blockchain hashes", compare_hash_result))
+        verify_response.append(
+            ("Comparing local and blockchain hashes", compare_hash_result))
 
         # check author
         issuing_address = config.get_key_by_type('CERT_PUBKEY')
@@ -48,18 +55,21 @@ def verify(transaction_id, signed_local_file):
 
 
 def get_hash_from_bc_op(tx_json):
-    tx_outs = tx_json["out"]
+    tx_outs = tx_json['out']
+    op_tx = None
     for o in tx_outs:
-        if int(o.get("value", 1)) == 0:
+        if int(o.get('value', 1)) == 0:
             op_tx = o
-    hashed_json = unhexlify(op_tx["script"])
+    if not op_tx:
+        raise InvalidTransactionError('transaction is missing op_return ')
+    hashed_json = unhexlify(op_tx['script'])
     return hashed_json
 
 
 def check_revocation(tx_json, revoke_address):
-    tx_outs = tx_json["out"]
+    tx_outs = tx_json['out']
     for o in tx_outs:
-        if o.get("addr") == revoke_address and o.get("spent") == False:
+        if o.get('addr') == revoke_address and o.get('spent') is False:
             return True
     return False
 

@@ -1,17 +1,17 @@
 import logging
-import os
 
+import os
+from flask import Flask
 from . import config
 from .certificate_store import CertificateStore
-from .models import UserData
 from .forms import RegistrationForm, BitcoinForm
-from flask import Flask
+from .models import UserData
 
 app = Flask(__name__)
 
 app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
 
-certificate_service = CertificateStore()
+cert_store = CertificateStore()
 
 
 def initialize_logger():
@@ -29,17 +29,20 @@ def initialize_logger():
     logger.addHandler(handler)
 
     # create file handler and set level to info
-    handler = logging.FileHandler(os.path.join(log_output_dir, log_file_name), "w", encoding=None, delay="true")
+    handler = logging.FileHandler(
+        os.path.join(
+            log_output_dir,
+            log_file_name),
+        "w",
+        encoding=None,
+        delay="true")
     handler.setLevel(logging.INFO)
     formatter = logging.Formatter("%(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+
 initialize_logger()
 
 # keep here to avoid circular dependencies
 from . import views
-
-
-
-

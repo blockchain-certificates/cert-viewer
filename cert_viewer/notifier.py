@@ -9,21 +9,27 @@ CONFIG_SECTION = 'certificates'
 class Notifier(object):
     def factory():
         notifier = config.get_config().get(CONFIG_SECTION, 'NOTIFIER_TYPE')
-        if notifier == 'mail': return Mail()
-        if notifier == 'noop': return NoOp()
-        assert 0, "Unrecognized notifier type: " + type
+        if notifier == 'mail':
+            return Mail()
+        if notifier == 'noop':
+            return NoOp()
+        assert 0, "Unrecognized notifier type: " + notifier
+
     factory = staticmethod(factory)
 
 
 class NoOp(Notifier):
     def notify(self, recipient_email, first_name, last_name):
-        logging.warning('A notification would have been sent to first_name=%s,last_name=%s,email=%s, but no notifier is configured',
-                        first_name, last_name, recipient_email)
+        logging.warning(
+            'A notification would have been sent to first_name=%s,last_name=%s,email=%s, but no notifier is configured',
+            first_name, last_name, recipient_email)
         return False
+
 
 class Mail(Notifier):
     def __init__(self):
-        self.mandrill_api_key = config.get_config().get(CONFIG_SECTION, 'MANDRILL_API_KEY')
+        self.mandrill_api_key = config.get_config().get(
+            CONFIG_SECTION, 'MANDRILL_API_KEY')
         self.subject = config.get_config().get(CONFIG_SECTION, 'SUBJECT')
         self.from_email = config.get_config().get(CONFIG_SECTION, 'FROM_EMAIL')
         self.from_name = config.get_config().get(CONFIG_SECTION, 'FROM_NAME')
@@ -55,7 +61,9 @@ class Mail(Notifier):
                                                             async=False)
             return result
         except mandrill.Error as e:
-            error_message = 'A mandrill error occurred: %s - %s' % (e.__class__, e)
+            error_message = 'A mandrill error occurred: %s - %s' % (
+                e.__class__, e)
             logging.exception(error_message, e)
-            # A mandrill error occurred: <class 'mandrill.InvalidKeyError'> - Invalid API key
+            # A mandrill error occurred: <class 'mandrill.InvalidKeyError'> -
+            # Invalid API key
             raise
