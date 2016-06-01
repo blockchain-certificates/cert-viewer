@@ -1,7 +1,7 @@
 FROM mongo
 
 COPY dump /dump
-CMD mongorestore --host mongodb --db admin /dump/admin/
+CMD mongorestore --host mongodb --db admin /dump/
 
 # Note: the recipient and certificate files are currently here for reference only. Because we're storing the
 # certificates in gridfs, we need to use mongodump and mongorestore to load sample data.

@@ -18,28 +18,21 @@ def create_config(config_file=None):
     parser = ConfigParser()
     config_env = os.environ.get('CONFIG_FILE', DEFAULT_CONFIG_FILE)
     config_files = []
-    if config_file:
-        config_files.append(config_file)
+    config_files.append(TEST_CONFIG_FILE)
+    config_files.append(DEFAULT_CONFIG_FILE)
     if config_env:
         config_files.append(config_env)
+    if config_file:
+        config_files.append(config_file)
 
-    config_files.append(DEFAULT_CONFIG_FILE)
-    config_files.append(TEST_CONFIG_FILE)
     parser.read(config_files)
     return parser
 
 
-CONFIG = create_config()
-
-
 def read_file(path):
-    with(path) as f:
+    with open(path) as f:
         data = f.read()
     return data
-
-
-def get_config():
-    return CONFIG
 
 
 def get_key_by_type(key_type):
@@ -48,7 +41,6 @@ def get_key_by_type(key_type):
 
 
 def get_key_by_name(key_name):
-    """Ugh, todo: clean this up"""
     pubkey = get_config().get('keys', 'CERT_PUBKEY')
     revokekey = get_config().get('keys', 'CERT_REVOKEKEY')
 
@@ -59,3 +51,14 @@ def get_key_by_name(key_name):
     issuer = json.loads(issuer_file)
     address = key_mappings.get(key_name, None)
     return issuer[address][0]["key"]
+
+
+parsed_config=None
+
+
+def get_config():
+    global parsed_config
+    if parsed_config:
+        return parsed_config
+    parsed_config = create_config()
+    return parsed_config

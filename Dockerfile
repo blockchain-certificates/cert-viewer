@@ -10,25 +10,25 @@ RUN apt-get install -y python python-pip wget
 RUN apt-get install -y python-dev
 
 # Create a working directory.
-RUN mkdir deployment
+RUN mkdir cert-viewer
 
 # Install VirtualEnv.
 RUN pip install virtualenv
 
 # Add requirements file.
-ADD requirements.txt /deployment/requirements.txt
+ADD requirements.txt /cert-viewer/requirements.txt
 
 # Add the script that will start everything.
-ADD run.py /deployment/run.py
+ADD run.py /cert-viewer/run.py
 
 # Run VirtualEnv.
-RUN virtualenv /deployment/env/
-RUN /deployment/env/bin/pip install wheel
+RUN virtualenv /cert-viewer/env/
+RUN /cert-viewer/env/bin/pip install wheel
 
-RUN /deployment/env/bin/pip install -r /deployment/requirements.txt
+RUN /cert-viewer/env/bin/pip install -r /cert-viewer/requirements.txt
 
-COPY . /deployment
+COPY . /cert-viewer
 
 # Copy sample configuration file to conf.ini
-COPY conf_sample.ini /deployment/conf.ini
-RUN pip install /deployment
+COPY conf_sample.ini /cert-viewer/conf.ini
+RUN pip install /cert-viewer

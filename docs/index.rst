@@ -3,12 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Viewer's Documentation!
-==================================
-The Viewer project is part of the MIT Media Lab Digital Certificates incubation project. We're looking for feedback,
-contributions, and general discussion. This is not currently intended for production release, but we are improving
-our approach for future releases. Read more about the Digital Certificates Project at http://certificates.media.mit.edu/.
-
+Welcome to cert-viewer's documentation!
+=======================================
+The cert-viewer project is a Flask webapp to display and verify digital certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. `See the schema <https://github.com/digital-certificates/cert-schema>`_
 
 Get the code: https://github.com/digital-certificates/cert-viewer
 
@@ -19,7 +16,6 @@ Getting started
 .. toctree::
    :maxdepth: 2
 
-   about
    quick_start
    installation
    configuration
