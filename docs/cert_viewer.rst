@@ -12,30 +12,6 @@ cert_viewer.certificate_store module
     :undoc-members:
     :show-inheritance:
 
-cert_viewer.config module
---------------------
-
-.. automodule:: cert_viewer.config
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cert_viewer.formatters module
-------------------------
-
-.. automodule:: cert_viewer.formatters
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cert_viewer.forms module
--------------------
-
-.. automodule:: cert_viewer.forms
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 cert_viewer.models module
 --------------------
 
@@ -52,13 +28,6 @@ cert_viewer.notifier module
     :undoc-members:
     :show-inheritance:
 
-cert_viewer.ui_helpers module
-------------------------
-
-.. automodule:: cert_viewer.ui_helpers
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 cert_viewer.verification_helpers module
 ----------------------------------
