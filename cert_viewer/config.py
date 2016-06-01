@@ -1,12 +1,12 @@
 import json
-import os
 import sys
+
+import os
 
 if sys.version > '3':
     from configparser import ConfigParser
 else:
     from ConfigParser import ConfigParser
-
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
@@ -17,9 +17,7 @@ TEST_CONFIG_FILE = os.path.join(BASE_DIR, 'conf_test.ini')
 def create_config(config_file=None):
     parser = ConfigParser()
     config_env = os.environ.get('CONFIG_FILE', DEFAULT_CONFIG_FILE)
-    config_files = []
-    config_files.append(TEST_CONFIG_FILE)
-    config_files.append(DEFAULT_CONFIG_FILE)
+    config_files = [TEST_CONFIG_FILE, DEFAULT_CONFIG_FILE]
     if config_env:
         config_files.append(config_env)
     if config_file:
@@ -53,7 +51,7 @@ def get_key_by_name(key_name):
     return issuer[address][0]["key"]
 
 
-parsed_config=None
+parsed_config = None
 
 
 def get_config():

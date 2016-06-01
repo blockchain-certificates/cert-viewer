@@ -1,7 +1,6 @@
 import binascii
 import sys
 
-
 unhexlify = binascii.unhexlify
 hexlify = binascii.hexlify
 if sys.version > '3':

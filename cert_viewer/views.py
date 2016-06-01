@@ -11,11 +11,11 @@ else:
 from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join
 from werkzeug.routing import BaseConverter
 from . import app
-from . import certificate_service
+from . import cert_store
 from . import config
 from . import ui_helpers
-from .models import UserData
 from .forms import RegistrationForm, BitcoinForm
+from .models import UserData
 
 
 class RegexConverter(BaseConverter):
@@ -30,12 +30,15 @@ app.url_map.converters['regex'] = RegexConverter
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     """Home page"""
-    recent_certids_from_config = config.get_config().get('certificates', 'RECENT_CERTIDS')
+    recent_certids_from_config = config.get_config().get(
+        'certificates', 'RECENT_CERTIDS')
     if recent_certids_from_config:
         recent_certids = str.split(recent_certids_from_config, ',')
     else:
         # keeping for backcompat; either way we should update this from mongo
-        recent_certids =  ['56aa4c9bf3a6a0125aaf24bf','56aa4c9bf3a6a0125aaf24c7']
+        recent_certids = [
+            '56aa4c9bf3a6a0125aaf24bf',
+            '56aa4c9bf3a6a0125aaf24c7']
     return render_template('index.html', recent_certids=recent_certids)
 
 
@@ -57,13 +60,17 @@ def key_page(key_name=None):
 @app.route('/issuer/<path:issuer_filename>')
 def issuer_page(issuer_filename=None):
     """Shows issuer in the /issuer folder, e.g. http://0.0.0.0:5000/issuer/ml-issuer.json"""
-    return send_from_directory(safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False)
+    return send_from_directory(
+        safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False)
 
-@app.route('/criteria/<regex("[0-9]{4}"):year>/<regex("[0-9]{2}"):month>/<regex("[a-zA-Z0-9.]+"):criteria_name>')
+
+@app.route(
+    '/criteria/<regex("[0-9]{4}"):year>/<regex("[0-9]{2}"):month>/<regex("[a-zA-Z0-9.]+"):criteria_name>')
 def criteria_page(year, month, criteria_name):
     """Shows criteria, e.g. https://coins.media.mit.edu/criteria/2016/01/alumni.json"""
     criteria_filename = '-'.join([year, month, criteria_name])
-    return send_from_directory(safe_join(app.root_path, 'criteria'), criteria_filename, as_attachment=False)
+    return send_from_directory(
+        safe_join(app.root_path, 'criteria'), criteria_filename, as_attachment=False)
 
 
 @app.route('/favicon.ico')
@@ -80,12 +87,14 @@ def get_award(identifier=None):
     :return:
     """
 
-    format = request.args.get("format", None)
-    award, verification_info = certificate_service.get_formatted_certificate(certificate_uid=identifier, format=format)
-    if award and format == "json":
+    requested_format = request.args.get("format", None)
+    award, verification_info = cert_store.get_formatted_certificate(
+        certificate_uid=identifier, requested_format=requested_format)
+    if award and requested_format == "json":
         return award
     if award:
-        return render_template('award.html', award=award, verification_info=urlencode(verification_info))
+        return render_template('award.html', award=award,
+                               verification_info=urlencode(verification_info))
 
     return "Sorry, this page does not exist.", 404
 
@@ -110,23 +119,26 @@ def request_page():
                              form.first_name.data, form.last_name.data, form.address.data, form.city.data,
                              form.state.data, form.zipcode.data, form.country.data)
 
-        sent = certificate_service.request_certificate(user_data)
+        sent = cert_store.request_certificate(user_data)
         logging.debug('finished requesting certificate')
         hidden_email = ui_helpers.obfuscate_email_display(user_data.email)
         if sent:
             flash('We just sent a confirmation email to %s.' % hidden_email)
         else:
-            flash('We received your request and will respond to %s.' % hidden_email)
+            flash(
+                'We received your request and will respond to %s.' %
+                hidden_email)
         return redirect(url_for('home_page'))
 
-    return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
+    return render_template('request.html', form=form,
+                           registered=False, bitcoin=bitcoin)
 
 
 @app.route("/verify")
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = certificate_service.verify(transaction_id, uid)
+    verify_response = cert_store.verify(transaction_id, uid)
     return json.dumps(verify_response)
 
 
