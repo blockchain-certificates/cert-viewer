@@ -19,7 +19,7 @@ Getting started
 Data format
 -----------
 
-- [Certificate format](certificate.md)
+- [Certificate format](CERTIFICATE.md)
 - [Database collections](database_collections.md)
 
 
