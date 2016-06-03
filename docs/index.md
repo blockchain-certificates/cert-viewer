@@ -4,7 +4,7 @@ The cert-viewer project is a Flask webapp to display and verify digital certific
 to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation
  process. [See the schema](https://github.com/digital-certificates/cert-schema).
 
-Get the code: https://github.com/digital-certificates/cert-viewer
+[Get the code](https://github.com/digital-certificates/cert-viewer)
 
 
 Getting started
