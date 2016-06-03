@@ -13,11 +13,6 @@ MIT's Global Entrepreneurship Bootcamp issued digital certificates to the studen
 
 The Laboratorio para la Ciudad issued digital certificates to participants of a week-long workshop in Mexico City in September 2016. [Check out the certificates here.](http://certs.labcd.mx/)
 
-Documentation
--------------
-
-[http://cert-viewer.readthedocs.io/](http://cert-viewer.readthedocs.io/)
-
 
 Quick start
 -----------
@@ -52,13 +47,20 @@ example, mac instructions start at [https://docs.docker.com/engine/installation/
     docker-machine ip
     ```
 
-
 ###About Docker Setup
 The quick start steps do the following:
 
 1. Creates a container that runs the cert-viewer Flask app with MongoDB using Docker Compose [details](http://containertutorials.com/docker-compose/flask-mongo-compose.html)
 2. Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder
 3. Starts the container. This configuration exposes port 5000.
+
+
+Project Documentation
+---------------------
+
+Project documentation is under docs/ and summarized here: [docs/index.md](/docs/index.md)
+
+This content is also available at [http://cert-viewer.readthedocs.io/](http://cert-viewer.readthedocs.io/)
 
 
 About the Digital Certificates project
