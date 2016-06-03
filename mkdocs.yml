@@ -6,7 +6,7 @@ pages:
 - Installation: installation.md
 - Configuration: configuration.md
 - Testing: testing.md
-- Certificate Format: certificate.md
+- Certificate Format: CERTIFICATE.md
 - Database Collections: database_collections.md
 - Verify a Certificate: verify.md
 
