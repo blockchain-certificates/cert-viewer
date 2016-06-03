@@ -14,7 +14,7 @@ MIT's Global Entrepreneurship Bootcamp issued digital certificates to the studen
 The Laboratorio para la Ciudad issued digital certificates to participants of a week-long workshop in Mexico City in September 2016. [Check out the certificates here.](http://certs.labcd.mx/)
 
 
-Quick start
+Quick Start
 -----------
 
 ### Steps
@@ -63,7 +63,7 @@ Project documentation is under docs/ and summarized here: [docs/index.md](/docs/
 This content is also available at [http://cert-viewer.readthedocs.io/](http://cert-viewer.readthedocs.io/)
 
 
-About the Digital Certificates project
+About the Digital Certificates Project
 --------------------------------------
 
 The [MIT Media Lab Digital Certificates](http://certificates.media.mit.edu/) is an incubation project. We're looking for feedback, contributions, and general
