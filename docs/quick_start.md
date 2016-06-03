@@ -35,6 +35,6 @@ The quick start steps do the following:
 
 Limitations/Warnings
 --------------------
-- The quick start configuration is for demo purposes and not intended for production release. See "Detailed Installation"
+- The quick start configuration is for demo purposes and not intended for production release. See [installation](installation.md).
 - As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
 'Verify' to see details on how verification can fail.
