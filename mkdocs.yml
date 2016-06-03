@@ -1,0 +1,16 @@
+site_name: cert-viewer
+
+pages:
+- Home: index.md
+- Quick Start: quick_start.md
+- Installation: installation.md
+- Configuration: configuration.md
+- Testing: testing.md
+- Certificate Format: certificate.md
+- Database Collections: database_collections.md
+- Verify a Certificate: verify.md
+
+theme: readthedocs
+
+
+
