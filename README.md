@@ -20,11 +20,11 @@ Quick Start
 ### Steps
 
 1. [Install Docker Engine and Docker Compose](https://docs.docker.com/engine/installation)
-    - If you are using Mac OSX or Windows, your installation will includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
-        - Mac OSX: [https://docs.docker.com/engine/installation/mac/#installation](https://docs.docker.com/engine/installation/mac/#installation)
+    - If you are using Mac OSX or Windows, your installation includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
+        - Mac OSX: [https://docs.docker.com/engine/installation/mac/#installation](https://docs.docker.com/engine/installation/mac/#installatio)
         - Windows: [https://docs.docker.com/engine/installation/windows/#installation](https://docs.docker.com/engine/installation/windows/#installation)
-    - If you already have Docker installed, ensure your version is >= 1.10.0, and that you have both the Engine and Compose
-
+    - If you already have Docker installed, ensure your version is >= 1.10.0, and that you have both Engine and Compose
+ 
 2. Git clone the repository
 
     ```
