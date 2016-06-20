@@ -31,25 +31,30 @@ Quick Start
     git clone https://github.com/digital-certificates/cert-viewer.git
     ```
 
-3. Build the container with docker-compose
+3. Determine your docker machine ip, which you'll use to access the webapp
 
     ```
+    hostname=`docker-machine ip`
+    echo $hostname
+    ```
+
+4. From a command line in the cert-viewer dir, run docker-compose
+
+    ```
+    cd cert-viewer
     docker-compose build
     ```
 
-4. Start the container
+5. Start the container
 
     ```
     docker-compose up
     ```
 
-5. Access cert-viewer pre-populated with test data at `http://<hostname>:5000`, where hostname is given by
+6. Access cert-viewer pre-populated with test data at `http://<hostname>:5000`, where hostname is given by step 3.
 
-    ```
-    docker-machine ip
-    ```
 
-###About Docker Setup
+### About Docker Setup
 The quick start steps do the following:
 
 1. Creates a container that runs the cert-viewer Flask app with MongoDB using Docker Compose [details](http://containertutorials.com/docker-compose/flask-mongo-compose.html)

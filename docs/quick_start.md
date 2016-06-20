@@ -14,16 +14,27 @@ Steps
 
     `git clone https://github.com/digital-certificates/cert-viewer.git`
 
-3. Build the container with docker-compose
+3. Determine your docker machine ip, which you'll use to access the webapp
 
-    `docker-compose build`
+    ```
+    hostname=`docker-machine ip`
+    echo $hostname
+    ```
 
-4. Start the container
+4. From a command line in the cert-viewer dir, run docker-compose
 
-    `docker-compose up`
+    ```
+    cd cert-viewer
+    docker-compose build
+    ```
 
-5. Access the cert-viewer pre-populated with test data at `http://<hostname>:5000`, where hostname is given by
-    `docker-machine ip`
+5. Start the container
+
+    ```
+    docker-compose up
+    ```
+
+6. Access cert-viewer pre-populated with test data at `http://<hostname>:5000`, where hostname is given by step 3.
 
 
 About Docker Setup
