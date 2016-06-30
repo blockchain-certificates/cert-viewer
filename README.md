@@ -13,6 +13,7 @@ MIT's Global Entrepreneurship Bootcamp issued digital certificates to the studen
 
 The Laboratorio para la Ciudad issued digital certificates to participants of a week-long workshop in Mexico City in September 2016. [Check out the certificates here.](http://certs.labcd.mx/)
 
+[//]: # "start_docker_instructions"
 
 Quick Start
 -----------
@@ -21,7 +22,7 @@ Quick Start
 
 1. [Install Docker Engine and Docker Compose](https://docs.docker.com/engine/installation)
     - If you are using Mac OSX or Windows, your installation includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
-        - Mac OSX: [https://docs.docker.com/engine/installation/mac/#installation](https://docs.docker.com/engine/installation/mac/#installatio)
+        - Mac OSX: [https://docs.docker.com/engine/installation/mac/#installation](https://docs.docker.com/engine/installation/mac/#installation)
         - Windows: [https://docs.docker.com/engine/installation/windows/#installation](https://docs.docker.com/engine/installation/windows/#installation)
     - If you already have Docker installed, ensure your version is >= 1.10.0, and that you have both Engine and Compose
  
@@ -61,6 +62,13 @@ The quick start steps do the following:
 2. Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder
 3. Starts the container. This configuration exposes port 5000.
 
+### Limitations/Warnings
+
+- The quick start configuration is for demo purposes and not intended for production release. See [installation](installation.md).
+- As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
+'Verify' to see details on how verification can fail.
+
+[//]: # "end_docker_instructions"
 
 Project Documentation
 ---------------------

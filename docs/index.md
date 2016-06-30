@@ -10,10 +10,11 @@ to allow learners to request a certificate and generate their own Bitcoin identi
 Getting started
 ---------------
 
-- [Quick start](quick_start.md)
+- [Quick start](docker.md)
 - [Installation](installation.md)
 - [Configuration](configuration.md)
 - [Testing](testing.md)
+- [Pre-commit hooks for developers](precommit.md)
 
 
 Data format
