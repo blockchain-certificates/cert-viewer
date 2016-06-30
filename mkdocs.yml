@@ -2,10 +2,11 @@ site_name: cert-viewer
 
 pages:
 - Home: index.md
-- Quick Start: quick_start.md
+- Quick Start: docker.md
 - Installation: installation.md
 - Configuration: configuration.md
 - Testing: testing.md
+- Pre-commit hooks: precommit.md
 - Certificate Format: CERTIFICATE.md
 - Database Collections: database_collections.md
 - Verify a Certificate: verify.md
