@@ -2,7 +2,7 @@ Digital Certificates Viewer Project
 ===================================
 
 Flask webapp to display and verify digital certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. [See the schema](https://github.com/digital-certificates/cert-schema>) and [how to issue a certificate](https://github.com/digital-certificates/cert-issuer).
- 
+
 Example Deployments
 -------------
 The Media Lab issued digital certificates (nicknamed "coins") to Media Lab alumni who attended the Lab's 30th anniversary in October 2015. [Check out the certificates here.](https://coins.media.mit.edu/)
@@ -22,37 +22,31 @@ Quick Start
 
 1. [Install Docker Engine and Docker Compose](https://docs.docker.com/engine/installation)
     - If you are using Mac OSX or Windows, your installation includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
-        - Mac OSX: [https://docs.docker.com/engine/installation/mac/#installation](https://docs.docker.com/engine/installation/mac/#installation)
-        - Windows: [https://docs.docker.com/engine/installation/windows/#installation](https://docs.docker.com/engine/installation/windows/#installation)
+        - Mac OSX: [https://docs.docker.com/docker-for-mac/](https://docs.docker.com/docker-for-mac/)
+        - Windows: [https://docs.docker.com/docker-for-windows/](https://docs.docker.com/docker-for-windows/)
     - If you already have Docker installed, ensure your version is >= 1.10.0, and that you have both Engine and Compose
- 
+        - Note that if you're using an old version of Docker (or if you're using Docker Toolbox) you may not get hosted at localhost. If you run `docker-machine ip`, you'll find out what IP the machine is being run from.
+
 2. Git clone the repository
 
     ```
     git clone https://github.com/digital-certificates/cert-viewer.git
     ```
 
-3. Determine your docker machine ip, which you'll use to access the webapp
-
-    ```
-    hostname=`docker-machine ip`
-    echo $hostname
-    ```
-
-4. From a command line in the cert-viewer dir, run docker-compose
+3. From a command line in the cert-viewer dir, run docker-compose
 
     ```
     cd cert-viewer
     docker-compose build
     ```
 
-5. Start the container
+4. Start the container
 
     ```
     docker-compose up
     ```
 
-6. Access cert-viewer pre-populated with test data at `http://<hostname>:5000`, where hostname is given by step 3.
+5. Access cert-viewer pre-populated with test data at `http://localhost:5000`.
 
 
 ### About Docker Setup
@@ -89,5 +83,3 @@ Contact
 -------
 
 Contact [certs@media.mit.edu](mailto:certs@media.mit.edu) with questions
-
-
