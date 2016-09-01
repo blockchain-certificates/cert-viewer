@@ -38,7 +38,7 @@ Show below is the certificate format for the ML alumni coins. To see a rendered 
       "url": "http://media.mit.edu",
       "image": "data:image/png;base64,<base64 encoded image of ML logo>",
       "id": "https://coins.media.mit.edu/issuer/ml-issuer.json",
-      "email": "coins@media.mit.edu",
+      "email": "certs@media.mit.edu",
       "name": "MIT Media Lab"
     }
   }

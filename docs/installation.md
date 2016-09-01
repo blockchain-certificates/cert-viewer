@@ -8,7 +8,7 @@ should be changed if you're using this for anything other than demo purposes.
 1. Git clone the repository
 
     ```bash
-    git clone https://github.com/digital-certificates/cert-viewer.git
+    git clone https://github.com/blockchain-certificates/cert-viewer.git
     ```
 
 2. Install [mongodb](https://docs.mongodb.com/v3.0/installation/)

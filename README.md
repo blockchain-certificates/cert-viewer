@@ -1,7 +1,7 @@
 Digital Certificates Viewer Project
 ===================================
 
-Flask webapp to display and verify digital certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. [See the schema](https://github.com/digital-certificates/cert-schema>) and [how to issue a certificate](https://github.com/digital-certificates/cert-issuer).
+Flask webapp to display and verify digital certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. [See the schema](https://github.com/blockchain-certificates/cert-schema>) and [how to issue a certificate](https://github.com/blockchain-certificates/cert-issuer).
 
 Example Deployments
 -------------
@@ -30,7 +30,7 @@ Quick Start
 2. Git clone the repository
 
     ```
-    git clone https://github.com/digital-certificates/cert-viewer.git
+    git clone https://github.com/blockchain-certificates/cert-viewer.git
     ```
 
 3. From a command line in the cert-viewer dir, run docker-compose

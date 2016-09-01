@@ -14,7 +14,7 @@ with open(os.path.join(here, 'README.md')) as fp:
 setup(
     name='cert-viewer',
     version='0.0.1',
-    url='https://github.com/digital-certificates/cert-viewer',
+    url='https://github.com/blockchain-certificates/cert-viewer',
     license='MIT',
     author='MIT Media Lab Digital Certificates',
     author_email='certs@media.mit.edu',

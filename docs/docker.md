@@ -13,7 +13,7 @@ Quick Start
 2. Git clone the repository
 
     ```
-    git clone https://github.com/digital-certificates/cert-viewer.git
+    git clone https://github.com/blockchain-certificates/cert-viewer.git
     ```
 
 3. Determine your docker machine ip, which you'll use to access the webapp
