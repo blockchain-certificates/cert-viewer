@@ -1,3 +1,9 @@
+---
+layout: default
+title: Database Collections 
+permalink: /database/
+---
+
 Database Collections
 ====================
 This webapp uses MongoDB. There are two collections, one for recipients and one for certificates. GridFs is used to store the certificates themselves.

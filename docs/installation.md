@@ -1,4 +1,9 @@
+---
+layout: default
+title: Installation
+permalink: /installation/
 
+---
 
 Detailed Installation
 ===
