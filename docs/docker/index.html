@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Docker quick start &middot; cert-viewer
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/cert-viewer/public/css/poole.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/syntax.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/cert-viewer/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/cert-viewer/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/site_config/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/cert-viewer/">
+          cert-viewer
+        </a>
+        </h1>
+      <p class="lead">A Blockchain Certificates Project</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/cert-viewer/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//CERTIFICATE/">Certificate format</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//about/">About</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//configuration/">Configuration</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//database_collections/">Database Collections</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item active" href="/cert-viewer//docker/">Docker quick start</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//precommit/">Precommit hooks</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//testing/">Tests</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//verify/">Verifying a certificate</a>
+          
+        
+      
+
+      <a class="sidebar-nav-item" href="https://github.com/blockchain-certificates/cert-viewer">GitHub project</a>
+      <span class="sidebar-nav-item">Currently v0.0.1</span>
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">Docker quick start</h1>
+  <h3>Steps</h3>
+
+<ol>
+<li><p><a href="https://docs.docker.com/engine/installation">Install Docker Engine and Docker Compose</a></p>
+
+<ul>
+<li>If you are using Mac OSX or Windows, your installation includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
+
+<ul>
+<li>Mac OSX: <a href="https://docs.docker.com/engine/installation/mac/#installation">https://docs.docker.com/engine/installation/mac/#installation</a></li>
+<li>Windows: <a href="https://docs.docker.com/engine/installation/windows/#installation">https://docs.docker.com/engine/installation/windows/#installation</a></li>
+</ul></li>
+<li>If you already have Docker installed, ensure your version is &gt;= 1.10.0, and that you have both Engine and Compose</li>
+</ul></li>
+<li><p>Git clone the repository</p>
+<div class="highlight"><pre><code class="language-" data-lang="">git clone https://github.com/blockchain-certificates/cert-viewer.git
+</code></pre></div></li>
+<li><p>Determine your docker machine ip, which you&#39;ll use to access the webapp</p>
+<div class="highlight"><pre><code class="language-" data-lang="">hostname=`docker-machine ip`
+echo $hostname
+</code></pre></div></li>
+<li><p>From a command line in the cert-viewer dir, run docker-compose</p>
+<div class="highlight"><pre><code class="language-" data-lang="">cd cert-viewer
+docker-compose build
+</code></pre></div></li>
+<li><p>Start the container</p>
+<div class="highlight"><pre><code class="language-" data-lang="">docker-compose up
+</code></pre></div></li>
+<li><p>Access cert-viewer pre-populated with test data at <code>http://&lt;hostname&gt;:5000</code>, where hostname is given by step 3.</p></li>
+</ol>
+
+<h3>About Docker Setup</h3>
+
+<p>The quick start steps do the following:</p>
+
+<ol>
+<li>Creates a container that runs the cert-viewer Flask app with MongoDB using Docker Compose <a href="http://containertutorials.com/docker-compose/flask-mongo-compose.html">details</a></li>
+<li>Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder</li>
+<li>Starts the container. This configuration exposes port 5000.</li>
+</ol>
+
+<h3>Limitations/Warnings</h3>
+
+<ul>
+<li>The quick start configuration is for demo purposes and not intended for production release. See <a href="installation.md">installation</a>.</li>
+<li>As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
+&#39;Verify&#39; to see details on how verification can fail.</li>
+</ul>
+
+</div>
+
+    </div>
+
+  </body>
+</html>

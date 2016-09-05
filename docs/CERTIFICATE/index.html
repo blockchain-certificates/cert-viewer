@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Certificate format &middot; cert-viewer
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/cert-viewer/public/css/poole.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/syntax.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/cert-viewer/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/cert-viewer/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/site_config/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/cert-viewer/">
+          cert-viewer
+        </a>
+        </h1>
+      <p class="lead">A Blockchain Certificates Project</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/cert-viewer/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item active" href="/cert-viewer//CERTIFICATE/">Certificate format</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//about/">About</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//configuration/">Configuration</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//database_collections/">Database Collections</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//docker/">Docker quick start</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//precommit/">Precommit hooks</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//testing/">Tests</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//verify/">Verifying a certificate</a>
+          
+        
+      
+
+      <a class="sidebar-nav-item" href="https://github.com/blockchain-certificates/cert-viewer">GitHub project</a>
+      <span class="sidebar-nav-item">Currently v0.0.1</span>
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">Certificate format</h1>
+  <h1>Certificate format</h1>
+
+<p>Show below is the certificate format for the ML alumni coins. To see a rendered certificate, please go to <a href="https://coins.media.mit.edu">coins.media.mit.edu</a>.</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"signer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://coins.media.mit.edu/keys/ml-certs-public-key.asc"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"attribute-signed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"uid"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ECDSA(secp256k1)"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"recipient"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"hashed"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"familyName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Joe"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"givenName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Schmoe"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"pubkey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;unique recipient bitcoin address&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"johndeere@email.com"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"assertion"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"issuedOn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-26"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"image:signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data:image/png;base64,&lt;base64 encoded image of Joi's signature&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"evidence"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"uid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;string of bson objectid()&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://coins.media.mit.edu/&lt;uid&gt;"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nt">"certificate"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"subtitle"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"content"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"display"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This certificate honors you as a member of the Media Lab's alumni community on the occasion of the Lab's 30th anniversary. The Lab places special value on the many ways our alumni have contributed\u2014and continue to contribute\u2014to the intellectual vitality both at the Lab and throughout the world."</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"en-US"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Alum"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data:image/png;base64,&lt;base64 encoded image of ML alum logo&gt;"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://coins.media.mit.edu/criteria/2016/01/alumni.json"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://media.mit.edu"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data:image/png;base64,&lt;base64 encoded image of ML logo&gt;"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://coins.media.mit.edu/issuer/ml-issuer.json"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"certs@media.mit.edu"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MIT Media Lab"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre></div>
+</div>
+
+    </div>
+
+  </body>
+</html>

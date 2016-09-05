@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Verifying a certificate &middot; cert-viewer
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/cert-viewer/public/css/poole.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/syntax.css">
+  <link rel="stylesheet" href="/cert-viewer/public/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/cert-viewer/public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="/cert-viewer/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/site_config/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>
+        <a href="/cert-viewer/">
+          cert-viewer
+        </a>
+        </h1>
+      <p class="lead">A Blockchain Certificates Project</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item" href="/cert-viewer/">Home</a>
+
+      
+
+      
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//CERTIFICATE/">Certificate format</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//about/">About</a>
+          
+        
+      
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//configuration/">Configuration</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//database_collections/">Database Collections</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//docker/">Docker quick start</a>
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//precommit/">Precommit hooks</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item" href="/cert-viewer//testing/">Tests</a>
+          
+        
+      
+        
+          
+            <a class="sidebar-nav-item active" href="/cert-viewer//verify/">Verifying a certificate</a>
+          
+        
+      
+
+      <a class="sidebar-nav-item" href="https://github.com/blockchain-certificates/cert-viewer">GitHub project</a>
+      <span class="sidebar-nav-item">Currently v0.0.1</span>
+    </nav>
+
+    <p>&copy; 2016. All rights reserved.</p>
+  </div>
+</div>
+
+
+    <div class="content container">
+      <div class="page">
+  <h1 class="page-title">Verifying a certificate</h1>
+  <h1>Manually verify a certificate</h1>
+
+<p>To manually verify a digital certificate, follow the instructions below. These instructions will require Python 2.7 and the Python <a href="https://github.com/petertodd/python-bitcoinlib">python-bitcoinlib</a>. These can be installed with:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">pip install python-bitcoinlib
+</code></pre></div>
+<h4>1. Download the certificate and blockchain transaction</h4>
+
+<p>To compare the local certificate to the certificate transacted on the Bitcoin blockchain, first download a copy of both the local certificate and the record of the certificate&#39;s transaction on the blockchain. For example, the json of a local certificate can be found at <code>https://coins.media.mit.edu/&lt;CERTIFICATE_UID&gt;?format=json</code>. The json from <a href="http://blockchain.info">blockchain.info</a> can be found at <code>http://blockchain.info/tx/&lt;TRANSACTION_ID&gt;?format=json</code>.</p>
+
+<h4>2. Check that the certificate was authored by the Media Lab</h4>
+
+<p>To check that the certificate was authored by the Media Lab, we will verify that the signature in the local certificate file was signed by the Media Lab&#39;s private key.</p>
+
+<p>Our public key can be found at <a href="https://coins.media.mit.edu/keys/ml-certs-public-key.asc">https://coins.media.mit.edu/keys/ml-certs-public-key.asc</a>. This needs to be copy/pasted into the code.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">from</span> <span class="nn">bitcoin.signmessage</span> <span class="kn">import</span> <span class="n">BitcoinMessage</span><span class="p">,</span> <span class="n">VerifyMessage</span><span class="p">,</span> <span class="n">SignMessage</span>
+
+<span class="n">valid_author</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="n">ml_pubkey</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">INSERT_MEDIA_LAB_PUBLIC_KEY_HERE</span><span class="o">&gt;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="o">&lt;</span><span class="n">INSERT_PATH_TO_LOCAL_CERTIFICATE_FILE</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">as</span> <span class="n">coin_file</span><span class="p">:</span>
+    <span class="n">coin_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">coin_file</span><span class="p">)</span>
+<span class="n">coin_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">uid</span> <span class="o">=</span> <span class="n">BitcoinMessage</span><span class="p">(</span><span class="n">coin_data</span><span class="p">[</span><span class="s">"assertion"</span><span class="p">][</span><span class="s">"uid"</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">coin_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"signature"</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="n">signed_uid</span> <span class="o">=</span> <span class="n">coin_data</span><span class="p">[</span><span class="s">"signature"</span><span class="p">]</span>
+    <span class="n">valid_author</span> <span class="o">=</span> <span class="n">VerifyMessage</span><span class="p">(</span><span class="n">ml_pubkey</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">signed_uid</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">"Valid author:"</span>
+<span class="k">print</span> <span class="n">valid_author</span>
+</code></pre></div>
+<h4>3. Compare the hash of the local certificate to the hash embedded in the certificate transaction on the Bitcoin blockchain</h4>
+
+<p>To check that the certificate was sent to the Bitcoin blockchain by the Media Lab, we will compare the hash of the local certificate with the hash embedded in the record of its transaction on the Bitcoin blockchain.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">valid_hash</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">blockchain_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="o">&lt;</span><span class="n">INSERT_PATH_TO_BLOCKCHAIN_TRANSACTION_FILE</span><span class="o">&gt;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">raw_coin_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="o">&lt;</span><span class="n">INSERT_PATH_TO_LOCAL_CERTIFICATE_FILE</span><span class="o">&gt;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">local_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">raw_coin_data</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+<span class="n">transaction_outs</span> <span class="o">=</span> <span class="n">blockchain_data</span><span class="p">[</span><span class="s">"out"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">tx_out</span> <span class="ow">in</span> <span class="n">transaction_outs</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tx_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"addr"</span><span class="p">)</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">opreturn_tx</span> <span class="o">=</span> <span class="n">tx_out</span>
+<span class="n">op_field</span> <span class="o">=</span> <span class="n">opreturn_tx</span><span class="p">[</span><span class="s">"script"</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"hex"</span><span class="p">)</span>
+<span class="n">hash_from_chain</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">op_field</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">local_hash</span> <span class="ow">in</span> <span class="n">hash_from_chain</span> <span class="ow">or</span> <span class="n">local_hash</span> <span class="o">==</span> <span class="n">hash_from_chain</span><span class="p">:</span>
+    <span class="n">valid_hash</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="k">print</span> <span class="s">"Valid hash:"</span>
+<span class="k">print</span> <span class="n">valid_hash</span>
+</code></pre></div>
+<h4>4. Check that the certificate has not been revoked</h4>
+
+<p>We will check that the certificate has not been revoked by the issuer. To do this, we will check that the BTC transferred to the Media Lab’s revocation address has not been spent. </p>
+
+<p>Our revocation key can be found at <a href="https://coins.media.mit.edu/keys/ml-certs-revoke-key.asc">https://coins.media.mit.edu/keys/ml-certs-revoke-key.asc</a>. This needs to be copy/pasted into the code.</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">not_revoked</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="n">revocation_address</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">INSERT_REVOCATION_ADDRESS_HERE</span><span class="o">&gt;</span>
+
+<span class="n">transaction_outs</span> <span class="o">=</span> <span class="n">blockchain_data</span><span class="p">[</span><span class="s">"out"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">tx_out</span> <span class="ow">in</span> <span class="n">transaction_outs</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">tx_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"addr"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="n">revocation_address</span> <span class="ow">and</span> <span class="n">tx_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"spent"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="n">not_revoked</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="k">print</span> <span class="s">"Not revoked:"</span>
+<span class="k">print</span> <span class="n">not_revoked</span>
+</code></pre></div>
+<h4>5. Check that all three criteria are met and return if the certificate is valid.</h4>
+
+<p>Lastly, we will check that all the above steps are valid. If so, the certificate is valid!</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">valid_coin</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">if</span> <span class="n">valid_author</span> <span class="ow">and</span> <span class="n">valid_hash</span> <span class="ow">and</span> <span class="n">not_revoked</span><span class="p">:</span>
+    <span class="n">valid_coin</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="k">print</span> <span class="s">"Valid coin:"</span> 
+<span class="k">print</span> <span class="n">valid_coin</span>
+</code></pre></div>
+<p>Questions / Comments? Please contact Juliana at <a href="mailto:juliana@media.mit.edu">juliana@media.mit.edu</a> or send a pull request.</p>
+
+</div>
+
+    </div>
+
+  </body>
+</html>

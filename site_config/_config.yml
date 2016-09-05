@@ -1,0 +1,32 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+#relative_permalinks: true
+
+# Setup
+title:            'cert-viewer'
+tagline:          'Technical documentation for the cert-viewer project'
+description:      'A Blockchain Certificates Project'
+url:              'http://www.blockcerts.org'
+baseurl:          '/cert-viewer'
+
+author:
+  name:           'Blockchain Certificates Team'
+  url:            'http://www.blockcerts.org'
+
+paginate:         5
+
+# Custom vars
+version:          0.0.1
+
+github:
+  repo:           'https://github.com/blockchain-certificates/cert-viewer'
+
+# include: ["_pages"]
+
+gems: [jekyll-paginate]
+paginate: 5
+paginate_path: "page:num"
