@@ -39,6 +39,9 @@
 
 cd site_config
 bundle install
+
+# remove markdown files from previous runs
+rm *.md 
 cp ../docs_md/* .
 
 # if index.md exists, move it to _includes to appear in the main page
