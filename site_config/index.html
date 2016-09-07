@@ -7,9 +7,11 @@ title: Home
 
 <div class="page">
 
-  <p>details coming soon!</p>
 
-  <p>Read about the <a href="{{ site.url }}">Blockchain Certificates Project</a></p>
+{% capture index %}{% include index.md %}{% endcapture %}
+{{ index | markdownify }}
+
+<p>Read about the <a href="{{ site.url }}">Blockchain Certificates Project</a></p>
 
 </div>
 

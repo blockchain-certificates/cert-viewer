@@ -30,11 +30,22 @@
 # layout: page
 # title: Page Title
 # ---
+#
+# The one special case is the index.md file. If you include this file, you should
+# omit the header (so it's just a normal markdown file) and it will be included in
+# the site's index.html.
+#
 ######################################################################################
 
 cd site_config
 bundle install
 cp ../docs_md/* .
+
+# if index.md exists, move it to _includes to appear in the main page
+if [ -s index.md ]; then
+    mv index.md _includes/
+fi
+
 bundle exec jekyll build --verbose
 
 cd ..

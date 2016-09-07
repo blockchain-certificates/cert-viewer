@@ -1,8 +1,4 @@
----
-layout: page
-title: About 
----
-`
+
 The cert-viewer project is a Flask webapp to display and verify blockchain certificates after they have been issued and
 to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation
  process. [See the schema](https://github.com/blockchain-certificates/cert-schema).
@@ -31,8 +27,3 @@ Verifying a certificate
 ------------------------
 
 - [verify](verify.md)
-
-
-Contact
--------
-Contact certs@media.mit.edu with questions
