@@ -22,13 +22,20 @@ Quick Start
 
 ### Steps
 
-1. [Install Docker Engine and Docker Compose](https://docs.docker.com/engine/installation)
-    - If you are using Mac OSX or Windows, your installation includes both Engine and Compose, so you can skip to the #installation anchor for your OS.
-        - Mac OSX: [https://docs.docker.com/docker-for-mac/](https://docs.docker.com/docker-for-mac/)
-        - Windows: [https://docs.docker.com/docker-for-windows/](https://docs.docker.com/docker-for-windows/)
-    - If you already have Docker installed, ensure your version is >= 1.10.0, and that you have both Engine and Compose
-        - Note that if you're using an old version of Docker (or if you're using Docker Toolbox) you may not get hosted at localhost. If you run `docker-machine ip`, you'll find out what IP the machine is being run from.
+1. [Install Docker](https://docs.docker.com/engine/installation/) for your OS, ensuring your installation includes Docker Compose
+    - The installation details will vary depending on your OS. For example, if you use Mac OSX, then you can simply install [Docker for Mac](https://docs.docker.com/docker-for-mac/#/download-docker-for-mac), which will include all the tools you need
+    - Before moving on, ensure you have all the tools you need by running these 3 commands. Your details may vary depending on the version you installed; you just want to make sure these tools are available on your system
+   ```
+   $ docker --version
+   Docker version 1.12.0, build 8eab29e
 
+   $ docker-compose --version
+   docker-compose version 1.8.0, build f3628c7
+
+   $ docker-machine --version
+   docker-machine version 0.8.0, build b85aac1
+   ```
+   
 2. Git clone the repository
 
     ```
@@ -48,7 +55,10 @@ Quick Start
     docker-compose up
     ```
 
-5. Access cert-viewer pre-populated with test data at `http://localhost:5000`.
+5. The output of the previous command (example below) will tell you how to access the site. You can enter that value in a browser.
+    ```
+    web_1         | INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+    ```
 
 
 ### About Docker Setup
@@ -65,20 +75,6 @@ The quick start steps do the following:
 'Verify' to see details on how verification can fail.
 
 [//]: # "end_docker_instructions"
-
-Project Documentation
----------------------
-
-Project documentation is under docs/ and summarized here: [docs/index.md](/docs/index.md)
-
-This content is also available at [http://cert-viewer.readthedocs.io/](http://cert-viewer.readthedocs.io/)
-
-
-About the Blockchain Certificates Project
---------------------------------------
-
-The [MIT Media Lab Blockchain Certificates](http://www.blockcerts.org/) is an incubation project. We're looking for feedback, contributions, and general
-discussion. This is not currently intended for production release, but we are improving our approach for future releases.
 
 
 Contact

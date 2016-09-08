@@ -29,6 +29,4 @@ RUN /cert-viewer/env/bin/pip install -r /cert-viewer/requirements.txt
 
 COPY . /cert-viewer
 
-# Copy sample configuration file to conf.ini
-COPY conf_sample.ini /cert-viewer/conf.ini
 RUN pip install /cert-viewer

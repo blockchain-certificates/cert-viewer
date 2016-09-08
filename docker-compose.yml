@@ -1,20 +1,28 @@
-mongodb:
-  image: mongo:3.0.2
-  command: --smallfiles
-  ports:
-    - "27017:27017"
+version: "2"
 
-mongo-seed:
-  build: ./mongo-seed
-  links:
-    - mongodb
+services:
+  mongodb:
+    image: mongo:latest
+    command: --smallfiles
+    ports:
+      - "27017:27017"
 
-web:
-  build: .
-  command: python -u /cert-viewer/run.py
-  ports:
-    - "5000:5000"
-  links:
-    - mongodb
+  mongo-seed:
+    build: ./mongo-seed
+    depends_on:
+      - mongodb
+
+  web:
+    build: .
+    env_file:
+      - ./cert-viewer-local.env
+    command: python -u /cert-viewer/run.py
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+      - mongo-seed
+
+
 
 
