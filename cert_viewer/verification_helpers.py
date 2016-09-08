@@ -39,12 +39,12 @@ def verify(transaction_id, signed_local_file):
             ("Comparing local and blockchain hashes", compare_hash_result))
 
         # check author
-        issuing_address = config.get_key_by_type('CERT_PUBKEY')
+        issuing_address = config.get_config().CERT_PUBKEY
         verify_authors = check_author(issuing_address, signed_local_json)
         verify_response.append(("Checking signature", verify_authors))
 
         # check revocation
-        revocation_address = config.get_key_by_type('CERT_REVOKEKEY')
+        revocation_address = config.get_config().CERT_REVOKEKEY
         not_revoked = check_revocation(remote_json, revocation_address)
         verify_response.append(("Checking not revoked by issuer", not_revoked))
 

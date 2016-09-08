@@ -3,12 +3,10 @@ import logging
 import mandrill
 from . import config
 
-CONFIG_SECTION = 'certificates'
-
 
 class Notifier(object):
     def factory():
-        notifier = config.get_config().get(CONFIG_SECTION, 'NOTIFIER_TYPE')
+        notifier = config.get_config().NOTIFIER_TYPE
         if notifier == 'mail':
             return Mail()
         if notifier == 'noop':
@@ -28,11 +26,10 @@ class NoOp(Notifier):
 
 class Mail(Notifier):
     def __init__(self):
-        self.mandrill_api_key = config.get_config().get(
-            CONFIG_SECTION, 'MANDRILL_API_KEY')
-        self.subject = config.get_config().get(CONFIG_SECTION, 'SUBJECT')
-        self.from_email = config.get_config().get(CONFIG_SECTION, 'FROM_EMAIL')
-        self.from_name = config.get_config().get(CONFIG_SECTION, 'FROM_NAME')
+        self.mandrill_api_key = config.get_config().MANDRILL_API_KEY
+        self.subject = config.get_config().SUBJECT
+        self.from_email = config.get_config().FROM_EMAIL
+        self.from_name = config.get_config().FROM_NAME
 
     def notify(self, recipient_email, first_name, last_name):
         mandrill_client = mandrill.Mandrill(self.mandrill_api_key)

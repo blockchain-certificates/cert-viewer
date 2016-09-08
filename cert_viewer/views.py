@@ -30,8 +30,8 @@ app.url_map.converters['regex'] = RegexConverter
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     """Home page"""
-    recent_certids_from_config = config.get_config().get(
-        'certificates', 'RECENT_CERTIDS')
+    recent_certids_from_config = config.get_config().RECENT_CERTIDS
+
     if recent_certids_from_config:
         recent_certids = str.split(recent_certids_from_config, ',')
     else:

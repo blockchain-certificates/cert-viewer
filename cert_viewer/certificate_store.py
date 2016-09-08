@@ -9,9 +9,6 @@ from . import formatters
 from . import verification_helpers
 from .notifier import Notifier
 
-CONFIG_SECTION = 'certificates'
-
-
 class CertificateStore:
     def __init__(self,
                  client=None,
@@ -24,10 +21,9 @@ class CertificateStore:
         :param notifier: notifier
 
         """
-        self.client = client or MongoClient(
-            host=config.get_config().get(
-                CONFIG_SECTION, 'MONGO_URI'))
-        certificates_db_name = config.get_config().get(CONFIG_SECTION, 'CERTIFICATES_DB')
+        self.client = client or MongoClient(host=config.get_config().MONGO_URI)
+        print(config.get_config().MONGO_URI)
+        certificates_db_name = config.get_config().CERTIFICATES_DB
         self.gfs = gfs or gridfs.GridFS(self.client[certificates_db_name])
         self.db = self.client[certificates_db_name]
         self.notifier = notifier or Notifier.factory()
@@ -83,7 +79,7 @@ class CertificateStore:
             logging.warning('File not found in gridfs, filename=%s', filename)
             return None, None
 
-        pubkey_content = config.get_key_by_type('CERT_PUBKEY')
+        pubkey_content = config.get_config().CERT_PUBKEY
         award = formatters.gfs_file_to_award(
             gfs_file, pubkey_content, certificate)
         verification_info = formatters.format_verification_info(certificate)

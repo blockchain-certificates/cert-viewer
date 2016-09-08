@@ -12,6 +12,11 @@ services:
     depends_on:
       - mongodb
 
+  intro-ui:
+    image: blockcerts/certintro_web:1.0
+    ports:
+      - "5001:5001"
+
   web:
     build: .
     env_file:
@@ -22,6 +27,7 @@ services:
     depends_on:
       - mongodb
       - mongo-seed
+      - intro-ui
 
 
 

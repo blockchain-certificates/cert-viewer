@@ -9,15 +9,15 @@ from .models import UserData
 
 app = Flask(__name__)
 
-app.secret_key = config.get_config().get('ui', 'SECRET_KEY')
+app.secret_key = config.get_config().SECRET_KEY
 
 cert_store = CertificateStore()
 
 
 def initialize_logger():
     """Configure logging settings"""
-    log_output_dir = config.get_config().get('logging', 'LOG_DIR')
-    log_file_name = config.get_config().get('logging', 'LOG_FILE_NAME')
+    log_output_dir = config.get_config().LOG_DIR
+    log_file_name = config.get_config().LOG_FILE_NAME
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
