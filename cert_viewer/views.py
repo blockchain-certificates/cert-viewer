@@ -16,6 +16,8 @@ from . import config
 from . import ui_helpers
 from .forms import RegistrationForm, BitcoinForm
 from .models import UserData
+import requests
+from .notifier import Notifier
 
 
 class RegexConverter(BaseConverter):
@@ -111,17 +113,53 @@ def generate_keys():
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_page():
-    """Request a certificate"""
+    """Request an introduction"""
     form = RegistrationForm(request.form)
     bitcoin = BitcoinForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
-                             form.first_name.data, form.last_name.data, form.address.data, form.city.data,
-                             form.state.data, form.zipcode.data, form.country.data)
 
-        sent = cert_store.request_certificate(user_data)
+    if request.method == 'POST' and form.validate():
+        if config.get_config().USE_LEGACY_REQUESTS:
+            user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
+                                 form.first_name.data, form.last_name.data, form.address.data, form.city.data,
+                                 form.state.data, form.zipcode.data, form.country.data)
+
+            sent = cert_store.request_certificate(user_data)
+        else:
+            intro_endpoint = config.get_config().INTRO_ENDPOINT
+            if not intro_endpoint:
+                return "Sorry, introductions are not supported", 404
+
+            user_data = {
+                'bitcoinAddress': form.pubkey.data,
+                'comments': form.comments.data,
+                'email': form.email.data,
+                'firstName': form.first_name.data,
+                'lastName': form.last_name.data,
+                'degree': form.degree.data,
+                'address': form.address.data,
+                'city': form.city.data,
+                'state': form.state.data,
+                'zip_code': form.zipcode.data,
+                'country': form.country.data
+            }
+
+            headers = {'Content-type': 'application/json',
+                       'Accept': 'application/json'}
+            r = requests.post(intro_endpoint, json=user_data, headers=headers)
+            succeeded = r.status_code == 200
+            if not succeeded:
+                error_message = str(r.content)
+                logging.error('Problem processing introduction, %s', error_message)
+                return 'Problem processing introduction', 500
+
+            sent = Notifier.factory().notify(
+                form.email.data,
+                form.first_name.data,
+                form.last_name.data)
+
+
         logging.debug('finished requesting certificate')
-        hidden_email = ui_helpers.obfuscate_email_display(user_data.email)
+        hidden_email = ui_helpers.obfuscate_email_display(form.email.data)
         if sent:
             flash('We just sent a confirmation email to %s.' % hidden_email)
         else:
@@ -129,9 +167,9 @@ def request_page():
                 'We received your request and will respond to %s.' %
                 hidden_email)
         return redirect(url_for('home_page'))
-
-    return render_template('request.html', form=form,
-                           registered=False, bitcoin=bitcoin)
+    else:
+        return render_template('request.html', form=form,
+                               registered=False, bitcoin=bitcoin)
 
 
 @app.route("/verify")

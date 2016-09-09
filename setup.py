@@ -1,6 +1,6 @@
 import os
 from pip.req import parse_requirements
-from setuptools import setup
+from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -20,7 +20,7 @@ setup(
     author_email='certs@media.mit.edu',
     description='A web app for viewing and validating blockchain certificates on the Bitcoin blockchain',
     long_description=long_description,
-    packages=['cert_viewer'],
+    packages=find_packages(),
     include_package_data=True,
     install_requires=reqs
 )

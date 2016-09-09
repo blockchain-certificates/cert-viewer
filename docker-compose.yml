@@ -13,7 +13,12 @@ services:
       - mongodb
 
   intro-ui:
-    image: blockcerts/certintro_web:1.0
+    image: blockcerts/certintro_web:1.1
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/test
+    command: python -u /cert-intro/app.py
+    depends_on:
+      - mongodb
     ports:
       - "5001:5001"
 
@@ -21,6 +26,8 @@ services:
     build: .
     env_file:
       - ./cert-viewer-local.env
+    # TODO: will need to pass this in
+    # INTRO_ENDPOINT=http://localhost:5001/intro/
     command: python -u /cert-viewer/run.py
     ports:
       - "5000:5000"
@@ -28,7 +35,3 @@ services:
       - mongodb
       - mongo-seed
       - intro-ui
-
-
-
-

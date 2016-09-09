@@ -34,6 +34,11 @@ def create_config():
     p.add_argument('--CERT_REVOKEKEY', type=str, env_var='CERT_REVOKEKEY', help='TODO revoke key')
     p.add_argument('--ISSUER_PATH', type=str, env_var='ISSUER_PATH', help='TODO issuer path')
 
+    p.add_argument('--INTRO_ENDPOINT', type=str, env_var='INTRO_ENDPOINT', help='endpoint for submitting intros')
+
+    p.add_argument('--USE_LEGACY_REQUESTS', action='store_true', env_var='USE_LEGACY_REQUESTS',
+                   help='Use original v1 version of requests database, as opposed to introductions')
+
     args, _ = p.parse_known_args()
     return args
 
