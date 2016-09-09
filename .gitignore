@@ -11,3 +11,5 @@ venv*/
 *build/
 
 *.egg-info*
+
+*.log
