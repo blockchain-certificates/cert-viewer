@@ -16,7 +16,7 @@ services:
     image: blockcerts/certintro_web:1.1
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/test
-    command: python -u /cert-intro/app.py
+    command: python -u /cert-provider/cert-provider/app.py
     depends_on:
       - mongodb
     ports:
