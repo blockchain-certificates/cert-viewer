@@ -16,8 +16,10 @@ from . import config
 from . import ui_helpers
 from .forms import RegistrationForm, BitcoinForm
 from .models import UserData
+from . import formatters
 import requests
 from .notifier import Notifier
+from cert_verifier import verifier
 
 
 class RegexConverter(BaseConverter):
@@ -176,8 +178,16 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    verify_response = cert_store.verify(transaction_id, uid)
-    return json.dumps(verify_response)
+    signed_local_file = cert_store.find_file_in_gridfs(
+        formatters.certificate_uid_to_filename(uid))
+    if not signed_local_file:
+        return False
+
+    verify_response = verifier.verify_cert_contents(signed_local_file, transaction_id, 'mainnet')
+    if verify_response:
+        return json.dumps(verify_response)
+    else:
+        return 'problem rendering response' # TODO!!!
 
 
 @app.errorhandler(404)

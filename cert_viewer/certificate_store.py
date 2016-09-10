@@ -6,7 +6,6 @@ from bson.objectid import ObjectId
 from pymongo import MongoClient
 from . import config
 from . import formatters
-from . import verification_helpers
 from .notifier import Notifier
 
 class CertificateStore:
@@ -85,12 +84,6 @@ class CertificateStore:
         verification_info = formatters.format_verification_info(certificate)
         return award, verification_info
 
-    def verify(self, transaction_id, uid):
-        signed_local_file = self.find_file_in_gridfs(
-            formatters.certificate_uid_to_filename(uid))
-        if not signed_local_file:
-            return False
-        return verification_helpers.verify(transaction_id, signed_local_file)
 
     def find_certificate_by_txid(self, txid):
         certificate = None
