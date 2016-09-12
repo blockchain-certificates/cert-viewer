@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/blockchain-certificates/cert-viewer.svg?branch=master)](https://travis-ci.org/blockchain-certificates/cert-viewer)
 
-Blockchain Certificates Viewer Project
-===================================
+# cert-viewer
 
 Flask webapp to display and verify blockchain certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. [See the schema](https://github.com/blockchain-certificates/cert-schema>) and [how to issue a certificate](https://github.com/blockchain-certificates/cert-issuer).
 
-Example Deployments
--------------
+## Example Deployments
+
 The Media Lab issued blockchain certificates (nicknamed "coins") to Media Lab alumni who attended the Lab's 30th anniversary in October 2015. [Check out the certificates here.](https://coins.media.mit.edu/)
 
 Learning Machine issued blockchain certificates to all of its employees. Check out two example certificates [here](https://hr.learningmachine.com/52d8acfc86584d0c40700631) and [here](https://hr.learningmachine.com/1c56735cd6a4320c61583b9d).
@@ -17,8 +16,8 @@ The Laboratorio para la Ciudad issued blockchain certificates to participants of
 
 [//]: # "start_docker_instructions"
 
-Quick Start
------------
+## Quick Start
+
 
 ### Steps
 
@@ -56,16 +55,13 @@ The quick start steps do the following:
 2. Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder
 3. Starts the container. This configuration exposes port 5000.
 
-### Limitations/Warnings
-
-- The quick start configuration is for demo purposes and not intended for production release. See [installation](installation.md).
-- As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
+### Notes
+As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
 'Verify' to see details on how verification can fail.
 
 [//]: # "end_docker_instructions"
 
 
-Contact
--------
+## Contact
 
-Contact [certs@media.mit.edu](mailto:certs@media.mit.edu) with questions
+Contact [certs@mit.edu](mailto:certs@mit.edu) with questions
