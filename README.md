@@ -23,7 +23,7 @@ Quick Start
 ### Steps
 
 
-1. First ensure you have Docker installed. [See our Docker installation help](https://github.com/blockchain-certificates/developer-common-docs/blob/master/docker_install.mdd).
+1. First ensure you have Docker installed. [See our Docker installation help](https://github.com/blockchain-certificates/developer-common-docs/blob/master/docker_install.md).
    
 2. Git clone the repository and change to the directory
 
