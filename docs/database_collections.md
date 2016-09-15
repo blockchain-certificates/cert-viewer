@@ -1,7 +1,4 @@
----
-layout: page
-title: Database Collections 
----
+# Database Collections
 
 This webapp uses MongoDB. There are two collections, one for recipients and one for certificates. GridFs is used to store the certificates themselves.
 

@@ -2,22 +2,11 @@
 
 # cert-viewer
 
-Flask webapp to display and verify blockchain certificates after they have been issued and to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation process. [See the schema](https://github.com/blockchain-certificates/cert-schema>) and [how to issue a certificate](https://github.com/blockchain-certificates/cert-issuer).
+The cert-viewer project is a Flask webapp to display and verify blockchain certificates after they have been issued and
+to allow learners to request a certificate and generate their own Bitcoin identity needed for the certificate creation
+ process. 
 
-## Example Deployments
-
-The Media Lab issued blockchain certificates (nicknamed "coins") to Media Lab alumni who attended the Lab's 30th anniversary in October 2015. [Check out the certificates here.](https://coins.media.mit.edu/)
-
-Learning Machine issued blockchain certificates to all of its employees. Check out two example certificates [here](https://hr.learningmachine.com/52d8acfc86584d0c40700631) and [here](https://hr.learningmachine.com/1c56735cd6a4320c61583b9d).
-
-MIT's Global Entrepreneurship Bootcamp issued blockchain certificates to the students that attended their workshop in Seoul, South Korea in March 2016. [Check out the certificates here.](http://certificates-bootcamp.mit.edu/)
-
-The Laboratorio para la Ciudad issued blockchain certificates to participants of a week-long workshop in Mexico City in September 2016. [Check out the certificates here.](http://certs.labcd.mx/)
-
-[//]: # "start_docker_instructions"
-
-## Quick Start
-
+## Quick Start using Docker
 
 ### Steps
 
@@ -59,8 +48,77 @@ The quick start steps do the following:
 As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
 'Verify' to see details on how verification can fail.
 
-[//]: # "end_docker_instructions"
+## Installation and Configuration
 
+These steps allow you to install and run outside outside of Docker. Step 5 describes the configuration options that
+should be changed if you're using this for anything other than demo purposes.
+
+### Steps
+
+1. Ensure you have an python environment. [Recommendations](https://github.com/blockchain-certificates/developer-common-docs/blob/master/virtualenv.md)
+
+2. Install [mongodb](https://docs.mongodb.com/v3.0/installation/)
+
+3. Git clone the repository and change to the directory
+
+    ```bash
+    git clone https://github.com/blockchain-certificates/cert-viewer.git && cd cert-viewer
+    ```
+
+4. Setup your conf.ini file (see 'Configuration')
+
+5. Start mongo database. `--dbpath` can be left off if you used the default location
+
+    ```shell
+    mongod --dbpath <path to data directory>
+    ```
+
+6. Run cert-viewer setup
+
+    ```bash
+    pip install .
+    ```
+
+7. Run the flask server
+
+    ```shell
+    python run.py
+    ```
+
+8. Open `http://localhost:5000`
+
+
+## Configuration
+
+1. Copy the template ini file
+
+    ```bash
+    cp conf_template.ini conf.ini
+    ```
+    
+2. Edit the following entries (refer to conf_sample.ini for examples):
+    - `SECRET_KEY` is a random string used by Flask as a secret key to enable cryptographically signed session
+    - `MANDRILL_API_KEY` is used to send out notifications when a user signs up. Setup your mandrill account at https://www.mandrill.com/
+    - `MONGO_URL` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>`. Examples follow:
+         - Local mongo installation: `MONGO_URI = mongodb://localhost:27017`
+         - Docker installation: `MONGO_URI = mongodb://<DOCKER_MACHINE_IP>:27017`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
+
+
+
+## Unit tests
+
+This project uses tox to validate against several python environments.
+
+1. Ensure you have an python environment. [Recommendations](https://github.com/blockchain-certificates/developer-common-docs/blob/master/virtualenv.md)
+
+2. Run tests
+    ```
+    ./run_tests.sh
+    ```
+
+## Database collections 
+
+[About the database collections](docs/database_collections.md)
 
 ## Contact
 
