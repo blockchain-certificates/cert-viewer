@@ -4,9 +4,11 @@ import logging
 import gridfs
 from bson.objectid import ObjectId
 from pymongo import MongoClient
+
 from . import config
 from . import formatters
 from .notifier import Notifier
+
 
 class CertificateStore:
     def __init__(self,
@@ -26,27 +28,6 @@ class CertificateStore:
         self.gfs = gfs or gridfs.GridFS(self.client[certificates_db_name])
         self.db = self.client[certificates_db_name]
         self.notifier = notifier or Notifier.factory()
-
-    def request_certificate(self, user_data):
-        """Request a certificate
-
-        :param user_data: User data
-        :type user_data: cert_viewer.models.UserData
-
-        """
-        # check if we already have a user associated with the public key
-        user = self.find_recipient_by_pub_key(user_data.pubkey)
-        if user is None:
-            logging.info('User not found for public key; creating user')
-            self.create_user(user_data)
-        self.create_certificate_request(user_data.pubkey)
-        logging.debug('Created certificate request; sending notification')
-        sent = self.notifier.notify(
-            user_data.email,
-            user_data.first_name,
-            user_data.last_name)
-        logging.debug('Finished requesting certificate')
-        return sent
 
     def get_formatted_certificate(self, certificate_uid, requested_format):
         logging.debug('Retrieving certificate for uid=%s', certificate_uid)
@@ -84,14 +65,6 @@ class CertificateStore:
         verification_info = formatters.format_verification_info(certificate)
         return award, verification_info
 
-
-    def find_certificate_by_txid(self, txid):
-        certificate = None
-        if txid:
-            certificate = self.db.certificates.find_one(
-                {'txid': txid, 'issued': True})
-        return certificate
-
     def find_certificate_by_uid(self, uid=None):
         """
         Find certificate by certificate uid
@@ -104,24 +77,6 @@ class CertificateStore:
                 {'_id': ObjectId(uid), 'issued': True})
         return certificate
 
-    def find_recipient_by_pub_key(self, pubkey):
-        return self.db.recipients.find_one({'pubkey': pubkey})
-
-    def find_user_and_certificate_by_pubkey(self, pubkey):
-        # if certificate is missing pubkey, it will be returned by the filter
-        # below.
-        if pubkey is None:
-            return None, None
-        user = self.find_recipient_by_pub_key(pubkey)
-        certificates = self.db.certificates.find(
-            {'pubkey': pubkey, 'issued': True})
-        if user:
-            # TODO: create new object instead of overwriting
-            user['_id'] = formatters.parse_user_uid(user)
-        if certificates:
-            certificates = list(certificates)
-        return user, certificates
-
     def find_file_in_gridfs(self, filename):
         certfile = self.gfs.find_one({'filename': filename})
         if certfile:
@@ -130,25 +85,6 @@ class CertificateStore:
                 return contents.decode("utf-8")
             return contents
         return None
-
-    def create_user(self, user_data):
-        user_json = formatters.user_data_to_json(user_data)
-        rec_id = self.insert_user(user_json)
-        logging.info('Inserted user with recipient id=%s', rec_id)
-
-        return user_json
-
-    def create_certificate_request(self, pubkey):
-        cert_json = formatters.pubkey_to_cert_request(pubkey)
-        cert_id = self.insert_certificate(cert_json=cert_json)
-        logging.info('Inserted certificate request with uid=%s', cert_id)
-
-        return cert_id
-
-    def insert_user(self, user_json):
-        """Exposed separately to ease testing"""
-        user_id = CertificateStore.insert_shim(self.db.recipients, user_json)
-        return user_id.inserted_id
 
     def insert_certificate(self, cert_json):
         """Exposed separately to ease testing"""

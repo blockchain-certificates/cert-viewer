@@ -5,7 +5,6 @@ from flask import Flask
 from . import config
 from .certificate_store import CertificateStore
 from .forms import RegistrationForm, BitcoinForm
-from .models import UserData
 
 app = Flask(__name__)
 

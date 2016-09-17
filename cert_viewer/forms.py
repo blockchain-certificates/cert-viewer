@@ -1,6 +1,6 @@
 import sys
 
-from wtforms import Form, TextField, TextAreaField, validators, RadioField
+from wtforms import Form, TextAreaField, validators, RadioField, StringField
 
 
 def get_coerce_val():
@@ -12,36 +12,36 @@ def get_coerce_val():
 
 
 class RegistrationForm(Form):
-    first_name = TextField(
+    first_name = StringField(
         'First Name', [
             validators.required(), validators.length(
                 max=200)])
-    last_name = TextField(
+    last_name = StringField(
         'Last Name', [
             validators.required(), validators.length(
                 max=200)])
-    email = TextField(
+    email = StringField(
         'Email', [
             validators.required(), validators.length(
                 max=200)])
-    pubkey = TextField(
+    pubkey = StringField(
         'Bitcoin Public Address', [
             validators.required(), validators.length(
                 max=35)])
-    address = TextField(
+    address = StringField(
         'Mailing Address', [
             validators.required(), validators.length(
                 max=200)])
-    city = TextField(
+    city = StringField(
         'City', [
             validators.required(), validators.length(
                 max=200)])
-    state = TextField('State/Province/Region',
-                      [validators.required(), validators.length(max=200)])
-    zipcode = TextField('ZIP/Postal Code',
-                        [validators.required(),
-                         validators.length(max=200)])
-    country = TextField(
+    state = StringField('State/Province/Region',
+                        [validators.required(), validators.length(max=200)])
+    zipcode = StringField('ZIP/Postal Code',
+                          [validators.required(),
+                           validators.length(max=200)])
+    country = StringField(
         'Country', [
             validators.required(), validators.length(
                 max=200)])
@@ -53,20 +53,20 @@ class RegistrationForm(Form):
 
 
 class AddressForm(Form):
-    address = TextField(
+    address = StringField(
         'Mailing Address', [
             validators.required(), validators.length(
                 max=200)])
-    city = TextField(
+    city = StringField(
         'City', [
             validators.required(), validators.length(
                 max=200)])
-    state = TextField('State/Province/Region',
-                      [validators.required(), validators.length(max=200)])
-    zipcode = TextField('ZIP/Postal Code',
-                        [validators.required(),
-                         validators.length(max=200)])
-    country = TextField(
+    state = StringField('State/Province/Region',
+                        [validators.required(), validators.length(max=200)])
+    zipcode = StringField('ZIP/Postal Code',
+                          [validators.required(),
+                           validators.length(max=200)])
+    country = StringField(
         'Country', [
             validators.required(), validators.length(
                 max=200)])

@@ -2,24 +2,23 @@ import json
 import logging
 import sys
 
+import requests
+from cert_verifier import verifier
+from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join
+from werkzeug.routing import BaseConverter
+
+from . import app
+from . import cert_store
+from . import config
+from . import formatters
+from . import ui_helpers
+from .forms import RegistrationForm, BitcoinForm
+from .notifier import Notifier
+
 if sys.version > '3':
     from urllib.parse import urlencode
 else:
     from urllib import urlencode
-
-
-from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join
-from werkzeug.routing import BaseConverter
-from . import app
-from . import cert_store
-from . import config
-from . import ui_helpers
-from .forms import RegistrationForm, BitcoinForm
-from .models import UserData
-from . import formatters
-import requests
-from .notifier import Notifier
-from cert_verifier import verifier
 
 
 class RegexConverter(BaseConverter):
@@ -120,45 +119,38 @@ def request_page():
     bitcoin = BitcoinForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        if config.get_config().USE_LEGACY_REQUESTS:
-            user_data = UserData(form.pubkey.data, form.email.data, form.degree.data, form.comments.data,
-                                 form.first_name.data, form.last_name.data, form.address.data, form.city.data,
-                                 form.state.data, form.zipcode.data, form.country.data)
 
-            sent = cert_store.request_certificate(user_data)
-        else:
-            intro_endpoint = config.get_config().INTRO_ENDPOINT
-            if not intro_endpoint:
-                return "Sorry, introductions are not supported", 404
+        intro_endpoint = config.get_config().INTRO_ENDPOINT
+        if not intro_endpoint:
+            return "Sorry, introductions are not supported", 404
 
-            user_data = {
-                'bitcoinAddress': form.pubkey.data,
-                'comments': form.comments.data,
-                'email': form.email.data,
-                'firstName': form.first_name.data,
-                'lastName': form.last_name.data,
-                'degree': form.degree.data,
-                'address': form.address.data,
-                'city': form.city.data,
-                'state': form.state.data,
-                'zip_code': form.zipcode.data,
-                'country': form.country.data
-            }
+        user_data = {
+            'bitcoinAddress': form.pubkey.data,
+            'comments': form.comments.data,
+            'email': form.email.data,
+            'firstName': form.first_name.data,
+            'lastName': form.last_name.data,
+            'degree': form.degree.data,
+            'address': form.address.data,
+            'city': form.city.data,
+            'state': form.state.data,
+            'zipCode': form.zipcode.data,
+            'country': form.country.data
+        }
 
-            headers = {'Content-type': 'application/json',
-                       'Accept': 'application/json'}
-            r = requests.post(intro_endpoint, json=user_data, headers=headers)
-            succeeded = r.status_code == 200
-            if not succeeded:
-                error_message = str(r.content)
-                logging.error('Problem processing introduction, %s', error_message)
-                return 'Problem processing introduction', 500
+        headers = {'Content-type': 'application/json',
+                   'Accept': 'application/json'}
+        r = requests.post(intro_endpoint, json=user_data, headers=headers)
+        succeeded = r.status_code == 200
+        if not succeeded:
+            error_message = str(r.content)
+            logging.error('Problem processing introduction, %s', error_message)
+            return 'Problem processing introduction', 500
 
-            sent = Notifier.factory().notify(
-                form.email.data,
-                form.first_name.data,
-                form.last_name.data)
-
+        sent = Notifier.factory().notify(
+            form.email.data,
+            form.first_name.data,
+            form.last_name.data)
 
         logging.debug('finished requesting certificate')
         hidden_email = ui_helpers.obfuscate_email_display(form.email.data)
@@ -187,12 +179,12 @@ def verify():
     if verify_response:
         return json.dumps(verify_response)
     else:
-        return 'problem rendering response' # TODO!!!
+        return 'problem rendering response'  # TODO!!!
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    logging.error('Page not found: %s', request.path)
+    logging.error('Page not found: %s, error: ', request.path, error)
     return 'This page does not exist', 404
 
 

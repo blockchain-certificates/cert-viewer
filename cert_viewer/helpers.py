@@ -1,5 +1,20 @@
 """Utilities to convert certificates to user-friendly award display"""
+import binascii
 import json
+import sys
+
+unhexlify = binascii.unhexlify
+hexlify = binascii.hexlify
+if sys.version > '3':
+    unhexlify = lambda h: binascii.unhexlify(h.encode('utf8'))
+    hexlify = lambda b: binascii.hexlify(b).decode('utf8')
+
+
+def obfuscate_email_display(email):
+    """Partially hides email before displaying"""
+    hidden_email_parts = email.split("@")
+    hidden_email = hidden_email_parts[0][:2] + ("*" * (len(hidden_email_parts[0]) - 2)) + "@" + hidden_email_parts[1]
+    return hidden_email
 
 
 def certificate_to_filename(certificate):
@@ -12,10 +27,6 @@ def certificate_uid_to_filename(uid):
 
 def parse_standard_id_location(json_obj):
     return str(json_obj['_id'])
-
-
-def parse_user_uid(user):
-    return parse_standard_id_location(user)
 
 
 def parse_certificate_uid(certificate):
@@ -58,26 +69,3 @@ def check_display(award):
     if award['display'] == 'FALSE':
         award['subtitle'] = ''
     return award
-
-
-def user_data_to_json(user_data):
-    user_json = {'pubkey': user_data.pubkey, 'info': {}}
-    user_json['info']['email'] = user_data.email
-    user_json['info']['degree'] = user_data.degree
-    user_json['info']['comments'] = user_data.comments
-    user_json['info']['name'] = {
-        'familyName': user_data.last_name,
-        'givenName': user_data.first_name}
-    user_json['info']['address'] = {
-        'streetAddress': user_data.street_address,
-        'city': user_data.city,
-        'state': user_data.state,
-        # TODO: per discussion, ' was added to help export. Find another way
-        'zipcode': "\'" + user_data.zip_code,
-        'country': user_data.country
-    }
-    return user_json
-
-
-def pubkey_to_cert_request(pubkey):
-    return {'pubkey': pubkey, 'issued': False, 'txid': None}

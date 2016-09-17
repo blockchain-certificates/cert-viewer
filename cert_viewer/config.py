@@ -1,24 +1,27 @@
 import json
-import configargparse
-
 import os
+
+import configargparse
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 
 def create_config():
-
     p = configargparse.getArgumentParser(default_config_files=[os.path.join(BASE_DIR, 'conf_test.ini'),
-                                                                os.path.join(BASE_DIR, 'conf.ini'),
-                                                                '/etc/cert-issuer/conf.ini'])
+                                                               os.path.join(BASE_DIR, 'conf.ini'),
+                                                               '/etc/cert-issuer/conf.ini'])
     p.add('-c', '--my-config', required=False,
           is_config_file=True, help='config file path')
-    p.add_argument('--NOTIFIER_TYPE', default='noop', type=str, env_var='NOTIFIER_TYPE', help='type of notification on certificate introduction')
-    p.add_argument('--MONGO_URI', default='mongodb://localhost:27017', type=str, env_var='MONGO_URI', help='mongo connection URI')
+    p.add_argument('--NOTIFIER_TYPE', default='noop', type=str, env_var='NOTIFIER_TYPE',
+                   help='type of notification on certificate introduction')
+    p.add_argument('--MONGO_URI', default='mongodb://localhost:27017', type=str, env_var='MONGO_URI',
+                   help='mongo connection URI')
     # TODO: update canned data to test db
-    p.add_argument('--CERTIFICATES_DB', default='admin', type=str, env_var='CERTIFICATES_DB', help='mongo db name')
+    p.add_argument('--CERTIFICATES_DB', default='admin', type=str, env_var='CERTIFICATES_DB',
+                   help='mongo db name')
 
-    p.add_argument('--FROM_EMAIL', type=str, env_var='FROM_EMAIL', help='email address from which notification should be sent')
+    p.add_argument('--FROM_EMAIL', type=str, env_var='FROM_EMAIL',
+                   help='email address from which notification should be sent')
     p.add_argument('--FROM_NAME', type=str, env_var='FROM_NAME', help='name from which notification should be sent')
     p.add_argument('--SUBJECT', type=str, env_var='SUBJECT', help='notification subject line')
 
@@ -27,7 +30,8 @@ def create_config():
     p.add_argument('--LOG_DIR', type=str, env_var='LOG_DIR', help='application log directory')
     p.add_argument('--LOG_FILE_NAME', type=str, env_var='LOG_FILE_NAME', help='application log file name')
 
-    p.add_argument('--SECRET_KEY', type=str, env_var='SECRET_KEY', help='Flask secret key, to enable cryptographically signed sessions')
+    p.add_argument('--SECRET_KEY', type=str, env_var='SECRET_KEY',
+                   help='Flask secret key, to enable cryptographically signed sessions')
     p.add_argument('--CRITERIA_PATH', type=str, env_var='CRITERIA_PATH', help='TODO criteria path')
     p.add_argument('--KEY_PATH', type=str, env_var='KEY_PATH', help='TODO key path')
     p.add_argument('--CERT_PUBKEY', type=str, env_var='CERT_PUBKEY', help='TODO pub key')
@@ -35,9 +39,6 @@ def create_config():
     p.add_argument('--ISSUER_PATH', type=str, env_var='ISSUER_PATH', help='TODO issuer path')
 
     p.add_argument('--INTRO_ENDPOINT', type=str, env_var='INTRO_ENDPOINT', help='endpoint for submitting intros')
-
-    p.add_argument('--USE_LEGACY_REQUESTS', action='store_true', env_var='USE_LEGACY_REQUESTS',
-                   help='Use original v1 version of requests database, as opposed to introductions')
 
     args, _ = p.parse_known_args()
     return args
