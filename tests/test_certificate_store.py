@@ -7,14 +7,13 @@ from pymongo.results import InsertOneResult
 
 from cert_viewer.certificate_store import CertificateStore
 
-
 # mongo mock doesn't support insert_one, so we patch that with insert
 def mock_insert_workaround(collection, document):
     inserted_id = collection.insert(document)
     return InsertOneResult(inserted_id, True)
 
 
-class TestCertificates(unittest.TestCase):
+class TestCertificateStore(unittest.TestCase):
     def setUp(self):
         self.client = mongomock.MongoClient()
         self.fs = Mock(name='mockGridFS')

@@ -10,8 +10,7 @@ from werkzeug.routing import BaseConverter
 from . import app
 from . import cert_store
 from . import config
-from . import formatters
-from . import ui_helpers
+from . import helpers
 from .forms import RegistrationForm, BitcoinForm
 from .notifier import Notifier
 
@@ -153,7 +152,7 @@ def request_page():
             form.last_name.data)
 
         logging.debug('finished requesting certificate')
-        hidden_email = ui_helpers.obfuscate_email_display(form.email.data)
+        hidden_email = helpers.obfuscate_email_display(form.email.data)
         if sent:
             flash('We just sent a confirmation email to %s.' % hidden_email)
         else:
@@ -171,7 +170,7 @@ def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
     signed_local_file = cert_store.find_file_in_gridfs(
-        formatters.certificate_uid_to_filename(uid))
+        helpers.certificate_uid_to_filename(uid))
     if not signed_local_file:
         return False
 

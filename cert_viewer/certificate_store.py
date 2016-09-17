@@ -5,8 +5,7 @@ import gridfs
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
-from . import config
-from . import formatters
+from . import config, helpers
 from .notifier import Notifier
 
 
@@ -37,7 +36,7 @@ class CertificateStore:
         if certificate:
             if requested_format == "json":
                 award = self.find_file_in_gridfs(
-                    formatters.certificate_to_filename(certificate))
+                    helpers.certificate_to_filename(certificate))
                 verification_info = None
             else:
                 award, verification_info = self.get_award_and_verification_for_certificate(
@@ -53,16 +52,16 @@ class CertificateStore:
         return award, verification_info
 
     def get_award_and_verification_for_certificate(self, certificate):
-        filename = formatters.certificate_to_filename(certificate)
+        filename = helpers.certificate_to_filename(certificate)
         gfs_file = self.find_file_in_gridfs(filename)
         if not gfs_file:
             logging.warning('File not found in gridfs, filename=%s', filename)
             return None, None
 
         pubkey_content = config.get_config().CERT_PUBKEY
-        award = formatters.gfs_file_to_award(
+        award = helpers.gfs_file_to_award(
             gfs_file, pubkey_content, certificate)
-        verification_info = formatters.format_verification_info(certificate)
+        verification_info = helpers.format_verification_info(certificate)
         return award, verification_info
 
     def find_certificate_by_uid(self, uid=None):
