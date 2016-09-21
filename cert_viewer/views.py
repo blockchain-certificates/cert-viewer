@@ -90,12 +90,14 @@ def get_award(identifier=None):
     requested_format = request.args.get("format", None)
     from . import cert_store_connection
 
-    certificate = cert_store_connection.get_certificate(identifier)
-    if not certificate:
+    cert_raw = cert_store_connection.get_certificate(identifier)
+    if not cert_raw:
         logging.error('Could not find certificate with id, %s', identifier)
         return 'Problem getting certificate', 500
 
-    award, verification_info = helpers.get_award_and_verification_for_certificate(certificate, 'txid')
+    cert_string = cert_raw.decode('utf-8')
+    cert_json = json.loads(cert_string)
+    award, verification_info = helpers.get_award_and_verification_for_certificate(cert_json, 'txid')
     if award and requested_format == "json":
         return award
     if award:
@@ -171,12 +173,12 @@ def request_page():
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    signed_local_file = '' #cert_store.find_file_in_gridfs(
-    #    helpers.certificate_uid_to_filename(uid))
-    #if not signed_local_file:
-    #    return False
-    # TODO
-    verify_response = verifier.verify_cert_contents(signed_local_file, transaction_id, 'mainnet')
+    from . import cert_store_connection
+    cert_raw = cert_store_connection.get_certificate(uid)
+    if not cert_raw:
+        logging.error('Could not find certificate with uid, %s', uid)
+        return 'Problem getting certificate', 500
+    verify_response = verifier.verify_cert_contents(cert_raw, 'testnet', transaction_id)
     if verify_response:
         return json.dumps(verify_response)
     else:
