@@ -1,7 +1,7 @@
 FROM mongo
 
 COPY dump /dump
-CMD mongorestore --host mongodb --db admin /dump/
+CMD mongorestore --host mongodb --db test /dump/test
 
 # Note: the recipient and certificate files are currently here for reference only. Because we're storing the
 # certificates in gridfs, we need to use mongodump and mongorestore to load sample data.
@@ -10,6 +10,6 @@ CMD mongorestore --host mongodb --db admin /dump/
 # example:
 # COPY recipients.json /recipients.json
 # COPY certificates.json /certificates.json
-# CMD mongoimport --db admin --collection recipients --type json --file recipients.json --jsonArray
-# CMD mongoimport --db admin --collection certificates --type json --file certificates.json --jsonArray
+# CMD mongoimport --db test --collection recipients --type json --file recipients.json --jsonArray
+# CMD mongoimport --db test --collection certificates --type json --file certificates.json --jsonArray
 

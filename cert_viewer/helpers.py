@@ -1,6 +1,7 @@
 """Utilities to convert certificates to user-friendly award display"""
 import binascii
 import json
+import logging
 import sys
 
 unhexlify = binascii.unhexlify
@@ -17,35 +18,41 @@ def obfuscate_email_display(email):
     return hidden_email
 
 
-def certificate_to_filename(certificate):
-    return certificate_uid_to_filename(parse_certificate_uid(certificate))
-
-
-def certificate_uid_to_filename(uid):
-    return uid + '.json'
-
-
-def parse_standard_id_location(json_obj):
-    return str(json_obj['_id'])
-
-
-def parse_certificate_uid(certificate):
-    return parse_standard_id_location(certificate)
-
-
-def parse_txid(certificate):
-    return certificate['txid']
-
-
-def format_verification_info(certificate):
+def format_verification_info_v1_2(certificate):
     return {
-        'uid': parse_certificate_uid(certificate),
-        'transactionID': parse_txid(certificate)
+        'uid': str(certificate['document']['assertion']['uid'])
     }
 
 
-def gfs_file_to_award(gfs_file, pubkey_content, certificate):
-    json_certificate = json.loads(gfs_file)
+def format_verification_info_v1_1(certificate, txid):
+    return {
+        'uid': str(certificate['_id']),
+        'transactionID': txid
+    }
+
+def gfs_file_to_award_v1_2(json_certificate):
+    certificate = json_certificate['document']['certificate']
+    assertion = json_certificate['document']['assertion']
+    recipient = json_certificate['document']['recipient']
+    award = {
+        'logoImg': certificate['issuer']['image'],
+        'name': recipient['givenName'] + ' ' + recipient['familyName'],
+        'title': certificate['title'],
+        'organization': certificate['issuer']['name'],
+        'text': certificate['description'],
+        'signatureImg': assertion['image:signature'],
+        'publicKeyURL': json_certificate['document']['verify']['signer'],
+        #'transactionID': txid,
+        #'transactionIDURL': 'https://blockchain.info/tx/' + txid,
+        'issuedOn': assertion['issuedOn']
+    }
+    if 'subtitle' in certificate:
+        award['subtitle'] = certificate['subtitle']
+
+    return award
+
+
+def gfs_file_to_award_v1_1(json_certificate, txid):
     award = {
         'logoImg': json_certificate['certificate']['issuer']['image'],
         'name': json_certificate['recipient']['givenName'] + ' ' + json_certificate['recipient']['familyName'],
@@ -55,10 +62,9 @@ def gfs_file_to_award(gfs_file, pubkey_content, certificate):
         'organization': json_certificate['certificate']['issuer']['name'],
         'text': json_certificate['certificate']['description'],
         'signatureImg': json_certificate['assertion']['image:signature'],
-        'publicKey': pubkey_content,
         'publicKeyURL': json_certificate['verify']['signer'],
-        'transactionID': parse_txid(certificate),
-        'transactionIDURL': 'https://blockchain.info/tx/' + parse_txid(certificate),
+        'transactionID': txid,
+        'transactionIDURL': 'https://blockchain.info/tx/' + txid,
         'issuedOn': json_certificate['assertion']['issuedOn']
     }
     award = check_display(award)
@@ -69,3 +75,9 @@ def check_display(award):
     if award['display'] == 'FALSE':
         award['subtitle'] = ''
     return award
+
+
+def get_award_and_verification_for_certificate(certificate_json, txid):
+    award = gfs_file_to_award_v1_2(certificate_json)
+    verification_info = format_verification_info_v1_2(certificate_json)
+    return award, verification_info

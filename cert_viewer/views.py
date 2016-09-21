@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import sys
 
 import requests
@@ -8,7 +9,6 @@ from flask import render_template, request, flash, redirect, url_for, send_from_
 from werkzeug.routing import BaseConverter
 
 from . import app
-from . import cert_store
 from . import config
 from . import helpers
 from .forms import RegistrationForm, BitcoinForm
@@ -32,7 +32,7 @@ app.url_map.converters['regex'] = RegexConverter
 @app.route('/', methods=['GET', 'POST'])
 def home_page():
     """Home page"""
-    recent_certids_from_config = config.get_config().RECENT_CERTIDS
+    recent_certids_from_config = config.get_config().recent_certids
 
     if recent_certids_from_config:
         recent_certids = str.split(recent_certids_from_config, ',')
@@ -52,27 +52,25 @@ def faq_page():
 
 @app.route('/keys/<key_name>')
 def key_page(key_name=None):
-    """Shows keys in the /keys folder"""
-    key = config.get_key_by_name(key_name)
-    if key:
-        return key
-    return 'Sorry, this page does not exist.', 404
+    """Redirect to identity endpoint for backcompat"""
+    redirect_url = os.path.join(config.get_config().id_endpoint, 'keys', key_name)
+    return redirect(redirect_url)
 
 
 @app.route('/issuer/<path:issuer_filename>')
 def issuer_page(issuer_filename=None):
-    """Shows issuer in the /issuer folder, e.g. http://0.0.0.0:5000/issuer/ml-issuer.json"""
-    return send_from_directory(
-        safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False)
+    """Redirect to identity endpoint for backcompat"""
+    redirect_url = os.path.join(config.get_config().id_endpoint, 'issuer', issuer_filename)
+    return redirect(redirect_url)
 
 
 @app.route(
     '/criteria/<regex("[0-9]{4}"):year>/<regex("[0-9]{2}"):month>/<regex("[a-zA-Z0-9.]+"):criteria_name>')
 def criteria_page(year, month, criteria_name):
-    """Shows criteria, e.g. https://coins.media.mit.edu/criteria/2016/01/alumni.json"""
+    """Redirect to identity endpoint for backcompat"""
     criteria_filename = '-'.join([year, month, criteria_name])
-    return send_from_directory(
-        safe_join(app.root_path, 'criteria'), criteria_filename, as_attachment=False)
+    redirect_url = os.path.join(config.get_config().id_endpoint, 'criteria', criteria_filename)
+    return redirect(redirect_url)
 
 
 @app.route('/favicon.ico')
@@ -80,8 +78,8 @@ def favicon():
     return send_from_directory(safe_join(app.root_path, 'static/img'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-
-@app.route('/<regex("[a-zA-Z0-9]{12,24}"):identifier>')
+#regex("[a-zA-Z0-9]{12,24}"):
+@app.route('/<identifier>')
 def get_award(identifier=None):
     """
     Render user's certificates or individual certificate based on certificate uid
@@ -90,8 +88,14 @@ def get_award(identifier=None):
     """
 
     requested_format = request.args.get("format", None)
-    award, verification_info = cert_store.get_formatted_certificate(
-        certificate_uid=identifier, requested_format=requested_format)
+    from . import cert_store_connection
+
+    certificate = cert_store_connection.get_certificate(identifier)
+    if not certificate:
+        logging.error('Could not find certificate with id, %s', identifier)
+        return 'Problem getting certificate', 500
+
+    award, verification_info = helpers.get_award_and_verification_for_certificate(certificate, 'txid')
     if award and requested_format == "json":
         return award
     if award:
@@ -113,13 +117,13 @@ def generate_keys():
 
 @app.route('/request', methods=['GET', 'POST'])
 def request_page():
-    """Request an introduction"""
+    """Request an introduction. Forwarding to intro endpoint for backcompat"""
     form = RegistrationForm(request.form)
     bitcoin = BitcoinForm(request.form)
 
     if request.method == 'POST' and form.validate():
 
-        intro_endpoint = config.get_config().INTRO_ENDPOINT
+        intro_endpoint = config.get_config().intro_endpoint
         if not intro_endpoint:
             return "Sorry, introductions are not supported", 404
 
@@ -157,23 +161,21 @@ def request_page():
             flash('We just sent a confirmation email to %s.' % hidden_email)
         else:
             flash(
-                'We received your request and will respond to %s.' %
-                hidden_email)
+                'We received your request and will respond to %s.' % hidden_email)
         return redirect(url_for('home_page'))
     else:
-        return render_template('request.html', form=form,
-                               registered=False, bitcoin=bitcoin)
+        return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
 
 
 @app.route("/verify")
 def verify():
     uid = request.args.get('uid')
     transaction_id = request.args.get('transactionID')
-    signed_local_file = cert_store.find_file_in_gridfs(
-        helpers.certificate_uid_to_filename(uid))
-    if not signed_local_file:
-        return False
-
+    signed_local_file = '' #cert_store.find_file_in_gridfs(
+    #    helpers.certificate_uid_to_filename(uid))
+    #if not signed_local_file:
+    #    return False
+    # TODO
     verify_response = verifier.verify_cert_contents(signed_local_file, transaction_id, 'mainnet')
     if verify_response:
         return json.dumps(verify_response)

@@ -2,36 +2,63 @@ version: "2"
 
 services:
   mongodb:
-    image: mongo:latest
-    command: --smallfiles
+    image: mongo:3.0
+    environment:
+      - STORAGE_ENGINE=wiredTiger
     ports:
       - "27017:27017"
+    command: --smallfiles --storageEngine wiredTiger
+    restart: always
 
   mongo-seed:
     build: ./mongo-seed
     depends_on:
       - mongodb
 
-  intro-ui:
-    image: blockcerts/certintro_web:1.2
+  intro-service:
+    image: blockcerts/certissuerintro:0.1
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/test
-    command: python -u /cert-provider/cert-provider/app.py
+    command: python -u /cert-issuer-intro/run.py
     depends_on:
       - mongodb
     ports:
       - "5001:5001"
 
+  id-service:
+    image: blockcerts/certissueridentity:1.2
+    command: python -u /cert-issuer-identity/run.py
+    depends_on:
+      - mongodb
+    ports:
+      - "5002:5002"
+
+#  cert-store:
+#    image: blockcerts/certstore:0.2
+#    command: python -u /cert-store/run.py
+#    environment:
+#     - MONGODB_URI=mongodb://mongodb:27017/test
+#    depends_on:
+#      - mongodb
+#      - mongo-seed
+#    ports:
+#      - "5003:5003"
+
   web:
     build: .
     env_file:
       - ./cert-viewer-local.env
-    # TODO: will need to pass this in
-    # INTRO_ENDPOINT=http://localhost:5001/intro/
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/test
+      - INTRO_ENDPOINT=http://intro-service:5001/intro/
+      - ID_ENDPOINT=http://id-service:5002/
+ #     - CERT_STORE_ENDPOINT=http://cert-store:5003/certificates
     command: python -u /cert-viewer/run.py
     ports:
       - "5000:5000"
     depends_on:
       - mongodb
       - mongo-seed
-      - intro-ui
+      - intro-service
+      - id-service
+#      - certstore

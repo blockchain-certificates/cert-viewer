@@ -1,1 +1,0 @@
-[{"_id":{"$oid":"68656c6c6f636f6d7077fffe"},"info":{"email":"recipient@domain.com","comments":"some comments","degree":"some degree","name":{"givenName":"RecipientFirstName","familyName":"RecipientLastName"},"address":{"country":"usa","zipcode":"'44444","city":"somecity","state":"somestate","streetAddress":"111 main st"}},"pubkey":"17yG5mvCx1Hg7dsNkHiBNZ65aAygCJXdzN"}]
