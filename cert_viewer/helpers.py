@@ -1,9 +1,9 @@
 """Utilities to convert certificates to user-friendly award display"""
 import binascii
-import json
-import logging
 import sys
+from cert_verifier import Chain, UnrecognizedChainError, parse_chain_from_address
 
+# TODO: refactor
 unhexlify = binascii.unhexlify
 hexlify = binascii.hexlify
 if sys.version > '3':
@@ -31,9 +31,15 @@ def format_verification_info_v1_1(certificate, txid):
     }
 
 def gfs_file_to_award_v1_2(json_certificate):
-    certificate = json_certificate['document']['certificate']
-    assertion = json_certificate['document']['assertion']
-    recipient = json_certificate['document']['recipient']
+    document = json_certificate['document']
+    certificate = document['certificate']
+    assertion = document['assertion']
+    recipient = document['recipient']
+    receipt = json_certificate['receipt']
+    txid = receipt['anchors'][0]['sourceId']
+    chain = parse_chain_from_address(recipient['pubkey'])
+    tx_url = get_tx_lookup_prefix_for_chain(chain)
+
     award = {
         'logoImg': certificate['issuer']['image'],
         'name': recipient['givenName'] + ' ' + recipient['familyName'],
@@ -42,8 +48,8 @@ def gfs_file_to_award_v1_2(json_certificate):
         'text': certificate['description'],
         'signatureImg': assertion['image:signature'],
         'publicKeyURL': json_certificate['document']['verify']['signer'],
-        #'transactionID': txid,
-        #'transactionIDURL': 'https://blockchain.info/tx/' + txid,
+        'transactionID': txid,
+        'transactionIDURL': tx_url + txid,
         'issuedOn': assertion['issuedOn']
     }
     if 'subtitle' in certificate:
@@ -81,3 +87,15 @@ def get_award_and_verification_for_certificate(certificate_json, txid):
     award = gfs_file_to_award_v1_2(certificate_json)
     verification_info = format_verification_info_v1_2(certificate_json)
     return award, verification_info
+
+
+# TODO: refactor to common
+def get_tx_lookup_prefix_for_chain(chain):
+    if chain == Chain.testnet:
+        return 'https://tbtc.blockr.io/tx/info/'
+    elif chain == Chain.mainnet:
+        return 'https://blockchain.info/tx/'
+    else:
+        raise UnrecognizedChainError(
+            'unsupported chain (%s) requested with blockcypher collector. Currently only testnet and mainnet are supported' % chain)
+

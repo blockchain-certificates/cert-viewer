@@ -172,17 +172,17 @@ def request_page():
 @app.route("/verify")
 def verify():
     uid = request.args.get('uid')
-    transaction_id = request.args.get('transactionID')
+    #transaction_id = request.args.get('transactionID')
     from . import cert_store_connection
     cert_raw = cert_store_connection.get_certificate(uid)
+
     if not cert_raw:
         logging.error('Could not find certificate with uid, %s', uid)
         return 'Problem getting certificate', 500
-    verify_response = verifier.verify_cert_contents(cert_raw, 'testnet', transaction_id)
+    verify_response = verifier.verify_cert_contents(cert_raw)
     if verify_response:
         return json.dumps(verify_response)
-    else:
-        return 'problem rendering response'  # TODO!!!
+    return 'problem rendering response'  # TODO!!!
 
 
 @app.errorhandler(404)
