@@ -97,11 +97,11 @@ should be changed if you're using this for anything other than demo purposes.
     ```
     
 2. Edit the following entries (refer to conf_sample.ini for examples):
-    - `SECRET_KEY` is a random string used by Flask as a secret key to enable cryptographically signed session
-    - `MANDRILL_API_KEY` is used to send out notifications when a user signs up. Setup your mandrill account at https://www.mandrill.com/
-    - `MONGO_URL` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>`. Examples follow:
-         - Local mongo installation: `MONGO_URI = mongodb://localhost:27017`
-         - Docker installation: `MONGO_URI = mongodb://<DOCKER_MACHINE_IP>:27017`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
+    - `secret_key` is a random string used by Flask as a secret key to enable cryptographically signed session
+    - `mandrill_api_key` is used to send out notifications when a user signs up. Setup your mandrill account at https://www.mandrill.com/
+    - `mongodb_uri` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>`. Examples follow:
+         - Local mongo installation: `mongodb_uri = mongodb://localhost:27017`
+         - Docker installation: `mongodb_uri = mongodb://<DOCKER_MACHINE_IP>:27017`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
 
 
 
@@ -122,4 +122,4 @@ This project uses tox to validate against several python environments.
 
 ## Contact
 
-Contact [certs@mit.edu](mailto:certs@mit.edu) with questions
+Contact [info@blockcerts.org](mailto:info@blockcerts.org) with questions

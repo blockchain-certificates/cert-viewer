@@ -8,8 +8,8 @@ function renderResponse(i, len, data){
 	setTimeout(function(){
 		count = i+1;
 		total = len-1;
-		message = data[0];
-		value = data[1];
+		message = data.name;
+		value = data.status;
 		if(i != len-1){
 			$("#progress-msg").html($("#progress-msg").html()+'Step ' + count.toString() +' of ' + total.toString() + "... " +message+'</span>');
 		}
@@ -25,7 +25,7 @@ function renderResponse(i, len, data){
 				}
 			}
 			else{
-				$("#progress-msg").html($("#progress-msg").html()+'  ['+markMappings[value]+']<br>')
+				$("#progress-msg").html($("#progress-msg").html()+' ['+markMappings[value]+']<br>')
 			}
 		}, 1000)
 
@@ -33,7 +33,7 @@ function renderResponse(i, len, data){
 }
 
 timeDelay = 2000;
-markMappings = {true: "PASS", false: "FAIL", "DONE": "DONE"}
+markMappings = {"passed": "PASS", "failed": "FAIL", "done": "DONE", "not_started": "NOT STARTED"}
 
 $(document).ready(function() {
 	$( "#verify-button" ).click(function() {

@@ -3,21 +3,29 @@ import logging
 import os
 from flask import Flask
 from . import config
-from .certificate_store import CertificateStore
 from .forms import RegistrationForm, BitcoinForm
-from .models import UserData
+
+import gridfs
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-app.secret_key = config.get_config().SECRET_KEY
-
-cert_store = CertificateStore()
+cert_store_connection = None
 
 
-def initialize_logger():
+def set_cert_store(conf):
+    from cert_store.certificate_store import CertificateStore
+    global cert_store_connection
+    mongo_client = MongoClient(host=conf.mongodb_uri)
+    db = mongo_client[conf.mongodb_uri[conf.mongodb_uri.rfind('/') + 1:len(conf.mongodb_uri)]]
+    gfs = gridfs.GridFS(db)
+    cert_store_connection = CertificateStore(mongo_client, gfs, db)
+
+
+def initialize_logger(conf):
     """Configure logging settings"""
-    log_output_dir = config.get_config().LOG_DIR
-    log_file_name = config.get_config().LOG_FILE_NAME
+    log_output_dir = conf.log_dir
+    log_file_name = conf.log_file_name
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
@@ -41,8 +49,6 @@ def initialize_logger():
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-
-initialize_logger()
 
 # keep here to avoid circular dependencies
 from . import views
