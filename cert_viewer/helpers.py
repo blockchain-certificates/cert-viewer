@@ -37,13 +37,13 @@ def gfs_file_to_award_v1_2(json_certificate):
     recipient = document['recipient']
     receipt = json_certificate['receipt']
     txid = receipt['anchors'][0]['sourceId']
-    chain = parse_chain_from_address(recipient['pubkey'])
+    chain = parse_chain_from_address(recipient['publicKey'])
     tx_url = get_tx_lookup_prefix_for_chain(chain)
 
     award = {
         'logoImg': certificate['issuer']['image'],
         'name': recipient['givenName'] + ' ' + recipient['familyName'],
-        'title': certificate['title'],
+        'title': certificate['name'],
         'organization': certificate['issuer']['name'],
         'text': certificate['description'],
         'signatureImg': assertion['image:signature'],
