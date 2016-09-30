@@ -15,7 +15,7 @@ function renderResponse(i, len, data){
 		}
 		setTimeout(function(){
 			if(i == len-1){
-				if(value==true){
+				if(value=="passed" || value == "done"){
 					$("#progress-msg").html($("#progress-msg").html()+"Success! The certificate has been verified.")
 					$("#verified").show();
 				}

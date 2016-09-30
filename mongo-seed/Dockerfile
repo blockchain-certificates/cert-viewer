@@ -13,3 +13,5 @@ CMD mongorestore --host mongodb --db test /dump/test
 # CMD mongoimport --db test --collection recipients --type json --file recipients.json --jsonArray
 # CMD mongoimport --db test --collection certificates --type json --file certificates.json --jsonArray
 
+# dump db:
+# mongodump --db test --out dump

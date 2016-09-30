@@ -93,6 +93,7 @@ def get_award(identifier=None):
     cert_raw = cert_store_connection.get_certificate(identifier)
     if not cert_raw:
         logging.error('Could not find certificate with id, %s', identifier)
+        # TODO: better error
         return 'Problem getting certificate', 500
 
     cert_string = cert_raw.decode('utf-8')
