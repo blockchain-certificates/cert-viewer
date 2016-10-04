@@ -8,9 +8,7 @@ CMD mongorestore --host mongodb --db test /dump/test
 # For reference, this is how it would be done using mongoexport/mongoimport:
 # reference: http://stackoverflow.com/questions/31210973/how-do-i-seed-a-mongo-database-using-docker-compose
 # example:
-# COPY recipients.json /recipients.json
 # COPY certificates.json /certificates.json
-# CMD mongoimport --db test --collection recipients --type json --file recipients.json --jsonArray
 # CMD mongoimport --db test --collection certificates --type json --file certificates.json --jsonArray
 
 # dump db:

@@ -1,19 +1,7 @@
 version: "2"
 
-services:
-  mongodb:
-    image: mongo:3.0
-    environment:
-      - STORAGE_ENGINE=wiredTiger
-    ports:
-      - "27017:27017"
-    command: --smallfiles --storageEngine wiredTiger
-    restart: always
 
-  mongo-seed:
-    build: ./mongo-seed
-    depends_on:
-      - mongodb
+services:
 
   intro-service:
     image: blockcerts/certissuerintro:0.1
@@ -28,31 +16,18 @@ services:
   id-service:
     image: blockcerts/certissueridentity:1.2
     command: python -u /cert-issuer-identity/run.py
-    depends_on:
-      - mongodb
     ports:
       - "5002:5002"
 
-#  cert-store:
-#    image: blockcerts/certstore:0.2
-#    command: python -u /cert-store/run.py
-#    environment:
-#     - MONGODB_URI=mongodb://mongodb:27017/test
-#    depends_on:
-#      - mongodb
-#      - mongo-seed
-#    ports:
-#      - "5003:5003"
-
   web:
     build: .
+    image: blockcerts/certviewer:latest
     env_file:
       - ./cert-viewer-local.env
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/test
       - INTRO_ENDPOINT=http://intro-service:5001/intro/
       - ID_ENDPOINT=http://id-service:5002/
- #     - CERT_STORE_ENDPOINT=http://cert-store:5003/certificates
     command: python -u /cert-viewer/run.py
     ports:
       - "5000:5000"
@@ -61,4 +36,20 @@ services:
       - mongo-seed
       - intro-service
       - id-service
-#      - certstore
+
+  mongodb:
+    image: mongo:3.0
+    volumes:
+        - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    restart: always
+
+  mongo-seed:
+    build: ./mongo-seed
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
+    external: false
