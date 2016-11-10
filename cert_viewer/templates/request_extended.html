@@ -55,28 +55,51 @@
                 </div>
             </div>
             <span id="reg-info" class="show-later">
-      <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
-      {% from "_formhelpers.html" import render_errors, render_radio_field %}
-      <form method="POST" id="reg-form">
-        <div class="input-group input-group-lg first-group">
-          {{ form.pubkey(type='text',placeholder='Bitcoin Public Address',**{'class':'form-control'}) }}
-        </div>
-        {{ render_errors(form.pubkey) }}
-        <div class="input-group input-group-lg first-group">
-          {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'}) }}
-        </div>
-        {{ render_errors(form.first_name) }}
-        <div class="input-group input-group-lg first-group">
-          {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'}) }}
-        </div>
-        {{ render_errors(form.last_name) }}
-        <div class="input-group input-group-lg first-group last-input">
-          {{ form.email(type='email',placeholder='Email',**{'class':'form-control'}) }}
-        </div>
-        {{ render_errors(form.email) }}
+    <div class="col-md-12 col-sm-12 col-xs-12 no-padding-col">
+    {% from "_formhelpers.html" import render_errors, render_radio_field %}
+    <form method="POST" id="reg-form">
+      <div class="input-group input-group-lg first-group">
+        {{ form.pubkey(type='text',placeholder='Bitcoin Public Address',**{'class':'form-control'}) }}
+      </div>
+      {{ render_errors(form.pubkey) }}
+      <div class="input-group input-group-lg first-group">
+        {{ form.first_name(type='text',placeholder='First Name',**{'class':'form-control'}) }}
+      </div>
+      {{ render_errors(form.first_name) }}
+      <div class="input-group input-group-lg first-group">
+        {{ form.last_name(type='text',placeholder='Last Name',**{'class':'form-control'}) }}
+      </div>
+      {{ render_errors(form.last_name) }}
+      <div class="input-group input-group-lg first-group last-input">
+        {{ form.email(type='email',placeholder='Email',**{'class':'form-control'}) }}
+      </div>
+      {{ render_errors(form.email) }}
+      <span class="first-group">
+        {{ render_radio_field(form.degree) }}
+      </span>
+      {{ render_errors(form.degree) }}
+      <div class="input-group input-group-lg first-group last-input btn-margin" id="comments-input">
+        {{ form.comments(type='text',placeholder='Comments', **{'class':'form-control'}) }}
+      </div>
+      {{ render_errors(form.comments) }}
+      <button type="button" class="btn btn-default btn-margin font-light" id="next-btn">Next</button>
+      </span>
+            <span id="shipping-info" class="show-later">
+        <h3 class="heading font-bold">Shipping Address</h3>
+        <p class="description font-light"> We will send your physical certificate here.</p>
+        <div class="input-group input-group-lg">{{ form.address(type='text',placeholder='Address',**{'class':'form-control'}) }}</div>
+        {{ render_errors(form.address) }}
+        <div class="input-group input-group-lg">{{ form.city(type='text',placeholder='City',**{'class':'form-control'}) }}</div>
+        {{ render_errors(form.city) }}
+        <div class="input-group input-group-lg">{{ form.state(type='text',placeholder='State/Province/Region',**{'class':'form-control'}) }}</div>
+        {{ render_errors(form.state) }}
+        <div class="input-group input-group-lg">{{ form.zipcode(type='text',placeholder='ZIP/Postal Code',**{'class':'form-control'}) }}</div>
+        {{ render_errors(form.zipcode) }}
+        <div class="input-group input-group-lg last-input">{{ form.country(type='text',placeholder='Country',**{'class':'form-control'}) }}</div>
+        {{ render_errors(form.country) }}
         <button type="submit" class="btn btn-default btn-margin font-light" id="submit-btn">Submit</button>
-      </form>
-    </span>
+      </span>
+            </form>
         </div>
     </div>
     </div>

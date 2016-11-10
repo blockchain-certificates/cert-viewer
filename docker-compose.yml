@@ -3,22 +3,6 @@ version: "2"
 
 services:
 
-  intro-service:
-    image: blockcerts/certissuerintro:0.1
-    environment:
-      - MONGODB_URI=mongodb://mongodb:27017/test
-    command: python -u /cert-issuer-intro/run.py
-    depends_on:
-      - mongodb
-    ports:
-      - "5001:5001"
-
-  id-service:
-    image: blockcerts/certissueridentity:1.2
-    command: python -u /cert-issuer-identity/run.py
-    ports:
-      - "5002:5002"
-
   web:
     build: .
     image: blockcerts/certviewer:latest
@@ -26,16 +10,11 @@ services:
       - ./cert-viewer-local.env
     environment:
       - MONGODB_URI=mongodb://mongodb:27017/test
-      - INTRO_ENDPOINT=http://intro-service:5001/intro/
-      - ID_ENDPOINT=http://id-service:5002/
     command: python -u /cert-viewer/run.py
     ports:
       - "5000:5000"
     depends_on:
       - mongodb
-      - mongo-seed
-      - intro-service
-      - id-service
 
   mongodb:
     image: mongo:3.0
@@ -44,11 +23,6 @@ services:
     ports:
       - "27017:27017"
     restart: always
-
-  mongo-seed:
-    build: ./mongo-seed
-    depends_on:
-      - mongodb
 
 volumes:
   mongo-data:

@@ -30,3 +30,5 @@ RUN /cert-viewer/env/bin/pip install -r /cert-viewer/requirements.txt
 COPY . /cert-viewer
 
 RUN pip install /cert-viewer
+
+ADD cert_data /etc/cert_data

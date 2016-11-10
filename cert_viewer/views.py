@@ -1,17 +1,14 @@
 import json
 import logging
-import os
 import sys
 
-import requests
-from cert_verifier import verifier
-from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join
+from flask import render_template, request, flash, redirect, url_for, send_from_directory, safe_join, jsonify
 from werkzeug.routing import BaseConverter
 
-from . import app
-from . import config
+from . import app, config
+from . import certificate_formatter
 from . import helpers
-from .forms import RegistrationForm, BitcoinForm
+from .forms import SimpleRegistrationForm, BitcoinForm
 from .notifier import Notifier
 
 if sys.version > '3':
@@ -29,56 +26,118 @@ class RegexConverter(BaseConverter):
 app.url_map.converters['regex'] = RegexConverter
 
 
-@app.route('/', methods=['GET', 'POST'])
-def home_page():
-    """Home page"""
-    recent_certids_from_config = config.get_config().recent_certids
-
-    if recent_certids_from_config:
-        recent_certids = str.split(recent_certids_from_config, ',')
-    else:
-        # keeping for backcompat; either way we should update this from mongo
-        recent_certids = [
-            '56aa4c9bf3a6a0125aaf24bf',
-            '56aa4c9bf3a6a0125aaf24c7']
-    return render_template('index.html', recent_certids=recent_certids)
-
-
-@app.route('/faq', methods=['GET'])
-def faq_page():
-    """FAQs"""
-    return render_template('faq.html')
-
-
-@app.route('/keys/<key_name>')
-def key_page(key_name=None):
-    """Redirect to identity endpoint for backcompat"""
-    redirect_url = os.path.join(config.get_config().id_endpoint, 'keys', key_name)
-    return redirect(redirect_url)
-
-
-@app.route('/issuer/<path:issuer_filename>')
-def issuer_page(issuer_filename=None):
-    """Redirect to identity endpoint for backcompat"""
-    redirect_url = os.path.join(config.get_config().id_endpoint, 'issuer', issuer_filename)
-    return redirect(redirect_url)
-
-
-@app.route(
-    '/criteria/<regex("[0-9]{4}"):year>/<regex("[0-9]{2}"):month>/<regex("[a-zA-Z0-9.]+"):criteria_name>')
-def criteria_page(year, month, criteria_name):
-    """Redirect to identity endpoint for backcompat"""
-    criteria_filename = '-'.join([year, month, criteria_name])
-    redirect_url = os.path.join(config.get_config().id_endpoint, 'criteria', criteria_filename)
-    return redirect(redirect_url)
-
-
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(safe_join(app.root_path, 'static/img'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-#regex("[a-zA-Z0-9]{12,24}"):
+
+@app.route('/', methods=['GET', 'POST'])
+def home_page():
+    recent_certs_from_config = config.get_config().recent_certids
+    if recent_certs_from_config:
+        recent_certs = str.split(recent_certs_from_config, ',')
+    else:
+        recent_certs = []
+    return render_template('index.html', recent_certids=recent_certs)
+
+
+@app.route('/faq', methods=['GET'])
+def faq_page():
+    return render_template('faq.html')
+
+
+@app.route('/issuer/<path:issuer_filename>')
+def issuer_page(issuer_filename=None):
+    """
+    Returns identifying information for a Blockchain Certificate issuer.
+    ---
+    tags:
+      - issuer
+    parameters:
+      - name: username
+        in: path
+        type: string
+        required: true
+    responses:
+      200:
+        description: The issuer identification at the specified path
+        schema:
+          id: issuer_response
+          properties:
+            issuerKeys:
+              type: string
+              description: The username
+              default: some_username
+            revocationKeys:
+              type: string
+              description: The username
+              default: some_username
+            id:
+              type: string
+              description: The username
+              default: some_username
+            name:
+              type: string
+              description: The username
+              default: some_username
+            email:
+              type: string
+              description: The username
+              default: some_username
+            url:
+              type: string
+              description: The username
+              default: some_username
+            introductionURL:
+              type: string
+              description: The username
+              default: some_username
+            image:
+              type: string
+              description: The username
+              default: some_username
+    """
+    return jsonify(send_from_directory(safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False))
+
+
+@app.route('/certificate/<uid>')
+def get_certificate(certificate_uid=None):
+    """
+    Returns a certificate based on a certificate UID
+    ---
+    tags:
+      - certificate
+    parameters:
+
+      - name: username
+        in: path
+        type: string
+        required: true
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+    responses:
+      200:
+        description: The issuer identification at the specified path
+
+    :param certificate_uid:
+    :return:
+    """
+    try:
+        from . import cert_store
+        certificate_json = cert_store.get_certificate_json(certificate_uid)
+        if not certificate_json:
+            logging.error('Could not find certificate with id: %s', certificate_uid)
+            return 'Could not find certificate', 500
+        return jsonify(certificate_json)
+    except KeyError:
+        logging.warning('Could not find certificate with id: %s', certificate_uid)
+        return 'Could not find certificate', 404
+    except Exception as e:
+        logging.error(e)
+        return 'Internal error', 500
+
+
+# regex("[a-zA-Z0-9]{12,24}"):
 @app.route('/<identifier>')
 def get_award(identifier=None):
     """
@@ -86,26 +145,22 @@ def get_award(identifier=None):
     :param identifier:
     :return:
     """
-
-    requested_format = request.args.get("format", None)
-    from . import cert_store_connection
-
-    cert_raw = cert_store_connection.get_certificate(identifier)
-    if not cert_raw:
-        logging.error('Could not find certificate with id, %s', identifier)
-        # TODO: better error
-        return 'Problem getting certificate', 500
-
-    cert_string = cert_raw.decode('utf-8')
-    cert_json = json.loads(cert_string)
-    award, verification_info = helpers.get_award_and_verification_for_certificate(cert_json, 'txid')
-    if award and requested_format == "json":
-        return award
-    if award:
-        return render_template('award.html', award=award,
-                               verification_info=urlencode(verification_info))
-
-    return "Sorry, this page does not exist.", 404
+    requested_format = request.args.get('format', None)
+    if requested_format == 'json':
+        return get_certificate(identifier)
+    else:
+        try:
+            from . import cert_store
+            award, verification_info = certificate_formatter.get_formatted_award_and_verification_info(cert_store,
+                                                                                                       identifier)
+            return render_template('award.html', award=award,
+                                   verification_info=urlencode(verification_info))
+        except KeyError:
+            logging.warning('Could not find certificate with id: %s', identifier)
+            return 'Could not find certificate', 404
+        except Exception as e:
+            logging.error(e)
+            return 'Internal error', 500
 
 
 @app.route('/bitcoinkeys', methods=['GET'])
@@ -118,72 +173,92 @@ def generate_keys():
     return render_template('bitcoinkeys.html')
 
 
+@app.route('/intro', methods=['POST'])
+def intro(introduction):
+    """
+    Returns identifying information for a Blockchain Certificate issuer.
+    ---
+    tags:
+      - introduction
+    parameters:
+      - in: body
+        name: introduction
+        required: true
+        description: Introduce yourself to a Blockchain Certificate issuer
+        schema:
+          id: User
+          required:
+            - bitcoinAddress
+            - email
+            - firstName
+            - lastName
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            bitcoinAddress:
+              type: string
+              description: bitcoin public address
+              pattern: ^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$
+            email:
+              type: string
+              format: email
+    responses:
+      200:
+        description: Introduction was successful
+      400:
+        description: Invalid introduction json payload
+
+
+    :return:
+    """
+    from cert_viewer import intro_store
+    intro_store.insert(introduction)
+
+
 @app.route('/request', methods=['GET', 'POST'])
 def request_page():
     """Request an introduction. Forwarding to intro endpoint for backcompat"""
-    form = RegistrationForm(request.form)
-    bitcoin = BitcoinForm(request.form)
+    recipient_form = SimpleRegistrationForm(request.form)
+    bitcoin_form = BitcoinForm(request.form)
 
-    if request.method == 'POST' and form.validate():
-
-        intro_endpoint = config.get_config().intro_endpoint
-        if not intro_endpoint:
-            return "Sorry, introductions are not supported", 404
-
-        user_data = {
-            'bitcoinAddress': form.pubkey.data,
-            'comments': form.comments.data,
-            'email': form.email.data,
-            'firstName': form.first_name.data,
-            'lastName': form.last_name.data,
-            'degree': form.degree.data,
-            'address': form.address.data,
-            'city': form.city.data,
-            'state': form.state.data,
-            'zipCode': form.zipcode.data,
-            'country': form.country.data
-        }
-
-        headers = {'Content-type': 'application/json',
-                   'Accept': 'application/json'}
-        r = requests.post(intro_endpoint, json=user_data, headers=headers)
-        succeeded = r.status_code == 200
+    if request.method == 'POST' and recipient_form.validate():
+        user_data = recipient_form.to_user_data()
+        intro(user_data)
+        succeeded = True
         if not succeeded:
-            error_message = str(r.content)
-            logging.error('Problem processing introduction, %s', error_message)
+            # error_message = str(r.content)
+            # logging.error('Problem processing introduction, %s', error_message)
             return 'Problem processing introduction', 500
 
         sent = Notifier.factory().notify(
-            form.email.data,
-            form.first_name.data,
-            form.last_name.data)
+            recipient_form.email.data,
+            recipient_form.first_name.data,
+            recipient_form.last_name.data)
 
         logging.debug('finished requesting certificate')
-        hidden_email = helpers.obfuscate_email_display(form.email.data)
+        hidden_email = helpers.obfuscate_email_display(recipient_form.email.data)
         if sent:
             flash('We just sent a confirmation email to %s.' % hidden_email)
         else:
-            flash(
-                'We received your request and will respond to %s.' % hidden_email)
+            flash('We received your request and will respond to %s.' % hidden_email)
         return redirect(url_for('home_page'))
     else:
-        return render_template('request.html', form=form, registered=False, bitcoin=bitcoin)
+        return render_template('request.html', form=recipient_form, registered=False, bitcoin=bitcoin_form)
 
 
 @app.route("/verify")
 def verify():
-    uid = request.args.get('uid')
-    #transaction_id = request.args.get('transactionID')
-    from . import cert_store_connection
-    cert_raw = cert_store_connection.get_certificate(uid)
-
-    if not cert_raw:
-        logging.error('Could not find certificate with uid, %s', uid)
-        return 'Problem getting certificate', 500
-    verify_response = verifier.verify_cert_contents(cert_raw)
-    if verify_response:
+    try:
+        uid = request.args.get('uid')
+        # transaction_id = request.args.get('transactionID')
+        from . import verifier
+        verify_response = verifier.verify(uid)
         return json.dumps(verify_response)
-    return 'problem rendering response'  # TODO!!!
+    except Exception as e:
+        logging.error(e)
+        return 'Problem verifying certificate', 500
 
 
 @app.errorhandler(404)

@@ -13,11 +13,11 @@ with open(os.path.join(here, 'README.md')) as fp:
 
 setup(
     name='cert-viewer',
-    version='0.0.1',
+    version='0.0.2',
     url='https://github.com/blockchain-certificates/cert-viewer',
     license='MIT',
     author='MIT Media Lab Blockchain Certificates',
-    author_email='certs@media.mit.edu',
+    author_email='info@blockcerts.org',
     description='A web app for viewing and validating blockchain certificates on the Bitcoin blockchain',
     long_description=long_description,
     packages=find_packages(),
