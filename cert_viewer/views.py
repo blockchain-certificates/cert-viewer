@@ -98,7 +98,8 @@ def issuer_page(issuer_filename=None):
               description: The username
               default: some_username
     """
-    return jsonify(send_from_directory(safe_join(app.root_path, 'issuer'), issuer_filename, as_attachment=False))
+    issuer_path = safe_join(app.root_path, 'issuer')
+    return send_from_directory(issuer_path, filename=issuer_filename, as_attachment=False)
 
 
 @app.route('/certificate/<uid>')
