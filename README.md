@@ -96,9 +96,9 @@ should be changed if you're using this for anything other than demo purposes.
 2. Edit the following entries (refer to conf_sample.ini for examples):
     - `secret_key` is a random string used by Flask as a secret key to enable cryptographically signed session
     - `mandrill_api_key` is used to send out notifications when a user signs up. Setup your mandrill account at https://www.mandrill.com/
-    - `mongodb_uri` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>`. Examples follow:
-         - Local mongo installation: `mongodb_uri = mongodb://localhost:27017`
-         - Docker installation: `mongodb_uri = mongodb://<DOCKER_MACHINE_IP>:27017`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
+    - `mongodb_uri` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>/<db_name>`. Examples follow:
+         - Local mongo installation: `mongodb_uri = mongodb://localhost:27017/test`
+         - Docker installation: `mongodb_uri = mongodb://<DOCKER_MACHINE_IP>:27017/test`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
     - `cert_store_type` is the type of key value store to use for certificates
     - `cert_store_path` is the file system path to the certificates
 
