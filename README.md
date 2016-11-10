@@ -41,12 +41,9 @@ to allow learners to request a certificate and generate their own Bitcoin identi
 The quick start steps do the following:
 
 1. Creates a container that runs the cert-viewer Flask app with MongoDB using Docker Compose [details](http://containertutorials.com/docker-compose/flask-mongo-compose.html)
-2. Seeds the MongoDB database with sample fake certificates. This data is located in the mongo-seed folder
+2. Copies the certificates in cert_data into the Docker container's file system.
 3. Starts the container. This configuration exposes port 5000.
 
-### Notes
-As of now, the mongo instance is populated with 2 unverified certificates; they are linked to on the main page. Click
-'Verify' to see details on how verification can fail.
 
 ## Installation and Configuration
 
@@ -99,10 +96,13 @@ should be changed if you're using this for anything other than demo purposes.
 2. Edit the following entries (refer to conf_sample.ini for examples):
     - `secret_key` is a random string used by Flask as a secret key to enable cryptographically signed session
     - `mandrill_api_key` is used to send out notifications when a user signs up. Setup your mandrill account at https://www.mandrill.com/
-    - `mongodb_uri` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>`. Examples follow:
-         - Local mongo installation: `mongodb_uri = mongodb://localhost:27017`
-         - Docker installation: `mongodb_uri = mongodb://<DOCKER_MACHINE_IP>:27017`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
+    - `mongodb_uri` is used to access your mongodb instance. The canonical form is `mongodb://<username>:<password>@<domain>:<mongo_port>/<db_name>`. Examples follow:
+         - Local mongo installation: `mongodb_uri = mongodb://localhost:27017/test`
+         - Docker installation: `mongodb_uri = mongodb://<DOCKER_MACHINE_IP>:27017/test`, where DOCKER_MACHINE_IP is given by `docker-machine ip`
+    - `cert_store_type` is the type of key value store to use for certificates
+    - `cert_store_path` is the file system path to the certificates
 
+See [cert-store](https://github.com/blockchain-certificates/cert-store) for information on advanced certificate storage setup.
 
 
 ## Unit tests

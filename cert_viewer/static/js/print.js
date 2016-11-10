@@ -1,6 +1,5 @@
-
-$(document).ready(function() {
-	$("#print-btn").click(function(){
-		window.print();
-	});
+$(document).ready(function () {
+    $("#print-btn").click(function () {
+        window.print();
+    });
 });

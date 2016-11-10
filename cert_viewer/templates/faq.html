@@ -1,23 +1,26 @@
 {% extends "layout.html" %}
 
 {% block css %}
-<link href="/static/css/index.css" rel="stylesheet">
-<link href="/static/css/faq.css" rel="stylesheet">
+    <link href="/static/css/index.css" rel="stylesheet">
+    <link href="/static/css/faq.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-2 col-sm-2 col-xs-4">
-    <img src="/static/img/logo.png" class="img-responsive" alt="Your logo"/>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-sm-8 col-xs-12">
-    <h3 class="heading font-bold name">Blockchain Certificates <br> FAQ</h3>
-    <h5 class="faq-title"><strong>What are the blockchain certificates?</strong></h5>
-    <p class="description font-light faq-text">
-        In essence, they are digital representations of your physcial certificates. Technically, we create a JSON that contains the certificate information, then sign and hash it, and place the hash on the Bitcoin blockchain. If you'd like to learn more about their architecture, please check out the <a href="http://www.blockcerts.org/" target="_blank"> Blockchain Certificates Project website </a>.
-    </p>     
-  </div>
-</div>
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-xs-4">
+            <img src="/static/img/logo.png" class="img-responsive" alt="Your logo"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <h3 class="heading font-bold name">Blockchain Certificates <br> FAQ</h3>
+            <h5 class="faq-title"><strong>What are the blockchain certificates?</strong></h5>
+            <p class="description font-light faq-text">
+                In essence, they are digital representations of your physcial certificates. Technically, we create a
+                JSON that contains the certificate information, then sign and hash it, and place the hash on the Bitcoin
+                blockchain. If you'd like to learn more about their architecture, please check out the <a
+                    href="http://www.blockcerts.org/" target="_blank"> Blockchain Certificates Project website </a>.
+            </p>
+        </div>
+    </div>
 {% endblock %}

@@ -1,12 +1,13 @@
 import logging
 
 import mandrill
-from . import config
 
 
 class Notifier(object):
     def factory():
-        notifier = config.get_config().notifier_type
+        from . import config
+        conf = config.get_config()
+        notifier = conf.notifier_type
         if notifier == 'mail':
             return Mail()
         if notifier == 'noop':
@@ -25,11 +26,11 @@ class NoOp(Notifier):
 
 
 class Mail(Notifier):
-    def __init__(self):
-        self.mandrill_api_key = config.get_config().mandrill_api_key
-        self.subject = config.get_config().subject
-        self.from_email = config.get_config().from_email
-        self.from_name = config.get_config().from_name
+    def __init__(self, conf):
+        self.mandrill_api_key = conf.mandrill_api_key
+        self.subject = conf.subject
+        self.from_email = conf.from_email
+        self.from_name = conf.from_name
 
     def notify(self, recipient_email, first_name, last_name):
         mandrill_client = mandrill.Mandrill(self.mandrill_api_key)
@@ -61,6 +62,4 @@ class Mail(Notifier):
             error_message = 'A mandrill error occurred: %s - %s' % (
                 e.__class__, e)
             logging.exception(error_message, e)
-            # A mandrill error occurred: <class 'mandrill.InvalidKeyError'> -
-            # Invalid API key
             raise

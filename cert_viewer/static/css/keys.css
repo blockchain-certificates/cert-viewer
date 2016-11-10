@@ -1,48 +1,48 @@
 
-.fold-text{
-  margin-top: -25px;
-  float: right;
-  font-size: 8px;
+.fold-text {
+    margin-top: -25px;
+    float: right;
+    font-size: 8px;
 }
 
-.wallet-warning{
-  padding-bottom: 15px;
+.wallet-warning {
+    padding-bottom: 15px;
 }
 
-#keys{
-	padding-top: 10px;
-	border: 1px solid #333;
-	word-wrap: break-word;
-	max-width: 225px;
-	margin-left: 15px;
-	padding: 20px;
+#keys {
+    padding-top: 10px;
+    border: 1px solid #333;
+    word-wrap: break-word;
+    max-width: 225px;
+    margin-left: 15px;
+    padding: 20px;
 }
 
-.key-text{
-  font-size: 10px;
+.key-text {
+    font-size: 10px;
 }
 
-#pubKeyQr{
-  padding-bottom: 30px;
+#pubKeyQr {
+    padding-bottom: 30px;
 }
 
-#middle-section{
-  min-height: 130px;
-  border-top: 1px dashed #000;
-  border-bottom: 1px dashed #000;
+#middle-section {
+    min-height: 130px;
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
 }
 
-#to-load{
-  padding-left: 10px;
-  margin-top: 5px;
-  text-align: left;
-  float: left;
-  margin-bottom: 20px;
+#to-load {
+    padding-left: 10px;
+    margin-top: 5px;
+    text-align: left;
+    float: left;
+    margin-bottom: 20px;
 }
 
-#logo{
-	float: right;
-  width: 20px;
+#logo {
+    float: right;
+    width: 20px;
 }
 
 @media print {

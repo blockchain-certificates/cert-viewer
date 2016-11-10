@@ -6,8 +6,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 
 def create_config():
-    p = configargparse.getArgumentParser(default_config_files=[os.path.join(BASE_DIR, 'conf_test.ini'),
-                                                               os.path.join(BASE_DIR, 'conf_local.ini'),
+    p = configargparse.getArgumentParser(default_config_files=[os.path.join(BASE_DIR, 'conf_local.ini'),
                                                                os.path.join(BASE_DIR, 'conf.ini'),
                                                                '/etc/cert-issuer/conf.ini'])
     p.add('-c', '--my-config', required=False, is_config_file=True, help='config file path')
@@ -20,13 +19,11 @@ def create_config():
     p.add_argument('--from_name', type=str, env_var='FROM_NAME', help='name from which notification should be sent')
     p.add_argument('--subject', type=str, env_var='SUBJECT', help='notification subject line')
     p.add_argument('--recent_certids', type=str, env_var='RECENT_CERTIDS', help='recent certificate ids')
-    p.add_argument('--log_dir', type=str, env_var='LOG_DIR', help='application log directory')
-    p.add_argument('--log_file_name', type=str, env_var='LOG_FILE_NAME', help='application log file name')
     p.add_argument('--secret_key', type=str, env_var='SECRET_KEY',
                    help='Flask secret key, to enable cryptographically signed sessions')
-    p.add_argument('--intro_endpoint', type=str, env_var='INTRO_ENDPOINT', help='endpoint for submitting intros')
-    p.add_argument('--id_endpoint', type=str, env_var='ID_ENDPOINT', help='endpoint for fetching identification')
-#    p.add_argument('--cert_store_endpoint', type=str, env_var='CERT_STORE_ENDPOINT', help='endpoint for fetching certificates')
+    p.add_argument('--cert_store_type', type=str, env_var='CERT_STORE_TYPE', help='type of key value store to use for Cert Store')
+    p.add_argument('--cert_store_path', type=str, env_var='CERT_STORE_PATH', help='path to file system Cert Store')
+    p.add_argument('--v1_aware', action='store_true', env_var='V1_AWARE', help='Whether to support v1 certs')
 
     args, _ = p.parse_known_args()
     return args
