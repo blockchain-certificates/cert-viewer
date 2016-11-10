@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import os
-import io
 
 from cert_viewer import configure_app
 from cert_viewer.config import get_config
