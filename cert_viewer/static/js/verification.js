@@ -40,7 +40,8 @@ $(document).ready(function () {
         hidefields("#not-verified", "#verified");
         $("#progress-msg").html("");
         var data = $(this).attr('value');
-        $.get("/verify?" + data, function (res) {
+        var uid = JSON.parse(data.replace(/'/g, '"')).uid;
+        $.get("/verify/" + uid, function (res) {
             res = JSON.parse(res);
             $("#progress-msg").show();
             if (res == null) {

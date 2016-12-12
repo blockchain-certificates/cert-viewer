@@ -1,0 +1,9 @@
+/* styles for index.html homepage */
+
+#search-box {
+    width: 100%
+}
+
+#term {
+    font-size: 14px;
+}

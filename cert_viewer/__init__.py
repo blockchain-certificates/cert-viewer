@@ -1,24 +1,21 @@
 import logging.config
 import os
-from flasgger import Swagger
-from flask import Flask
-from pymongo import MongoClient
 
 import gridfs
-
-from .forms import SimpleRegistrationForm, BitcoinForm
-
+from flasgger import Swagger
+from flask import (Flask)
+from flask.ext.themes2 import (Themes)
+from pymongo import MongoClient
 from simplekv.fs import FilesystemStore
-
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 app = Flask(__name__)
 Swagger(app)
+Themes(app, app_identifier='cert_viewer')
+
 logging.config.fileConfig(os.path.join(BASE_DIR, 'logging.conf'))
 log = logging.getLogger(__name__)
-
-from . import views
 
 mongo_connection = None
 cert_store = None
@@ -30,7 +27,9 @@ from cert_store.gridfs_key_value_store import GridfsKeyValueStore
 from cert_viewer.verifier_bridge import V1AwareCertificateVerifierBridge, CertificateVerifierBridge
 from cert_viewer.introduction_store_bridge import IntroStore
 
+
 def configure_app(configuration):
+    # Configure data sources
     mongo_client = MongoClient(host=configuration.mongodb_uri)
     conn = mongo_client[
         configuration.mongodb_uri[configuration.mongodb_uri.rfind('/') + 1:len(configuration.mongodb_uri)]]
@@ -45,7 +44,7 @@ def configure_app(configuration):
         kv_store = GridfsKeyValueStore(gfs)
         log.info('Configured a gridfs certificate store')
 
-
+    # Configure verifier
     global cert_store, verifier
     if configuration.v1_aware:
         cert_store = V1AwareCertificateStore(kv_store, mongo_connection)
@@ -54,6 +53,10 @@ def configure_app(configuration):
         cert_store = CertificateStore(kv_store)
         verifier = CertificateVerifierBridge(cert_store)
 
+    # Configure intro store
     global intro_store
     intro_store = IntroStore(mongo_connection)
-    app.secret_key = configuration.secret_key
+
+    # Configure views
+    from cert_viewer import views
+    views.add_rules(app, configuration)

@@ -14,6 +14,8 @@ def create_config():
                    help='type of notification on certificate introduction')
     p.add_argument('--mongodb_uri', default='mongodb://localhost:27017/test', type=str, env_var='MONGODB_URI',
                    help='mongo connection URI')
+    p.add_argument('--mandrill_api_key', type=str, env_var='MANDRILL_API_KEY',
+                   help='Mandrill API key; needed if notifier_type is mail')
     p.add_argument('--from_email', type=str, env_var='FROM_EMAIL',
                    help='email address from which notification should be sent')
     p.add_argument('--from_name', type=str, env_var='FROM_NAME', help='name from which notification should be sent')
@@ -21,9 +23,20 @@ def create_config():
     p.add_argument('--recent_certids', type=str, env_var='RECENT_CERTIDS', help='recent certificate ids')
     p.add_argument('--secret_key', type=str, env_var='SECRET_KEY',
                    help='Flask secret key, to enable cryptographically signed sessions')
-    p.add_argument('--cert_store_type', type=str, env_var='CERT_STORE_TYPE', help='type of key value store to use for Cert Store')
+    p.add_argument('--cert_store_type', type=str, env_var='CERT_STORE_TYPE',
+                   help='type of key value store to use for Cert Store')
     p.add_argument('--cert_store_path', type=str, env_var='CERT_STORE_PATH', help='path to file system Cert Store')
     p.add_argument('--v1_aware', action='store_true', env_var='V1_AWARE', help='Whether to support v1 certs')
+    p.add_argument('--issuer_name', env_var='ISSUER_NAME', help='Issuer that is hosting the certificate viewer',
+                   default='A Blockchain Certificate Issuer')
+    p.add_argument('--site_description', env_var='SITE_DESCRIPTION',
+                   help='Site description got issuer that is hosting the certificate viewer',
+                   default='A Blockchain Certificate Issuer Site')
+    p.add_argument('--issuer_logo_path', env_var='ISSUER_LOGO_PATH',
+                   help='Issuer logo to display in certificate viewer', default='img/logo.png')
+    p.add_argument('--issuer_email', env_var='ISSUER_EMAIL', help='Issuer email to display in certificate viewer',
+                   default='info@blockcerts.org')
+    p.add_argument('--theme', env_var='THEME', help='Flask theme to use for display', default='original')
 
     args, _ = p.parse_known_args()
     return args

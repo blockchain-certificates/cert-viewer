@@ -4,28 +4,11 @@
 
 /* FONT */
 
-@font-face {
-    font-family: Neue Haas Grotesk Light;
-    font-weight: 350;
-    src: url("/static/fonts/NHaasGroteskDSPro-35XLt.otf") format("opentype");
-}
-
-@font-face {
-    font-family: Neue Haas Grotesk;
-    font-weight: 550;
-    src: url("/static/fonts/NHaasGroteskDSPro-55Rg.otf") format("opentype");
-}
-
-@font-face {
-    font-family: Neue Haas Grotesk Bold;
-    font-weight: 750;
-    src: url("/static/fonts/NHaasGroteskDSPro-75Bd.otf") format("opentype");
-}
 
 /* GLOBAL STYLES */
 
 body {
-    font-family: Neue Haas Grotesk, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     padding: 35px;
 }
 
@@ -56,11 +39,11 @@ a.no-decoration {
 }
 
 .font-light {
-    font-family: Neue Haas Grotesk Light, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 .font-bold {
-    font-family: Neue Haas Grotesk Bold, "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 .no-wrap {

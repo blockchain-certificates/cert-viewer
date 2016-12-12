@@ -1,0 +1,27 @@
+{% macro render_errors(field) %}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            {% if error == "Not a valid choice" %}
+                <p class="font-light errors radio-error">
+                    Please select one.
+                </p>
+            {% else %}
+                <p class="font-light errors">
+                    {{ error }}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
+{% macro render_radio_field(field) -%}
+    {% for value, label, _ in field.iter_choices() %}
+        <div class="radio">
+            <label class="radio-label">
+                <input type="radio" class="radio-input {{ field.id }}" name="{{ field.id }}" id="{{ field.id }}"
+                       value="{{ value }}">
+                <span class="font-light lbl padding-8">{{ label }}</span>
+            </label>
+        </div>
+    {% endfor %}
+{%- endmacro %}

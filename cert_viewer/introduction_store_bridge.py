@@ -4,3 +4,8 @@ class IntroStore(object):
 
     def insert(self, intro):
         self.intro_db.introductions.insert_one(intro)
+
+
+def insert_introduction(introduction):
+    from cert_viewer import intro_store
+    intro_store.insert(introduction)
