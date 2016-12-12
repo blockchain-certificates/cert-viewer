@@ -1,13 +1,13 @@
 {% extends theme("layout.html") %}
 
-    <link rel=stylesheet type=text/css href="{{ theme_static('css/index.css') }}">
+<link rel=stylesheet type=text/css href="{{ theme_static('css/index.css') }}">
 
 
 {% block content %}
     {% with messages = get_flashed_messages() %}
         <div class="row">
             <div class="col-md-2 col-sm-2 col-xs-4">
-                <img src="/static/img/logo.png" class="img-responsive" alt="Your logo"/>
+                <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}" class="img-responsive" alt="Your logo"/>
             </div>
         </div>
         <div class="row">
@@ -29,17 +29,17 @@
                     </p>
                 {% endif %}
 
-    <div class="recently-issued">
-        {% if config.RECENT_CERT_IDS %}
-            <div class="recent-title">
-                <h3 class="heading font-bold">Recently Issued</h3>
-            </div>
-            {% for cert_id in config.RECENT_CERT_IDS %}
-                <!--<a href="/{{ cert_id }}">{{ cert_id }}</a> <br>-->
-                <a href="{{ cert_id }}">{{ cert_id }}</a> <br>
-            {% endfor %}
-        {% endif %}
-    </div>
+                <div class="recently-issued">
+                    {% if config.RECENT_CERT_IDS %}
+                        <div class="recent-title">
+                            <h3 class="heading font-bold">Recently Issued</h3>
+                        </div>
+                        {% for cert_id in config.RECENT_CERT_IDS %}
+                            <!--<a href="/{{ cert_id }}">{{ cert_id }}</a> <br>-->
+                            <a href="{{ cert_id }}">{{ cert_id }}</a> <br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
                 {% if not messages %}
                     <h3 class="heading font-bold">Request Your Certificate</h3>
                     <p class="description font-light">

@@ -1,7 +1,8 @@
 import logging
 
-from flask import request
-from flask_themes2 import render_theme_template
+import os
+from flask import jsonify, redirect
+from flask_themes2 import render_theme_template, static_file_url
 from werkzeug.routing import BaseConverter
 
 from cert_viewer import certificate_store_bridge
@@ -78,10 +79,27 @@ def add_rules(app, config):
     app.add_url_rule('/request', view_func=RequestView.as_view(name='request'))
     app.add_url_rule('/faq', view_func=GenericView.as_view('faq', template='faq.html'))
     app.add_url_rule('/bitcoinkeys', view_func=GenericView.as_view('bitcoinkeys', template='bitcoinkeys.html'))
+    app.add_url_rule('/issuer/<issuer_file>', view_func=issuer_page)
+    app.add_url_rule('/spec', view_func=spec)
 
     app.register_error_handler(404, page_not_found)
+    app.register_error_handler(KeyError, key_error)
     app.register_error_handler(500, internal_server_error)
     app.register_error_handler(Exception, unhandled_exception)
+
+
+from flasgger import Swagger
+
+def spec():
+    from cert_viewer import app
+
+    return jsonify(Swagger(app))
+
+
+def issuer_page(issuer_file):
+    from cert_viewer import app
+    the_url = static_file_url(theme=app.config['THEME'], filename = (os.path.join('issuer/', issuer_file)))
+    return redirect(the_url, code=302)
 
 
 class RegexConverter(BaseConverter):
@@ -92,9 +110,16 @@ class RegexConverter(BaseConverter):
 
 # Errors
 def page_not_found(error):
-    logging.error('Page not found: %s, error: ', request.path, error)
+    logging.error('Page not found: %s', error, exc_info=True)
     return 'This page does not exist', 404
 
+
+def key_error(error):
+    key = error.args[0]
+    logging.error('Key not found not found: %s, error: ', key)
+
+    message = 'Key not found: ' + key
+    return message, 404
 
 def internal_server_error(error):
     logging.error('Server Error: %s', error, exc_info=True)

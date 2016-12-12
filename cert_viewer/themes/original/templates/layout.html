@@ -8,7 +8,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/static/img/favicon.ico">
+
+    <link rel="icon" href="{{ theme_static('img/favicon.ico') }}">
     <title>Blockchain Certificates Viewer</title>
 
     {% block css %}
@@ -29,7 +30,7 @@
     {% block footer %}
         <div class="row hide-on-print" id="footer-info">
             <div class="col-md-6 col-sm-8 col-xs-12">
-                <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:info@blockcerts.org">info@blockcerts.org</a></span>
+                <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:{{ config.ISSUER_EMAIL }}">{{ config.ISSUER_EMAIL }}</a></span>
                 </h6>
                 {% if request.path != "/faq" %}
                     <h6 id="footer-start">Questions? <span class="font-light">Check out our <a href="/faq">FAQ page</a></span>

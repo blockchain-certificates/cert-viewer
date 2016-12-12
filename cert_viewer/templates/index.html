@@ -10,20 +10,32 @@
 {% endblock %}
 
 {% block content %}
-    <div class="issuer-logo">
-        <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}"/>
-    </div>
+    {% with messages = get_flashed_messages() %}
+        <div class="issuer-logo">
+            <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}"/>
+        </div>
 
-    <div class="intro-title">
-        <h1>{{ config.ISSUER_NAME }}</h1>
-    </div>
+        <div class="intro-title">
+            <h1>{{ config.ISSUER_NAME }}</h1>
+        </div>
 
-    <div class="intro-text">
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-        Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
-        mus. Donec qam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-        quis enim.
-    </div>
+    {% if messages %}
+            <div class="messages">
+                <h3>Check Your Inbox</h3>
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+    {% else %}
+        <div class="intro-text">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+            Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+            mus. Donec qam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
+            quis enim.
+        </div>
+
+    {% endif %}
+
 
     <div class="recently-issued">
         {% if config.RECENT_CERT_IDS %}
@@ -37,5 +49,5 @@
         {% endif %}
     </div>
 
-
+    {% endwith %}
 {% endblock %}

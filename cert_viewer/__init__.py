@@ -2,7 +2,6 @@ import logging.config
 import os
 
 import gridfs
-from flasgger import Swagger
 from flask import (Flask)
 from flask.ext.themes2 import (Themes)
 from pymongo import MongoClient
@@ -11,7 +10,6 @@ from simplekv.fs import FilesystemStore
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 app = Flask(__name__)
-Swagger(app)
 Themes(app, app_identifier='cert_viewer')
 
 logging.config.fileConfig(os.path.join(BASE_DIR, 'logging.conf'))

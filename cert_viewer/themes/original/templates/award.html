@@ -37,9 +37,11 @@
                 <button class="btn btn-sm btn-default hide-on-print" id="verify-button" value="{{ verification_info }}">
                     Verify certificate
                 </button>
-                <span id="verified"> <img id="verified-icon" src="/static/img/verified.png"/> Verified </span>
+
+
+                <span id="verified"> <img id="verified-icon" src="{{ theme_static('img/verified.png') }}"/> Verified </span>
                 <span id="not-verified"> <img id="not-verified-icon"
-                                              src="/static/img/not-verified.png"/> Not Verified</span>
+                                              src="{{ theme_static('img/not-verified.png') }}"/> Not Verified</span>
             </div>
         </div>
         <div class="row hide-on-print">
