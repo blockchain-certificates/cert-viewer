@@ -1,0 +1,55 @@
+{% extends theme("layout.html") %}
+
+<link rel=stylesheet type=text/css href="{{ theme_static('css/index.css') }}">
+
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        <div class="row">
+            <div class="col-md-2 col-sm-2 col-xs-4">
+                <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}" class="img-responsive" alt="Your logo"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-8 col-xs-12">
+                <h3 class="heading font-bold name">Blockchain Certificates Viewer</h3>
+                {% if messages %}
+                    <h3 class="heading font-bold" id="prompt-header">Check Your Inbox</h3>
+                    <p class="description font-light">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </p>
+                {% else %}
+                    <p class="description font-light">
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+                        Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus
+                        mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
+                        quis enim.
+                    </p>
+                {% endif %}
+
+                <div class="recently-issued">
+                    {% if config.RECENT_CERT_IDS %}
+                        <div class="recent-title">
+                            <h3 class="heading font-bold">Recently Issued</h3>
+                        </div>
+                        {% for cert_id in config.RECENT_CERT_IDS %}
+                            <!--<a href="/{{ cert_id }}">{{ cert_id }}</a> <br>-->
+                            <a href="{{ cert_id }}">{{ cert_id }}</a> <br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% if not messages %}
+                    <h3 class="heading font-bold">Request Your Certificate</h3>
+                    <p class="description font-light">
+                        Do you need to request a certificate? Request one <a href="/request"> here. </a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    {% endwith %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{
+  "application": "cert_viewer",
+  "identifier": "original",
+  "name": "Original",
+  "author": "blockcerts",
+  "license": "MIT",
+  "description": "The original cert-viewer styling",
+  "version": "1.0.0"
+}

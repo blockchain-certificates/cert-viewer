@@ -22,10 +22,10 @@ def certificate_to_award(displayable_certificate):
         'title': displayable_certificate.title,
         'organization': displayable_certificate.organization,
         'text': displayable_certificate.description,
-        'issuerId': displayable_certificate.issuer_id,
+        'issuerID': displayable_certificate.issuer_id,
         'transactionID': displayable_certificate.transaction_id,
         'transactionIDURL': os.path.join(tx_url, displayable_certificate.transaction_id),
-        'issuedOn': displayable_certificate.issued_on
+        'issuedOn': displayable_certificate.issued_on,
     }
     if displayable_certificate.signature_image:
         award['signatureImg'] = displayable_certificate.signature_image

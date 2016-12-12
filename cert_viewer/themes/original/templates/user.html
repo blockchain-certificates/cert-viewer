@@ -1,0 +1,38 @@
+<!-- TEMPLATE NOT IN USE -->
+{% extends theme("layout.html") %}
+
+{% block css %}
+    {{ super() }}
+    <link rel=stylesheet type=text/css href="{{ theme_static('css/user.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2 col-sm-2 col-xs-4">
+            <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}" class="img-responsive" alt="Your logo"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <h3 class="heading font-bold name">{{ user.info.name.givenName }} {{ user.info.name.familyName }}</h3>
+            <p class="description">Bitcoin Identity: <span class="font-light">{{ user.pubkey }}</span></p>
+        </div>
+    </div>
+    <div class="row" id="awards-row">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            {% for award in awards %}
+                <a href="/{{ award.transactionID }}">
+                    <div class="col-md-5 col-sm-5 col-xs-12 award-tile">
+                        <h4 class="heading font-bold">{{ award.title }} - {{ award.organization }}</h4>
+                        <p class="font-light">
+                            {{ award.issuedOn }}
+                        </p>
+                        <p class="font-light">
+                            {{ award.text[0:150] }}...
+                        </p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

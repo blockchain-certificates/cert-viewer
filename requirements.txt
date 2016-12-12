@@ -15,7 +15,11 @@ mock>=2.0.0
 mongomock>=2.0.0
 tox>=2.3.1
 configargparse>=0.10.0
-cert-verifier>=1.2.13
+cert-verifier>=1.2.14
 cert-store>=0.0.15
 flasgger>=0.5.14
 simplekv>=0.10.0
+Flask-Themes2==0.1.4
+pyOpenSSL==16.2.0
+ndg-httpsclient==0.4.2
+pyasn1==0.1.9

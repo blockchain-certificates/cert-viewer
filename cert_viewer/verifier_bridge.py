@@ -1,7 +1,5 @@
-import json
-
-from cert_verifier import verifier
 from cert_store.model import BlockcertVersion
+from cert_verifier import verifier
 
 
 class CertificateVerifierBridge(object):
@@ -29,3 +27,9 @@ class V1AwareCertificateVerifierBridge(CertificateVerifierBridge):
         else:
             raise Exception('Unknown Blockchain Certificate version')
 
+
+def verify(uid):
+    # transaction_id = request.args.get('transactionID')
+    from . import verifier
+    verify_response = verifier.verify(uid)
+    return verify_response

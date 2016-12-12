@@ -1,0 +1,95 @@
+/* styles for award.html pages */
+
+.certificate-meta,
+.certificate-name,
+.issuer-name{
+    font-size: 1.85rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: -0.05rem;
+    display: block;
+}
+
+.certificate-meta {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    margin: 3px 0px 3px 0px;
+}
+
+.description {
+    line-height: 1.4;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+#signature-img {
+    margin-bottom: 70px;
+    max-height: 40px;
+}
+
+.signature-info {
+    line-height: 1.2;
+}
+
+#verify-button {
+    margin-right: 5px;
+}
+
+#progress-msg {
+    border-bottom: 1px black dashed;
+    border-top: 1px black dashed;
+    display: none;
+    font-size: 12px;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+    padding-top: 12px;
+    text-align: left;
+}
+
+#verified, #not-verified {
+    display: none;
+}
+
+.issuer-logo {
+    margin-bottom: 30px;
+    max-width: 350px;
+}
+
+.issuer-logo img {
+    width: 100%;
+}
+
+.certificate-owner {
+    margin-bottom: 15px;
+}
+
+.certificate-meta {
+    font-size: 1.85rem;
+    font-weight: 400;
+    letter-spacing: -0.05rem;
+    line-height: 1.4;
+}
+
+#verified-icon, #not-verified-icon {
+    max-height: 25px;
+    vertical-align: middle;
+}
+
+.output-txt {
+    line-height: 1.5;
+}
+
+@media print {
+    div.divToPrint {
+        left: 20%;
+        top: 18%;
+        width: 60%;
+    }
+
+    a {
+        text-decoration: none !important;
+    }
+}
+

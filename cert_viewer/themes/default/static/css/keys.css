@@ -1,0 +1,54 @@
+
+.fold-text {
+    float: right;
+    font-size: 8px;
+    margin-top: -25px;
+}
+
+.wallet-warning {
+    padding-bottom: 15px;
+}
+
+#keys {
+    border: 1px solid #333;
+    margin-left: 15px;
+    max-width: 225px;
+    padding: 20px;
+    padding-top: 10px;
+    word-wrap: break-word;
+}
+
+.key-text {
+    font-size: 10px;
+}
+
+#pubKeyQr {
+    padding-bottom: 30px;
+}
+
+#middle-section {
+    border-bottom: 1px dashed #000;
+    border-top: 1px dashed #000;
+    min-height: 130px;
+}
+
+#to-load {
+    float: left;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    padding-left: 10px;
+    text-align: left;
+}
+
+#logo {
+    float: right;
+    width: 20px;
+}
+
+@media print {
+    div.divToPrint {
+        left: 35%;
+        top: 10%;
+        width: 30%;
+    }
+}

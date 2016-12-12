@@ -1,0 +1,9 @@
+{
+  "application": "cert_viewer",
+  "identifier": "default",
+  "name": "Default",
+  "author": "blockcerts",
+  "license": "MIT",
+  "description": "A pared-down, understyled theme.",
+  "version": "1.0.0"
+}

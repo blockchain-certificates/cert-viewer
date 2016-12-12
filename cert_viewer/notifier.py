@@ -9,7 +9,7 @@ class Notifier(object):
         conf = config.get_config()
         notifier = conf.notifier_type
         if notifier == 'mail':
-            return Mail()
+            return Mail(conf)
         if notifier == 'noop':
             return NoOp()
         assert 0, "Unrecognized notifier type: " + notifier
@@ -29,8 +29,8 @@ class Mail(Notifier):
     def __init__(self, conf):
         self.mandrill_api_key = conf.mandrill_api_key
         self.subject = conf.subject
-        self.from_email = conf.from_email
-        self.from_name = conf.from_name
+        self.from_email = conf.issuer_email
+        self.from_name = conf.issuer_name
 
     def notify(self, recipient_email, first_name, last_name):
         mandrill_client = mandrill.Mandrill(self.mandrill_api_key)

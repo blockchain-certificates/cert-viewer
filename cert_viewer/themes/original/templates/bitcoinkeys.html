@@ -1,0 +1,81 @@
+{% extends theme("layout.html") %}
+
+{% block css %}
+    {{ super() }}
+    <link rel=stylesheet type=text/css href="{{ theme_static('css/keys.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="row hide-on-print">
+        <div class="col-md-2 col-sm-2 col-xs-4">
+            <img src="{{ theme_static(config.ISSUER_LOGO_PATH) }}" class="img-responsive" alt="Your Logo"/>
+        </div>
+    </div>
+    <div class="row hide-on-print">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <h3 class="heading font-bold name">Create your Bitcoin identity</h3>
+            <p class="description">
+                <span class="notice-text"> In order to keep your Bitcoin keys secure, please turn off your wifi before continuing.</span>
+                <br>
+                <button id="generatekeys" class="btn btn-default btn-margin font-light">Generate Keys</button>
+            <div id="to-load"></div>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div id="keys" class="col-md-6 col-sm-8 col-xs-12 show-later divToPrint">
+    <span class="heading font-bold"> DO NOT DISCARD<span><br><br>
+    <p class="description font-light key-text wallet-warning">We do not contain a copy of this information. </p>
+    <p class="description key-text"> Bitcoin Public Address: </p>
+    <p class="description font-light key-text" id="pubKey">
+    </p>
+    <p><center><div id="pubKeyQr" class="enable-clear"></div></center>
+        </p>
+        <p id="middle-section">
+    </p>
+    <p class="description font-light key-text fold-text">Fold along line to hide private key.</p>
+    <p class="description key-text"> Private Key: </p>
+    <p class="description font-light key-text" id="privKey">
+    </p>
+    <p><center><div id="privKeyQr" class="enable-clear"></div></center>
+        </p>
+        </div>
+    </div>
+    <div class="row hide-on-print">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <br>
+            <p class="font-light show-later">Please print out your Bitcoin keys and save them.</p>
+            <button id="print-btn" class="btn btn-default btn-margin font-light show-later">Print</button>
+        </div>
+    </div>
+    <div class="row hide-on-print">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <button
+                    id="copy-btn"
+                    class="btn btn-default btn-margin font-light show-later"
+                    data-clipboard-action="copy"
+                    data-clipboard-target="#pubKey"
+                    data-placement="right"
+                    title="Copied!">
+                Copy Public Address
+            </button>
+        </div>
+    </div>
+    <div class="row hide-on-print">
+        <div class="col-md-6 col-sm-8 col-xs-12">
+            <p class="description font-light">
+                <br>
+                <a id="return-link" class="show-later" href="/request"> Return to the certificate request page </a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="/static/js/dist/dotdotdot.js"></script>
+    <script type="text/javascript" src="/static/js/dist/bitcoinjs.min.js"></script>
+    <script type="text/javascript" src="/static/js/dist/qrcode.min.js"></script>
+    <script type="text/javascript" src="/static/js/dist/clipboard.min.js"></script>
+    <script type="text/javascript" src="/static/js/bitcoinkeys.js"></script>
+    <script type="text/javascript" src="/static/js/print.js"></script>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" href="{{ theme_static('img/favicon.ico') }}">
+    <title>Blockchain Certificates Viewer</title>
+
+    {% block css %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link rel=stylesheet type=text/css href="{{ theme_static('css/style.css') }}">
+    {% endblock %}
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    {% block content %}{% endblock %}
+    {% block footer %}
+        <div class="row hide-on-print" id="footer-info">
+            <div class="col-md-6 col-sm-8 col-xs-12">
+                <h6 id="footer-start">Contact: <span class="font-light"><a href="mailto:{{ config.ISSUER_EMAIL }}">{{ config.ISSUER_EMAIL }}</a></span>
+                </h6>
+                {% if request.path != "/faq" %}
+                    <h6 id="footer-start">Questions? <span class="font-light">Check out our <a href="/faq">FAQ page</a></span>
+                    </h6>
+                {% endif %}
+                {% if request.path != "/" %}
+                    <h6 id="footer-start">
+            <span class="font-light">
+              <a href="/">Home</a>&nbsp;|&nbsp;<a href="http://www.blockcerts.org/"> Powered by the Blockchain Certificates Project </a>
+            </span>
+                    </h6>
+                {% else %}
+                    <h6 id="footer-start">
+            <span class="font-light">
+              <a href="http://www.blockcerts.org/"> Powered by the Blockchain Certificates Project </a>
+            </span>
+                    </h6>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
