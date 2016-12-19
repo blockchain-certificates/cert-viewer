@@ -1,13 +1,30 @@
+import glob
+
 import gridfs
 from pymongo import MongoClient
+import os
+
+
+def load_gridfs(mongodb_uri, cert_dir):
+    client = MongoClient(host=mongodb_uri)
+    conn = client[mongodb_uri[mongodb_uri.rfind('/') + 1:len(mongodb_uri)]]
+
+    fs = gridfs.GridFS(conn)
+
+    cert_glob = os.path.join(cert_dir, '*.json')
+    json_files = glob.glob(cert_glob)
+
+    for f in json_files:
+        with open(f) as infile:
+            filename = os.path.basename(f)
+            content = infile.read()
+            fs.put(content, filename=filename, encoding='utf-8')
+            out = fs.find_one({'filename': filename})
+            print('filename: ' + filename)
+            print(out.read())
+
 
 if __name__ == "__main__":
-    client = MongoClient(host='mongodb://localhost:27017')
-    fs = gridfs.GridFS(client.test)
-    files = ['f813349f-1385-487f-8d89-38a092411fa5.json', 'b5dee02e-50cd-4e48-ad33-de7d2eafa359.json']
-    for f in files:
-        with open(f) as infile:
-            content = infile.read()
-            fs.put(content, filename=f, encoding='utf-8')
-            out = fs.find_one({'filename': f})
-            print(out.read())
+    mongodb_uri = 'mongodb://localhost:27017/test'
+    cert_dir = '.'
+    load_gridfs(mongodb_uri, cert_dir)
