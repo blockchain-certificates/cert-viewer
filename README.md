@@ -90,6 +90,7 @@ Refer to 'Deployment considerations' for additional details about these options.
 2. Edit the following entries (refer to conf_sample.ini for examples):
     - `secret_key` is a random string used by Flask as a secret key to enable cryptographically signed session
     - `cert_store_type` is the type of key value store to use for certificates, using simplekv. simplekv_fs uses the file system, and simplekv_gridfs uses gridfs
+        - when using gridfs (mongodb) as a certificate store you can use `mongo-seed/load_gfs.py` script to load the certificates into mongodb
     - `cert_store_path` is the file system path to the certificates
     - `theme` is the Flask Theme you want to use for your styling, static content, and templates. We provide a few configuration options for your issuer branding, but in a real deployment, issuers should extend the base theme to provide their own styling. Cert-viewer uses [Flask-Themes2](http://flask-themes2.readthedocs.io/en/latest/)
     - `issuer_email` is used in the flask templates for your contact info
