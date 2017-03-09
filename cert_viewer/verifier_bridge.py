@@ -1,4 +1,4 @@
-from cert_store.model import BlockcertVersion
+from cert_core.model import BlockcertVersion
 from cert_verifier import verifier
 
 
