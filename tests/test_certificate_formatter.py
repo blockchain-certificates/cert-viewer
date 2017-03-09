@@ -2,7 +2,7 @@ import unittest
 import json
 
 from cert_viewer import certificate_formatter
-from cert_store.model import V1_2_BlockchainCertificate
+from cert_core.model import V1_2_BlockchainCertificate
 
 
 class TestCertificateFormatter(unittest.TestCase):
