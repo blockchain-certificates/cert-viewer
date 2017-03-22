@@ -22,7 +22,7 @@ intro_store = None
 
 from cert_store.certificate_store import CertificateStore, V1AwareCertificateStore
 from cert_store.gridfs_key_value_store import GridfsKeyValueStore
-from cert_viewer.verifier_bridge import V1AwareCertificateVerifierBridge, CertificateVerifierBridge
+from cert_viewer.verifier_bridge import CertificateVerifierBridge
 from cert_viewer.introduction_store_bridge import IntroStore
 
 
@@ -46,10 +46,9 @@ def configure_app(configuration):
     global cert_store, verifier
     if configuration.v1_aware:
         cert_store = V1AwareCertificateStore(kv_store, mongo_connection)
-        verifier = V1AwareCertificateVerifierBridge(cert_store)
     else:
         cert_store = CertificateStore(kv_store)
-        verifier = CertificateVerifierBridge(cert_store)
+    verifier = CertificateVerifierBridge(cert_store)
 
     # Configure intro store
     global intro_store
