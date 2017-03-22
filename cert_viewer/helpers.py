@@ -1,7 +1,7 @@
 import binascii
 import sys
 
-from cert_verifier import Chain, UnrecognizedChainError
+from cert_core import UnknownChainError, Chain
 
 unhexlify = binascii.unhexlify
 hexlify = binascii.hexlify
@@ -23,5 +23,5 @@ def get_tx_lookup_prefix_for_chain(chain):
     elif chain == Chain.mainnet:
         return 'https://blockchain.info/tx/'
     else:
-        raise UnrecognizedChainError(
+        raise UnknownChainError(
             'unsupported chain (%s) requested with blockcypher collector. Currently only testnet and mainnet are supported' % chain)

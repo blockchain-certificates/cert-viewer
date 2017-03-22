@@ -2,14 +2,14 @@ import unittest
 import json
 
 from cert_viewer import certificate_formatter
-from cert_core.model import V1_2_BlockchainCertificate
+from cert_core import model
 
 
 class TestCertificateFormatter(unittest.TestCase):
     def test_certificate_to_award(self):
         with open('data/1.2/sample-cert.json') as cert_file:
             certificate_json = json.load(cert_file)
-            certificate_model = V1_2_BlockchainCertificate(certificate_json)
+            certificate_model = model.to_certificate_model(certificate_json)
             award = certificate_formatter.certificate_to_award(certificate_model)
             self.assertEquals(award['title'], 'Game of Thrones Character')
             self.assertEquals(award['issuedOn'], '2016-09-29')

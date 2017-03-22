@@ -1,14 +1,14 @@
 import os
 
-from cert_verifier import parse_chain_from_address
+from cert_core import parse_chain_from_address
 
 from cert_viewer import helpers
 
 
 def format_verification_info(displayable_certificate):
     return {
-        'uid': displayable_certificate.uid,
-        'transactionID': displayable_certificate.transaction_id
+        "uid": str(displayable_certificate.uid),
+        "transactionID": str(displayable_certificate.get_transaction_id())
     }
 
 
@@ -18,14 +18,14 @@ def certificate_to_award(displayable_certificate):
 
     award = {
         'logoImg': displayable_certificate.logo_image,
-        'name': displayable_certificate.recipient_given_name + ' ' + displayable_certificate.recipient_family_name,
+        'name': displayable_certificate.recipient_name,
         'title': displayable_certificate.title,
         'organization': displayable_certificate.organization,
         'text': displayable_certificate.description,
         'issuerID': displayable_certificate.issuer_id,
-        'transactionID': displayable_certificate.transaction_id,
-        'transactionIDURL': os.path.join(tx_url, displayable_certificate.transaction_id),
-        'issuedOn': displayable_certificate.issued_on,
+        'transactionID': displayable_certificate.get_transaction_id(),
+        'transactionIDURL': os.path.join(tx_url, displayable_certificate.get_transaction_id()),
+        'issuedOn': displayable_certificate.issued_on.strftime('%Y-%m-%d')
     }
     if displayable_certificate.signature_image:
         award['signatureImg'] = displayable_certificate.signature_image
