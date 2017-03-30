@@ -17,12 +17,10 @@ log = logging.getLogger(__name__)
 
 mongo_connection = None
 cert_store = None
-verifier = None
 intro_store = None
 
 from cert_store.certificate_store import CertificateStore, V1AwareCertificateStore
 from cert_store.gridfs_key_value_store import GridfsKeyValueStore
-from cert_viewer.verifier_bridge import CertificateVerifierBridge
 from cert_viewer.introduction_store_bridge import IntroStore
 
 
@@ -43,12 +41,11 @@ def configure_app(configuration):
         log.info('Configured a gridfs certificate store')
 
     # Configure verifier
-    global cert_store, verifier
+    global cert_store
     if configuration.v1_aware:
         cert_store = V1AwareCertificateStore(kv_store, mongo_connection)
     else:
         cert_store = CertificateStore(kv_store)
-    verifier = CertificateVerifierBridge(cert_store)
 
     # Configure intro store
     global intro_store

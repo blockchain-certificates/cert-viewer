@@ -7,11 +7,10 @@ from werkzeug.routing import BaseConverter
 
 from cert_viewer import certificate_store_bridge
 from cert_viewer import introduction_store_bridge
-from cert_viewer import verifier
+from cert_viewer import verifier_bridge
 
 DEFAULT_THEME = 'default'
-GUID_REGEX = '[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}'
-
+GUID_REGEX = '([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}|[0-9a-fA-F]{24})'
 
 def update_app_config(app, config):
     app.config.update(
@@ -73,7 +72,7 @@ def add_rules(app, config):
                      view_func=JsonAwardView.as_view('certificate', view=certificate_store_bridge.get_award_json))
 
     app.add_url_rule('/verify/<regex("{}"):certificate_uid>'.format(GUID_REGEX),
-                     view_func=VerifyView.as_view('verify', view=verifier.verify))
+                     view_func=VerifyView.as_view('verify', view=verifier_bridge.verify))
 
     app.add_url_rule('/intro/', view_func=introduction_store_bridge.insert_introduction, methods=['POST', ])
     app.add_url_rule('/request', view_func=RequestView.as_view(name='request'))

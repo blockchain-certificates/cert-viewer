@@ -7,8 +7,8 @@ from cert_viewer import helpers
 
 def format_verification_info(displayable_certificate):
     return {
-        "uid": str(displayable_certificate.uid),
-        "transactionID": str(displayable_certificate.get_transaction_id())
+        'uid': displayable_certificate.uid,
+        'transactionID': displayable_certificate.get_transaction_id()
     }
 
 
@@ -28,7 +28,8 @@ def certificate_to_award(displayable_certificate):
         'issuedOn': displayable_certificate.issued_on.strftime('%Y-%m-%d')
     }
     if displayable_certificate.signature_image:
-        award['signatureImg'] = displayable_certificate.signature_image
+        # TODO: format images and titles for all signers
+        award['signatureImg'] = displayable_certificate.signature_image[0].image
 
     if displayable_certificate.subtitle:
         award['subtitle'] = displayable_certificate.subtitle
