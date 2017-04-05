@@ -7,8 +7,7 @@ from cert_viewer import helpers
 
 def format_verification_info(displayable_certificate):
     return {
-        'uid': displayable_certificate.uid,
-        'transactionID': displayable_certificate.get_transaction_id()
+        'uid': str(displayable_certificate.uid)
     }
 
 
