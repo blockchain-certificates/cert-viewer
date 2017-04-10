@@ -15,9 +15,9 @@ mock>=2.0.0
 mongomock>=2.0.0
 tox>=2.3.1
 configargparse>=0.10.0
-cert-verifier>=1.2.19
-cert-store>=0.0.27
-cert-core>=0.0.15
+cert-verifier>=1.2.21
+cert-store>=0.0.30
+cert-core>=0.0.17
 flasgger>=0.5.14
 simplekv>=0.10.0
 Flask-Themes2==0.1.4
