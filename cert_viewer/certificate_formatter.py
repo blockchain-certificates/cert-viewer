@@ -12,7 +12,6 @@ def format_verification_info(displayable_certificate):
     else:
         uid = displayable_certificate.uid
     return {
-
         'uid': str(uid)
     }
 
