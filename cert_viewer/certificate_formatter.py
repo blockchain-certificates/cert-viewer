@@ -27,8 +27,8 @@ def certificate_to_award(displayable_certificate):
         'organization': displayable_certificate.organization,
         'text': displayable_certificate.description,
         'issuerID': displayable_certificate.issuer_id,
-        'transactionID': displayable_certificate.get_transaction_id(),
-        'transactionIDURL': os.path.join(tx_url, displayable_certificate.get_transaction_id()),
+        'transactionID': displayable_certificate.txid,
+        'transactionIDURL': os.path.join(tx_url, displayable_certificate.txid),
         'issuedOn': displayable_certificate.issued_on.strftime('%Y-%m-%d')
     }
     if displayable_certificate.signature_image:
