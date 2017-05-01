@@ -1,16 +1,11 @@
 import os
 
 from cert_core import parse_chain_from_address
-from cert_core.model import URN_UUID_PREFIX
-
 from cert_viewer import helpers
 
 
 def format_verification_info(displayable_certificate):
-    if displayable_certificate.uid.startswith(URN_UUID_PREFIX):
-        uid = displayable_certificate.uid[len(URN_UUID_PREFIX):]
-    else:
-        uid = displayable_certificate.uid
+    uid = displayable_certificate.uid
     return {
         'uid': str(uid)
     }
