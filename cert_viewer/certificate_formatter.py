@@ -16,12 +16,12 @@ def certificate_to_award(displayable_certificate):
     tx_url = helpers.get_tx_lookup_prefix_for_chain(chain)
 
     award = {
-        'logoImg': displayable_certificate.logo_image,
+        'logoImg': displayable_certificate.issuer.image,
         'name': displayable_certificate.recipient_name,
         'title': displayable_certificate.title,
-        'organization': displayable_certificate.organization,
+        'organization': displayable_certificate.issuer.name,
         'text': displayable_certificate.description,
-        'issuerID': displayable_certificate.issuer_id,
+        'issuerID': displayable_certificate.issuer.id,
         'transactionID': displayable_certificate.txid,
         'transactionIDURL': os.path.join(tx_url, displayable_certificate.txid),
         'issuedOn': displayable_certificate.issued_on.strftime('%Y-%m-%d')
