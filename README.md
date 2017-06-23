@@ -6,7 +6,7 @@ The cert-viewer project is a Flask webapp to display and verify blockchain certi
 
 ## Install and Run
 
-1. Ensure you have a python environment. [Recommendations](https://github.com/blockchain-certificates/developer-common-docs/blob/master/virtualenv.md)
+1. Ensure you have a python environment. [Recommendations](https://github.com/blockchain-certificates/cert-issuer/blob/master/docs/virtualenv.md)
 
 2. Git clone the repository and change to the directory
 
@@ -100,7 +100,7 @@ The quick start instructions use the basic configuration options in `conf_local.
 
 To experiment with running cert-viewer and enable recipient introductions stored in MongoDB, you can use our Docker files.
 
-1. First ensure you have Docker installed. [See our Docker installation help](https://github.com/blockchain-certificates/developer-common-docs/blob/master/docker_install.md).
+1. First ensure you have Docker installed. [See our Docker installation help](https://github.com/blockchain-certificates/cert-issuer/blob/master/docs/docker_install.md).
    
 2. Git clone the repository and change to the directory
 
@@ -129,7 +129,7 @@ To experiment with running cert-viewer and enable recipient introductions stored
 
 This project uses tox to validate against several python environments.
 
-1. Ensure you have an python environment. [Recommendations](https://github.com/blockchain-certificates/developer-common-docs/blob/master/virtualenv.md)
+1. Ensure you have an python environment. [Recommendations](https://github.com/blockchain-certificates/cert-issuer/blob/master/docs/virtualenv.md)
 
 2. Run tests
     ```
