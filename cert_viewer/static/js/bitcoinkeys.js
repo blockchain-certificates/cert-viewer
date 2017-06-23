@@ -1,7 +1,9 @@
 $(document).ready(function () {
     var clipboard = new Clipboard('#copy-btn');
 
-    $('#copy-btn').tooltip({'trigger': 'click', delay: {"show": 500, "hide": 100}});
+    jQuery( '#copy-btn' ).ready(function( ) {
+        $('.hasTooltip').tooltip({'trigger': 'click', delay: {"show": 500, "hide": 100}});
+    });
 
     $("#generatekeys").click(function () {
 

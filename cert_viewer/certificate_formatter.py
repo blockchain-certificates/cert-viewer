@@ -1,14 +1,7 @@
 import os
 
-from cert_core import parse_chain_from_address
+from cert_schema import parse_chain_from_address
 from cert_viewer import helpers
-
-
-def format_verification_info(displayable_certificate):
-    uid = displayable_certificate.uid
-    return {
-        'uid': str(uid)
-    }
 
 
 def certificate_to_award(displayable_certificate):
@@ -44,5 +37,7 @@ def get_formatted_award_and_verification_info(cert_store, certificate_uid):
     """
     certificate_model = cert_store.get_certificate(certificate_uid)
     award = certificate_to_award(certificate_model)
-    verification_info = format_verification_info(certificate_model)
+    verification_info = {
+        'uid': str(certificate_uid)
+    }
     return award, verification_info

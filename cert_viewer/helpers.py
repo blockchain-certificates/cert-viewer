@@ -1,7 +1,7 @@
 import binascii
 import sys
 
-from cert_core import Chain, UnknownChainError
+from cert_schema import Chain, UnknownChainError
 
 unhexlify = binascii.unhexlify
 hexlify = binascii.hexlify
