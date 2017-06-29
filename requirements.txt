@@ -1,6 +1,6 @@
-cert-schema>=2.0b20
-cert-store>=2.0b11
-cert-verifier>=2.0b9
+cert-schema>=2.0
+cert-store>=2.0
+cert-verifier>=2.0
 configargparse>=0.10.0
 docopt>=0.4.0
 flasgger>=0.5.14
