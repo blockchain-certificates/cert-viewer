@@ -17,11 +17,13 @@ def obfuscate_email_display(email):
     return hidden_email
 
 
-def get_tx_lookup_prefix_for_chain(chain):
+def get_tx_lookup_chain(chain, txid):
     if chain == Chain.testnet:
-        return 'https://tbtc.blockr.io/tx/info/'
+        return 'https://tbtc.blockr.io/tx/info/' + txid
     elif chain == Chain.mainnet:
-        return 'https://blockchain.info/tx/'
+        return 'https://blockchain.info/tx/' + txid
+    elif chain == Chain.regtest or chain == Chain.mocknet:
+        return 'This has not been issued on a blockchain and is for testing only'
     else:
         raise UnknownChainError(
             'unsupported chain (%s) requested with blockcypher collector. Currently only testnet and mainnet are supported' % chain)
