@@ -1,10 +1,8 @@
 import logging
-
 import os
 
 from os import listdir
 from os.path import isfile, join
-
 from flask import jsonify, redirect
 from flask_themes2 import render_theme_template, static_file_url
 from werkzeug.routing import BaseConverter
@@ -12,8 +10,6 @@ from werkzeug.routing import BaseConverter
 from cert_viewer import certificate_store_bridge
 from cert_viewer import introduction_store_bridge
 from cert_viewer import verifier_bridge
-
-
 
 DEFAULT_THEME = 'default'
 GUID_REGEX = '([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}|[0-9a-fA-F]{24})'
@@ -27,16 +23,13 @@ def update_app_config(app, config):
         ISSUER_EMAIL=config.issuer_email,
         THEME=config.theme,
     )
-
     recent_certs = update_recent_certs()
-
     app.config['RECENT_CERT_IDS'] = recent_certs[-10:]
 
 def update_recent_certs():
-    mypath = "cert_data"
+    cert_path = "cert_data"
     certs_folder = []
-
-    for file in listdir(mypath):
+    for file in listdir(cert_path):
         if file[len(file) - 4:] == "json":
             certs_folder.append(file[:len(file) - 5])
     
