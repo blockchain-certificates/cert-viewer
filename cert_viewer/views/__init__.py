@@ -1,6 +1,10 @@
 import logging
 
 import os
+
+from os import listdir
+from os.path import isfile, join
+
 from flask import jsonify, redirect
 from flask_themes2 import render_theme_template, static_file_url
 from werkzeug.routing import BaseConverter
@@ -8,6 +12,8 @@ from werkzeug.routing import BaseConverter
 from cert_viewer import certificate_store_bridge
 from cert_viewer import introduction_store_bridge
 from cert_viewer import verifier_bridge
+
+
 
 DEFAULT_THEME = 'default'
 GUID_REGEX = '([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}|[0-9a-fA-F]{24})'
@@ -21,12 +27,20 @@ def update_app_config(app, config):
         ISSUER_EMAIL=config.issuer_email,
         THEME=config.theme,
     )
-    if config.recent_certids:
-        recent_certs = str.split(config.recent_certids, ',')
-    else:
-        recent_certs = []
-    app.config['RECENT_CERT_IDS'] = recent_certs
 
+    recent_certs = update_recent_certs()
+
+    app.config['RECENT_CERT_IDS'] = recent_certs[-10:]
+
+def update_recent_certs():
+    mypath = "cert_data"
+    certs_folder = []
+
+    for file in listdir(mypath):
+        if file[len(file) - 4:] == "json":
+            certs_folder.append(file[:len(file) - 5])
+    
+    return certs_folder
 
 def render(template, **context):
     from cert_viewer import app
@@ -64,9 +78,9 @@ def add_rules(app, config):
 
     app.add_url_rule('/', view_func=GenericView.as_view('index', template='index.html'))
 
-    app.add_url_rule(rule='/<regex("{}"):certificate_uid>'.format(GUID_REGEX), endpoint='award',
+    app.add_url_rule(rule='/<regex("{}"):certificate_uid>'.format(GUID_REGEX),                   endpoint='award',
                      view_func=AwardView.as_view(name='award', template='award.html',
-                                                 view=certificate_store_bridge.award))
+                     view=certificate_store_bridge.award))
 
     app.add_url_rule('/certificate/<regex("{}"):certificate_uid>'.format(GUID_REGEX),
                      view_func=JsonAwardView.as_view('certificate', view=certificate_store_bridge.get_award_json))
