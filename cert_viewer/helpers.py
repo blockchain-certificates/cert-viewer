@@ -19,7 +19,7 @@ def obfuscate_email_display(email):
 
 def get_tx_lookup_chain(chain, txid):
     if chain == Chain.bitcoin_testnet:
-        return 'https://tbtc.blockr.io/tx/info/' + txid
+        return 'https://live.blockcypher.com/btc-testnet/tx/' + txid
     elif chain == Chain.bitcoin_mainnet:
         return 'https://blockchain.info/tx/' + txid
     elif chain == Chain.bitcoin_regtest or chain == Chain.mockchain:
