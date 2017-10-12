@@ -18,11 +18,11 @@ def obfuscate_email_display(email):
 
 
 def get_tx_lookup_chain(chain, txid):
-    if chain == Chain.testnet:
+    if chain == Chain.bitcoin_testnet:
         return 'https://tbtc.blockr.io/tx/info/' + txid
-    elif chain == Chain.mainnet:
+    elif chain == Chain.bitcoin_mainnet:
         return 'https://blockchain.info/tx/' + txid
-    elif chain == Chain.regtest or chain == Chain.mocknet:
+    elif chain == Chain.bitcoin_regtest or chain == Chain.mockchain:
         return 'This has not been issued on a blockchain and is for testing only'
     else:
         raise UnknownChainError(
