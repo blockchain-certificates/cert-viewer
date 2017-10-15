@@ -1,4 +1,4 @@
-cert-core>=2.1.02
+cert-core>=2.1.2
 cert-schema>=2.0.9
 cert-verifier>=2.0.7
 configargparse>=0.12.0
