@@ -1,6 +1,6 @@
-cert-core>=2.1.3
-cert-schema>=2.1.1
-cert-verifier>=2.0.8
+cert-core>=2.1.4
+cert-schema>=2.1.2
+cert-verifier>=2.0.9
 configargparse>=0.12.0
 flasgger>=0.6.6
 Flask>=0.12.2
