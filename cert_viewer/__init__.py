@@ -19,8 +19,8 @@ mongo_connection = None
 cert_store = None
 intro_store = None
 
-from cert_store.certificate_store import CertificateStore, V1AwareCertificateStore
-from cert_store.gridfs_key_value_store import GridfsKeyValueStore
+from cert_core.cert_store.certificate_store import CertificateStore, V1AwareCertificateStore
+from cert_core.cert_store.gridfs_key_value_store import GridfsKeyValueStore
 from cert_viewer.introduction_store_bridge import IntroStore
 
 
