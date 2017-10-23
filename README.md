@@ -138,5 +138,5 @@ This project uses tox to validate against several python environments.
 
 ## Contact
 
-Contact [info@blockcerts.org](mailto:info@blockcerts.org) with questions
+Contact us at [the Blockcerts community forum](http://community.blockcerts.org/).
 
