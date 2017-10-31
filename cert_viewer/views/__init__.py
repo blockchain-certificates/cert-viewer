@@ -12,7 +12,6 @@ from cert_viewer import introduction_store_bridge
 from cert_viewer import verifier_bridge
 
 DEFAULT_THEME = 'default'
-GUID_REGEX = '([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}|[0-9a-fA-F]{24})'
 
 def update_app_config(app, config):
     app.config.update(
@@ -71,14 +70,14 @@ def add_rules(app, config):
 
     app.add_url_rule('/', view_func=GenericView.as_view('index', template='index.html'))
 
-    app.add_url_rule(rule='/<regex("{}"):certificate_uid>'.format(GUID_REGEX),                   endpoint='award',
+    app.add_url_rule(rule='/<certificate_uid>', endpoint='award',
                      view_func=AwardView.as_view(name='award', template='award.html',
                      view=certificate_store_bridge.award))
 
-    app.add_url_rule('/certificate/<regex("{}"):certificate_uid>'.format(GUID_REGEX),
+    app.add_url_rule('/certificate/<certificate_uid>',
                      view_func=JsonAwardView.as_view('certificate', view=certificate_store_bridge.get_award_json))
 
-    app.add_url_rule('/verify/<regex("{}"):certificate_uid>'.format(GUID_REGEX),
+    app.add_url_rule('/verify/<certificate_uid>',
                      view_func=VerifyView.as_view('verify', view=verifier_bridge.verify))
 
     app.add_url_rule('/intro/', view_func=introduction_store_bridge.insert_introduction, methods=['POST', ])
