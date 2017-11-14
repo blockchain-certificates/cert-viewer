@@ -3,7 +3,7 @@ import os
 
 import gridfs
 from flask import (Flask)
-from flask.ext.themes2 import (Themes)
+from flask_themes2 import (Themes)
 from pymongo import MongoClient
 from simplekv.fs import FilesystemStore
 
