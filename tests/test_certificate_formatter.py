@@ -11,11 +11,9 @@ class TestCertificateFormatter(unittest.TestCase):
             certificate_json = json.load(cert_file)
             certificate_model = to_certificate_model(certificate_json)
             award = certificate_formatter.certificate_to_award(certificate_model)
-            self.assertEquals(award['title'], 'Game of Thrones Character')
-            self.assertEquals(award['issuedOn'], '2016-09-29')
-            self.assertEquals(award['name'], 'Arya Stark')
-
-
+            self.assertEqual(award['title'], 'Game of Thrones Character')
+            self.assertEqual(award['issuedOn'], '2016-09-29')
+            self.assertEqual(award['name'], 'Arya Stark')
 
 
 if __name__ == '__main__':
