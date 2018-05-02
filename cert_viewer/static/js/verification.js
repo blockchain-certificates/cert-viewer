@@ -37,7 +37,7 @@ markMappings = {"passed": "PASS", "failed": "FAIL", "done": "DONE", "not_started
 
 $(document).ready(function () {
     $("#verify-button").click(function () {
-        hidefields("#not-verified", "#verified");
+        hidefields(["#not-verified", "#verified"]);
         $("#progress-msg").html("");
         var data = $(this).attr('value');
         var uid = JSON.parse(data.replace(/'/g, '"')).uid;
