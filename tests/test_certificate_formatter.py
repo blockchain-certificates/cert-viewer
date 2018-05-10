@@ -14,6 +14,7 @@ class TestCertificateFormatter(unittest.TestCase):
             self.assertEqual(award['title'], 'Game of Thrones Character')
             self.assertEqual(award['issuedOn'], '2016-09-29')
             self.assertEqual(award['name'], 'Arya Stark')
+            self.assertEqual(award['chain'], 'Bitcoin')
 
     def test_certificate_to_award_eth(self):
         with open('data/1.2/eth-ropsten-cert.json') as cert_file:
@@ -23,6 +24,7 @@ class TestCertificateFormatter(unittest.TestCase):
             self.assertEqual(award['title'], 'Certificate of Accomplishment')
             self.assertEqual(award['issuedOn'], '2017-10-25')
             self.assertEqual(award['name'], 'Mcallister Greenborough')
+            self.assertEqual(award['chain'], 'Ethereum')
 
 
 if __name__ == '__main__':

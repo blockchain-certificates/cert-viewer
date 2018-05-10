@@ -1,5 +1,5 @@
 from cert_viewer import helpers
-
+from cert_core import BlockchainType
 
 def certificate_to_award(displayable_certificate):
     tx_url = helpers.get_tx_lookup_chain(displayable_certificate.chain, displayable_certificate.txid)
@@ -11,6 +11,7 @@ def certificate_to_award(displayable_certificate):
         'organization': displayable_certificate.issuer.name,
         'text': displayable_certificate.description,
         'issuerID': displayable_certificate.issuer.id,
+        'chain': get_displayable_blockchain_type(displayable_certificate.chain.blockchain_type),
         'transactionID': displayable_certificate.txid,
         'transactionIDURL': tx_url,
         'issuedOn': displayable_certificate.issued_on.strftime('%Y-%m-%d')
@@ -37,3 +38,14 @@ def get_formatted_award_and_verification_info(cert_store, certificate_uid):
         'uid': str(certificate_uid)
     }
     return award, verification_info
+
+
+def get_displayable_blockchain_type(chain):
+    if chain == BlockchainType.bitcoin:
+        return 'Bitcoin'
+    elif chain == BlockchainType.ethereum:
+        return 'Ethereum'
+    elif chain == BlockchainType.mock:
+        return 'Mock'
+    else:
+        return None
