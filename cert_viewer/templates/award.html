@@ -35,7 +35,7 @@
     {% endblock %}
 
     <div class="verify">
-        <p>This certificate was digitally signed by {{ award.organization }} and registered on the Bitcoin
+        <p>This certificate was digitally signed by {{ award.organization }} and registered on the <span class="chain">{{ award.chain }}</span>
             blockchain.</p>
         <button id="verify-button" value="{{ verification_info }}">Verify certificate</button>
 

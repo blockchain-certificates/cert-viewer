@@ -25,9 +25,9 @@ def get_tx_lookup_chain(chain, txid):
     elif chain == Chain.bitcoin_regtest or chain == Chain.mockchain:
         return 'This has not been issued on a blockchain and is for testing only'
     elif chain == Chain.ethereum_mainnet:
-        url_prefix = 'https://api.etherscan.io/tx/' + txid
+        return 'https://api.etherscan.io/tx/' + txid
     elif chain == Chain.ethereum_ropsten:
-        url_prefix = 'https://ropsten.etherscan.io/tx/' + txid
+        return 'https://ropsten.etherscan.io/tx/' + txid
     else:
         raise UnknownChainError(
             'unsupported chain (%s) requested with blockcypher collector. Currently only testnet and mainnet are supported' % chain)
