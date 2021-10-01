@@ -56,7 +56,7 @@ class Mail(Notifier):
             logging.debug('sending mandrill receipt template')
             result = mandrill_client.messages.send_template(template_name='receipt-template',
                                                             template_content=template_content, message=message,
-                                                            async=False)
+                                                            send_async=False)
             return result
         except mandrill.Error as e:
             error_message = 'A mandrill error occurred: %s - %s' % (
